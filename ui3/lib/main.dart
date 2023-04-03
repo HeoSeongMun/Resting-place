@@ -194,6 +194,20 @@ class MyApp extends StatelessWidget {
             ),
           ],
         ),
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            height: 60,
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(Icons.home,color: Colors.black,),
+                Icon(Icons.man,color: Colors.black,),
+                Icon(Icons.search,color: Colors.black,),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
