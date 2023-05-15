@@ -11,10 +11,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        useMaterial3: true,
-      ),
       home: const MyHomePage(title: ''),
     );
   }
@@ -23,7 +19,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-
   final String title;
 
   @override
@@ -31,37 +26,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 50,),
+          SizedBox(
+            height: 50,
+          ),
           Row(
-            children:[
+            children: [
               Container(
                 width: 260,
                 height: 30,
                 margin: EdgeInsets.only(left: 50),
-                child:
-                TextField(
+                child: TextField(
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Color(0xFFAAC4FF),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width:2,
-                          color: Colors.black12),
+                      borderSide: BorderSide(width: 2, color: Colors.black12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width:2,
-                          color: Colors.black12),
+                      borderSide: BorderSide(width: 2, color: Colors.black12),
                     ),
-                    border: OutlineInputBorder(
-                    ),
+                    border: OutlineInputBorder(),
                   ),
                 ),
               ),
@@ -74,10 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-          SizedBox(height: 30,),
+          SizedBox(
+            height: 30,
+          ),
           Container(
             margin: EdgeInsets.only(left: 50),
-            child: Text("검색된 휴게소",
+            child: Text(
+              "검색된 휴게소",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -91,15 +85,16 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Color(0xFFAAC4FF),
             child: ListView.separated(
               padding: const EdgeInsets.all(5),
-                itemBuilder: (BuildContext context, int index) {
+              itemBuilder: (BuildContext context, int index) {
                 return Container(
                   height: 70,
                   color: Colors.white,
                   child: Center(child: Text('item : $index')),
                 );
-                },
-                separatorBuilder: (BuildContext context, int index) => const Divider(),
-                itemCount: 7,
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemCount: 7,
             ),
           ),
         ],
@@ -107,13 +102,22 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 60,
-            color: Colors.white,
+          color: Colors.white,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Icon(Icons.home,color: Colors.black,),
-              Icon(Icons.man,color: Colors.black,),
-              Icon(Icons.search,color: Colors.black,),
+              Icon(
+                Icons.home,
+                color: Colors.black,
+              ),
+              Icon(
+                Icons.man,
+                color: Colors.black,
+              ),
+              Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
             ],
           ),
         ),
