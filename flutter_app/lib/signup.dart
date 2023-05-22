@@ -138,7 +138,8 @@ class Signup extends StatelessWidget {
                           shadowColor: Colors.black,
                           elevation: 3,
                           side: BorderSide(
-                            color: Color(0xFFB1B2FF),
+                            color: Color.fromARGB(255, 153, 154, 221),
+                            width: 2,
                           )),
                       child: Text(
                         "중복확인",
@@ -331,7 +332,8 @@ class Signup extends StatelessWidget {
                           shadowColor: Colors.black,
                           elevation: 3,
                           side: BorderSide(
-                            color: Color(0xFFB1B2FF),
+                            color: Color.fromARGB(255, 153, 154, 221),
+                            width: 2,
                           )),
                       child: Text(
                         "인증번호 전송",
@@ -345,7 +347,7 @@ class Signup extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 30,
+                height: 5,
               ),
               Row(
                 children: [
@@ -395,7 +397,7 @@ class Signup extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 60,
+                height: 40,
               ),
               ElevatedButton(
                 onPressed: null,

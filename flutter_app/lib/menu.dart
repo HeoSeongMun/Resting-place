@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/areasearch.dart';
+import 'package:flutter_app/areaitem.dart';
+import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
+import 'package:flutter_app/restaurant.dart';
+import 'package:flutter_app/restitem.dart';
 
 class Menu extends StatelessWidget {
+  Menu({Key? key, required this.rest}) : super(key: key);
+
+  final Rest rest;
+
   final List<String> ImageList = [
     'assets/images/menu1.jpg',
     'assets/images/menu2.jpg',
@@ -12,7 +20,6 @@ class Menu extends StatelessWidget {
   final List<String> TitleList = ['메뉴1', '메뉴2', '메뉴3'];
   final List<String> MoneyList = ['1000원', '1200원', '1400원'];
 
-  Menu({super.key});
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -33,9 +40,7 @@ class Menu extends StatelessWidget {
                     width: 60,
                     height: 60,
                     child: Image.asset(
-                      'assets/images/1.jpg',
-                      height: 60,
-                      width: 60,
+                      rest.imgPath,
                     ),
                   ),
                   Container(
@@ -47,7 +52,7 @@ class Menu extends StatelessWidget {
                       children: [
                         Container(
                           child: Text(
-                            "말죽거리 한식당",
+                            rest.rest,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -60,7 +65,7 @@ class Menu extends StatelessWidget {
                         ),
                         Container(
                           child: Text(
-                            "시흥하늘휴게소(양방향)",
+                            '시흥 시흥 시흥',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -89,18 +94,31 @@ class Menu extends StatelessWidget {
               height: 560,
               color: Color.fromARGB(255, 255, 255, 255),
               child: ListView.separated(
+                itemCount: TitleList.length,
                 padding: const EdgeInsets.all(5),
-                itemBuilder: (BuildContext context, int index) {
-                  return _buildListItem(
-                      ImageList[index], TitleList[index], MoneyList[index]);
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider(
-                    thickness: 1,
-                    color: Colors.grey[300],
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(TitleList[index]),
+                    leading: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: Image.asset(ImageList[index]),
+                    ),
+                    trailing: Text(MoneyList[index]),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Cart(),
+                        ),
+                      );
+                    },
                   );
                 },
-                itemCount: ImageList.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(
+                  thickness: 1,
+                  color: Colors.black,
+                ),
               ),
             ),
           ],
@@ -145,32 +163,4 @@ class Menu extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _buildListItem(String imageUrl, String title, String money) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: ListTile(
-      leading: Image.asset(
-        imageUrl,
-        width: 50,
-        height: 50,
-        fit: BoxFit.cover,
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      trailing: Text(
-        money,
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
 }

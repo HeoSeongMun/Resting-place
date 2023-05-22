@@ -135,25 +135,21 @@ class Home extends StatelessWidget {
               IconButton(
                   icon: Icon(Icons.home),
                   color: Colors.black,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                    );
-                  }),
+                  onPressed: () {}),
               Icon(
                 Icons.man,
                 color: Colors.black,
               ),
               IconButton(
-                  icon: Icon(Icons.search),
-                  color: Colors.black,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AreaSearch()),
-                    );
-                  }),
+                icon: Icon(Icons.search),
+                color: Colors.black,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AreaSearch()),
+                  );
+                },
+              ),
             ],
           ),
         ),
