@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/areasearch.dart';
-import 'package:flutter_app/areaitem.dart';
 import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/restaurant.dart';
-import 'package:flutter_app/restitem.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Menu extends StatelessWidget {
-  Menu({Key? key, required this.rest}) : super(key: key);
-
-  final Rest rest;
-
-  final List<String> ImageList = [
-    'assets/images/menu1.jpg',
-    'assets/images/menu2.jpg',
-    'assets/images/menu3.png'
-  ];
+  Menu({super.key});
 
   final List<String> TitleList = ['메뉴1', '메뉴2', '메뉴3'];
   final List<String> MoneyList = ['1000원', '1200원', '1400원'];
+
+  CollectionReference product = FirebaseFirestore.instance.collection('menu');
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +34,7 @@ class Menu extends StatelessWidget {
                     width: 60,
                     height: 60,
                     child: Image.asset(
-                      rest.imgPath,
+                      'assets/images/menu1.jpg',
                     ),
                   ),
                   Container(
@@ -52,7 +46,7 @@ class Menu extends StatelessWidget {
                       children: [
                         Container(
                           child: Text(
-                            rest.rest,
+                            'ffdsfs',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -99,11 +93,6 @@ class Menu extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(TitleList[index]),
-                    leading: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: Image.asset(ImageList[index]),
-                    ),
                     trailing: Text(MoneyList[index]),
                     onTap: () {
                       Navigator.of(context).push(

@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/restaurant.dart';
+import 'package:flutter_app/menu.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'areaitem.dart';
-
-class AreaSearch extends StatelessWidget {
+class AreaSearch extends StatefulWidget {
   AreaSearch({super.key});
 
-  static List<String> ImageList = [
-    'assets/images/menu1.jpg',
-    'assets/images/menu2.jpg',
-    'assets/images/menu3.png'
-  ];
-  static List<String> AreaList = ['영종대교휴게소(서울행)', '서울 만남의광장 휴게소', '휴게소3'];
-  static List<String> DistanceList = ['14.2km', '10.5km', '20.7km'];
+  @override
+  State<AreaSearch> createState() => _AreaSearchState();
+}
 
-  final List<Area> areaDate = List.generate(AreaList.length,
-      (index) => Area(ImageList[index], AreaList[index], DistanceList[index]));
+class _AreaSearchState extends State<AreaSearch> {
+  CollectionReference product = FirebaseFirestore.instance.collection('menu');
 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -78,26 +75,32 @@ class AreaSearch extends StatelessWidget {
                 height: 520,
                 width: 290,
                 color: Color(0xFFD2DAFF),
-                child: ListView.builder(
-                  itemCount: areaDate.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        title: Text(areaDate[index].area),
-                        leading: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: Image.asset(areaDate[index].imgPath),
-                        ),
-                        trailing: Text(areaDate[index].distance),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => Restaurant(
-                                    area: areaDate[index],
-                                  )));
-                        },
-                      ),
-                    );
+                child: StreamBuilder(
+                  stream: product.snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                    if (streamSnapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: streamSnapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            final DocumentSnapshot documentSnapshot =
+                                streamSnapshot.data!.docs[index];
+                            return Card(
+                              child: ListTile(
+                                title: Text(documentSnapshot['name']),
+                                subtitle: Text(documentSnapshot['price']),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => Menu(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          });
+                    }
+                    return Center(child: CircularProgressIndicator());
                   },
                 ),
               ),

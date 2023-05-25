@@ -1,28 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/areaitem.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/menu.dart';
 
-import 'restitem.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Restaurant extends StatelessWidget {
-  Restaurant({Key? key, required this.area}) : super(key: key);
+  Restaurant({super.key});
 
-  final Area area;
-
-  static List<String> ImageList = [
-    'assets/images/menu1.jpg',
-    'assets/images/menu2.jpg',
-    'assets/images/menu3.png'
-  ];
-  static List<String> RestaurntList = ['말죽거리 한식당', '코바코 돈까스', '명가네 가락우동'];
-  static List<String> FoodTypeList = ['한식', '일식', '양식'];
-
-  final List<Rest> restDate = List.generate(
-      RestaurntList.length,
-      (index) =>
-          Rest(ImageList[index], RestaurntList[index], FoodTypeList[index]));
+  CollectionReference product = FirebaseFirestore.instance.collection('menu');
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +36,7 @@ class Restaurant extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    area.area,
+                    'fadfsdf',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -74,34 +60,30 @@ class Restaurant extends StatelessWidget {
             Container(
               height: 580,
               color: Colors.white,
-              child: ListView.separated(
-                itemCount: restDate.length,
-                padding: const EdgeInsets.all(5),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(restDate[index].rest),
-                    leading: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: Image.asset(restDate[index].imgPath),
-                    ),
-                    trailing: Text(restDate[index].type),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Menu(
-                            rest: restDate[index],
+              child: StreamBuilder(
+                stream: product.snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                  return ListView.builder(
+                      itemCount: streamSnapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final DocumentSnapshot documentSnapshot =
+                            streamSnapshot.data!.docs[index];
+                        return Card(
+                          child: ListTile(
+                            title: Text(documentSnapshot['name']),
+                            subtitle: Text(documentSnapshot['price']),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Restaurant(),
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                      );
-                    },
-                  );
+                        );
+                      });
                 },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(
-                  thickness: 1,
-                  color: Colors.black,
-                ),
               ),
             )
           ],
