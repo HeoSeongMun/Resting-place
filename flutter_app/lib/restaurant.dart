@@ -8,7 +8,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Restaurant extends StatelessWidget {
   Restaurant({super.key});
 
-  CollectionReference product = FirebaseFirestore.instance.collection('menu');
+  CollectionReference product =
+      FirebaseFirestore.instance.collection('restaurant');
+  CollectionReference product1 = FirebaseFirestore.instance.collection('area');
+
+  get index => 0;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +39,20 @@ class Restaurant extends StatelessWidget {
                       color: Colors.indigo[700],
                     ),
                   ),
-                  Text(
-                    'fadfsdf',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Container(
+                    child: StreamBuilder(
+                        stream: product1.snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                          final docs = streamSnapshot.data!.docs;
+                          return Text(
+                            docs[index]['location'],
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }),
                   ),
                   IconButton(
                     onPressed: () {},
@@ -64,28 +76,31 @@ class Restaurant extends StatelessWidget {
                 stream: product.snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                  return ListView.builder(
-                      itemCount: streamSnapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final DocumentSnapshot documentSnapshot =
-                            streamSnapshot.data!.docs[index];
-                        return Card(
-                          child: ListTile(
-                            title: Text(documentSnapshot['name']),
-                            subtitle: Text(documentSnapshot['price']),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Restaurant(),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      });
+                  if (streamSnapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(documentSnapshot['store']),
+                              subtitle: Text(documentSnapshot['kind']),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Menu(),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        });
+                  }
+                  return Center(child: CircularProgressIndicator());
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -9,9 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Menu extends StatelessWidget {
   Menu({super.key});
 
-  final List<String> TitleList = ['메뉴1', '메뉴2', '메뉴3'];
-  final List<String> MoneyList = ['1000원', '1200원', '1400원'];
-
   CollectionReference product = FirebaseFirestore.instance.collection('menu');
 
   Widget build(BuildContext context) {
@@ -85,29 +82,35 @@ class Menu extends StatelessWidget {
               color: Colors.black,
             ),
             Container(
-              height: 560,
-              color: Color.fromARGB(255, 255, 255, 255),
-              child: ListView.separated(
-                itemCount: TitleList.length,
-                padding: const EdgeInsets.all(5),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(TitleList[index]),
-                    trailing: Text(MoneyList[index]),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Cart(),
-                        ),
-                      );
-                    },
-                  );
+              height: 580,
+              color: Colors.white,
+              child: StreamBuilder(
+                stream: product.snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                  if (streamSnapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(documentSnapshot['name']),
+                              subtitle: Text(documentSnapshot['price']),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Cart(),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        });
+                  }
+                  return Center(child: CircularProgressIndicator());
                 },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(
-                  thickness: 1,
-                  color: Colors.black,
-                ),
               ),
             ),
           ],

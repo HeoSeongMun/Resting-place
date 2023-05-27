@@ -12,7 +12,7 @@ class AreaSearch extends StatefulWidget {
 }
 
 class _AreaSearchState extends State<AreaSearch> {
-  CollectionReference product = FirebaseFirestore.instance.collection('menu');
+  CollectionReference product = FirebaseFirestore.instance.collection('area');
 
   @override
   Widget build(BuildContext context) {
@@ -87,12 +87,11 @@ class _AreaSearchState extends State<AreaSearch> {
                                 streamSnapshot.data!.docs[index];
                             return Card(
                               child: ListTile(
-                                title: Text(documentSnapshot['name']),
-                                subtitle: Text(documentSnapshot['price']),
+                                title: Text(documentSnapshot['location']),
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => Menu(),
+                                      builder: (context) => Restaurant(),
                                     ),
                                   );
                                 },
