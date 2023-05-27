@@ -12,8 +12,6 @@ class Restaurant extends StatelessWidget {
       FirebaseFirestore.instance.collection('restaurant');
   CollectionReference product1 = FirebaseFirestore.instance.collection('area');
 
-  get index => 0;
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -41,18 +39,22 @@ class Restaurant extends StatelessWidget {
                   ),
                   Container(
                     child: StreamBuilder(
-                        stream: product1.snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                          final docs = streamSnapshot.data!.docs;
+                      stream: product1.snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                        if (streamSnapshot.hasData) {
+                          final docs = streamSnapshot.data!.docs[0];
                           return Text(
-                            docs[index]['location'],
+                            docs['location'],
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           );
-                        }),
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      },
+                    ),
                   ),
                   IconButton(
                     onPressed: () {},

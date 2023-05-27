@@ -88,7 +88,7 @@ class _AreaSearchState extends State<AreaSearch> {
                             return Card(
                               child: ListTile(
                                 title: Text(documentSnapshot['location']),
-                                onTap: () {
+                                onTap: () async {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => Restaurant(),
