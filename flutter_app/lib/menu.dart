@@ -3,7 +3,7 @@ import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/restaurant.dart';
-
+import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Menu extends StatelessWidget {
@@ -132,9 +132,17 @@ class Menu extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Home()),
                     );
                   }),
-              Icon(
-                Icons.man,
+              IconButton(
+                icon: Icon(
+                  Icons.man,
+                ),
                 color: Colors.black,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
+                },
               ),
               IconButton(
                   icon: Icon(Icons.search),

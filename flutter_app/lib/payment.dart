@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'completepayment.dart';
 
 class Payment extends StatelessWidget {
   Payment({super.key});
@@ -274,7 +275,10 @@ class Payment extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      debugPrint("결제");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PayComplete()),
+                      );
                     },
                     child: Container(
                       alignment: Alignment.center,

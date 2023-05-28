@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/restaurant.dart';
 import 'package:flutter_app/menu.dart';
+import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AreaSearch extends StatefulWidget {
@@ -88,7 +89,7 @@ class _AreaSearchState extends State<AreaSearch> {
                             return Card(
                               child: ListTile(
                                 title: Text(documentSnapshot['location']),
-                                onTap: () async {
+                                onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => Restaurant(),
@@ -122,9 +123,17 @@ class _AreaSearchState extends State<AreaSearch> {
                         MaterialPageRoute(builder: (context) => Home()),
                       );
                     }),
-                Icon(
-                  Icons.man,
+                IconButton(
+                  icon: Icon(
+                    Icons.man,
+                  ),
                   color: Colors.black,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UserPage()),
+                    );
+                  },
                 ),
                 IconButton(
                     icon: Icon(Icons.search),

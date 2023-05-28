@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/areasearch.dart';
+import 'package:flutter_app/userinfo.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -136,9 +137,17 @@ class Home extends StatelessWidget {
                   icon: Icon(Icons.home),
                   color: Colors.black,
                   onPressed: () {}),
-              Icon(
-                Icons.man,
+              IconButton(
+                icon: Icon(
+                  Icons.man,
+                ),
                 color: Colors.black,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
+                },
               ),
               IconButton(
                 icon: Icon(Icons.search),

@@ -25,7 +25,7 @@ class Login extends StatelessWidget {
           children: <Widget>[
             Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 25),
+              margin: EdgeInsets.only(top: 85),
               child: Text(
                 '휴게소에서 뭐먹지?',
                 style: TextStyle(
@@ -37,7 +37,7 @@ class Login extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 20, bottom: 20),
+              margin: EdgeInsets.only(top: 60, bottom: 20),
               child: Image.asset(
                 'assets/images/appicon.png',
                 height: 230,
@@ -46,7 +46,10 @@ class Login extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.center,
-              height: 333,
+              margin: EdgeInsets.only(
+                top: 30,
+              ),
+              height: 400,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -56,6 +59,7 @@ class Login extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Container(
+                    margin: EdgeInsets.only(top: 20),
                     child: Container(
                       alignment: Alignment(0.0, 0.0),
                       height: 45,
@@ -73,10 +77,11 @@ class Login extends StatelessWidget {
                                 borderSide:
                                     BorderSide(color: Colors.black, width: 2),
                               ),
-                              hintText: 'ID',
+                              hintText: 'E-mail',
                               hintStyle: TextStyle(
                                   color: Colors.grey[300],
                                   fontStyle: FontStyle.italic)),
+                          keyboardType: TextInputType.emailAddress,
                         ),
                       ),
                     ),
@@ -104,6 +109,8 @@ class Login extends StatelessWidget {
                             hintStyle: TextStyle(
                                 color: Colors.grey[300],
                                 fontStyle: FontStyle.italic)),
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
                       )),
                     ),
                   ),
