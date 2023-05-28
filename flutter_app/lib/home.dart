@@ -3,7 +3,8 @@ import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/userinfo.dart';
 
 class Home extends StatelessWidget {
-  Home({super.key});
+  const Home({super.key});
+
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -145,7 +146,7 @@ class Home extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
+                    MaterialPageRoute(builder: (context) => const UserPage()),
                   );
                 },
               ),

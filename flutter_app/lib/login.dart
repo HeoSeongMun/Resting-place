@@ -1,9 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/signup.dart';
 import 'package:flutter_app/home.dart';
+import 'package:flutter/services.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
+
+  final _authentication = FirebaseAuth.instance;
+
+  User? loggedUser;
+
+  void initState() {
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      if (user != null) {
+        loggedUser = user;
+        print(loggedUser!.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 텍스트 폼 필드 테스트
+  String userId = "";
+  String userPw = "";
+
+  final emailFocusNode = FocusNode();
+  final pwFocusNode = FocusNode();
+
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController pwController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+
+  CollectionReference product = FirebaseFirestore.instance.collection('login');
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +52,9 @@ class Login extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close),
-          tooltip: 'Next page',
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -66,6 +103,8 @@ class Login extends StatelessWidget {
                       margin: EdgeInsets.only(left: 30, right: 30, top: 15),
                       child: Container(
                         child: TextField(
+                          controller: emailController,
+                          textInputAction: TextInputAction.next,
                           style: TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                               isDense: true,
@@ -94,6 +133,7 @@ class Login extends StatelessWidget {
                           left: 30, right: 30, top: 30, bottom: 50),
                       child: Container(
                           child: TextField(
+                        controller: pwController,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                             isDense: true,
@@ -115,11 +155,34 @@ class Login extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home()),
-                      );
+                    onPressed: () async {
+                      try {
+                        final newUser =
+                            await _authentication.signInWithEmailAndPassword(
+                          email: emailController.text,
+                          password: pwController.text,
+                        );
+                        if (newUser.user != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const Home();
+                              },
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('이메일과 비밀번호를 확인해주세요'),
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      }
+                      /*final String id = idController.text;
+                            final String pw = pwController.text;*/
                     },
                     style: TextButton.styleFrom(
                         primary: Colors.black,

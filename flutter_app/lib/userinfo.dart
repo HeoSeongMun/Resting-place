@@ -7,7 +7,7 @@ import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/home.dart';
 
 class UserPage extends StatelessWidget {
-  UserPage({super.key});
+  const UserPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
