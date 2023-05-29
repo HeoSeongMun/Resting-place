@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'completepayment.dart';
 
 class Payment extends StatelessWidget {
   Payment({super.key});
+
+  CollectionReference product =
+      FirebaseFirestore.instance.collection('shoppingBasket');
 
   @override
   Widget build(BuildContext context) {
@@ -11,23 +15,23 @@ class Payment extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Container(
               height: 50,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: const Color.fromARGB(255, 255, 255, 255),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 0, right: 0),
+                    margin: const EdgeInsets.only(left: 0, right: 0),
                     width: 60,
                     height: 60,
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                       iconSize: 35,
-                      color: Color.fromARGB(255, 0, 0, 0),
+                      color: const Color.fromARGB(255, 0, 0, 0),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -36,7 +40,7 @@ class Payment extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -45,14 +49,14 @@ class Payment extends StatelessWidget {
               color: Colors.black,
             ),
             Container(
-              margin: EdgeInsets.only(left: 20, top: 20, right: 20),
+              margin: const EdgeInsets.only(left: 20, top: 20, right: 20),
               alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
-                    children: [
+                    children: const [
                       Text(
                         "요청 금액",
                         style: TextStyle(
@@ -71,11 +75,11 @@ class Payment extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 230,
                   ),
                   Column(
-                    children: [
+                    children: const [
                       Text(
                         "0원",
                         style: TextStyle(
@@ -97,7 +101,7 @@ class Payment extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Container(
@@ -105,14 +109,14 @@ class Payment extends StatelessWidget {
               width: 360,
               color: Colors.black26,
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Container(
-              margin: EdgeInsets.only(left: 20, right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Text(
                     "총 할인금액",
                     style: TextStyle(
@@ -132,22 +136,22 @@ class Payment extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Container(
               height: 70,
-              margin: EdgeInsets.only(left: 15, right: 15),
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.only(left: 15, right: 15),
+              decoration: const BoxDecoration(
                 color: Color(0xFFD2DAFF),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               child: Container(
-                margin: EdgeInsets.only(left: 15, right: 15),
+                margin: const EdgeInsets.only(left: 15, right: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "내 마일리지",
                       style: TextStyle(
                         fontSize: 13,
@@ -155,7 +159,7 @@ class Payment extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "0원",
                       style: TextStyle(
                         fontSize: 13,
@@ -163,24 +167,24 @@ class Payment extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 130),
+                      margin: const EdgeInsets.only(left: 130),
                       width: 50,
                       height: 40,
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),
                           ),
-                          primary: Colors.black,
-                          backgroundColor: Color(0xFFEEF1FF),
-                          side: BorderSide(
+                          backgroundColor: const Color(0xFFEEF1FF),
+                          side: const BorderSide(
                             color: Color(0xFFEEF1FF),
                             width: 1,
                           ),
                         ),
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           "사용",
                           style: TextStyle(
                             fontSize: 13,
@@ -193,7 +197,7 @@ class Payment extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -201,18 +205,18 @@ class Payment extends StatelessWidget {
               width: 360,
               color: Colors.black26,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               height: 70,
-              margin: EdgeInsets.only(left: 15, right: 15),
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.only(left: 15, right: 15),
+              decoration: const BoxDecoration(
                 color: Color(0xFFD2DAFF),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -220,13 +224,13 @@ class Payment extends StatelessWidget {
               width: 360,
               color: Colors.black,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
               alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 25),
-              child: Text(
+              margin: const EdgeInsets.only(left: 25),
+              child: const Text(
                 "결제 수단",
                 style: TextStyle(
                   fontSize: 18,
@@ -234,10 +238,10 @@ class Payment extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Container(
+            SizedBox(
               width: 300,
               height: 130,
               child: IconButton(
@@ -250,7 +254,7 @@ class Payment extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Expanded(
@@ -266,7 +270,7 @@ class Payment extends StatelessWidget {
                       width: 100,
                       height: double.infinity,
                       color: Colors.grey,
-                      child: Text(
+                      child: const Text(
                         "취소",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
@@ -274,7 +278,8 @@ class Payment extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      await product.doc().delete();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => PayComplete()),
@@ -284,8 +289,8 @@ class Payment extends StatelessWidget {
                       alignment: Alignment.center,
                       width: 292.3,
                       height: double.infinity,
-                      color: Color(0xFFB1B2FF),
-                      child: Text(
+                      color: const Color(0xFFB1B2FF),
+                      child: const Text(
                         "결제",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),

@@ -6,29 +6,31 @@ import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Restaurant extends StatelessWidget {
-  Restaurant({super.key});
+  String areaName = '';
+  Restaurant(this.areaName, {super.key});
 
   CollectionReference product =
       FirebaseFirestore.instance.collection('restaurant');
   CollectionReference product1 = FirebaseFirestore.instance.collection('area');
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Container(
               height: 80,
-              color: Color(0xFFAAC4FF),
+              color: const Color(0xFFAAC4FF),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
+                    margin: const EdgeInsets.only(left: 10, right: 10),
                     width: 60,
                     height: 60,
                     child: Icon(
@@ -38,27 +40,17 @@ class Restaurant extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    child: StreamBuilder(
-                      stream: product1.snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                        if (streamSnapshot.hasData) {
-                          final docs = streamSnapshot.data!.docs[0];
-                          return Text(
-                            docs['location'],
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        }
-                        return Center(child: CircularProgressIndicator());
-                      },
+                    child: Text(
+                      areaName,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.star_outline,
                       size: 45,
                     ),
@@ -75,31 +67,35 @@ class Restaurant extends StatelessWidget {
               height: 580,
               color: Colors.white,
               child: StreamBuilder(
-                stream: product.snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection('testlogin')
+                    .where("restAreaName", isEqualTo: areaName)
+                    .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                   if (streamSnapshot.hasData) {
                     return ListView.builder(
-                        itemCount: streamSnapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          final DocumentSnapshot documentSnapshot =
-                              streamSnapshot.data!.docs[index];
-                          return Card(
-                            child: ListTile(
-                              title: Text(documentSnapshot['store']),
-                              subtitle: Text(documentSnapshot['kind']),
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => Menu(),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        });
+                      itemCount: streamSnapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final DocumentSnapshot documentSnapshot =
+                            streamSnapshot.data!.docs[index];
+                        return Card(
+                          child: ListTile(
+                            title: Text(documentSnapshot['storeName']),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Menu(
+                                      areaName, documentSnapshot['storeName']),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),
@@ -114,33 +110,34 @@ class Restaurant extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                  icon: Icon(Icons.home),
+                  icon: const Icon(Icons.home),
                   color: Colors.black,
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                     );
                   }),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.man,
                 ),
                 color: Colors.black,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
+                    MaterialPageRoute(builder: (context) => const UserPage()),
                   );
                 },
               ),
               IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   color: Colors.black,
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AreaSearch()),
+                      MaterialPageRoute(
+                          builder: (context) => const AreaSearch()),
                     );
                   }),
             ],
@@ -149,7 +146,7 @@ class Restaurant extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.shopping_cart),
+        child: const Icon(Icons.shopping_cart),
       ),
     );
   }

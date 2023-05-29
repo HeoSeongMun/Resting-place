@@ -2,32 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
-import 'package:flutter_app/restaurant.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Menu extends StatelessWidget {
-  Menu({super.key});
+  String storeName = '';
+  String areaName = '';
+  Menu(this.areaName, this.storeName, {super.key});
 
-  CollectionReference product = FirebaseFirestore.instance.collection('menu');
+  CollectionReference product =
+      FirebaseFirestore.instance.collection('shoppingBasket');
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Container(
               height: 80,
-              color: Color(0xFFAAC4FF),
+              color: const Color(0xFFAAC4FF),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 20, right: 20),
+                    margin: const EdgeInsets.only(left: 20, right: 20),
                     width: 60,
                     height: 60,
                     child: Image.asset(
@@ -36,28 +39,28 @@ class Menu extends StatelessWidget {
                   ),
                   Container(
                     height: 70,
-                    margin: EdgeInsets.only(right: 40),
+                    margin: const EdgeInsets.only(right: 40),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
+                          margin: const EdgeInsets.only(top: 5),
                           child: Text(
-                            'ffdsfs',
-                            style: TextStyle(
+                            storeName,
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          margin: EdgeInsets.only(top: 5),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                           child: Text(
-                            '시흥 시흥 시흥',
-                            style: TextStyle(
+                            areaName,
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
@@ -67,7 +70,7 @@ class Menu extends StatelessWidget {
                     ),
                   ),
                   Column(
-                    children: [
+                    children: const [
                       SizedBox(
                         width: 50,
                         height: 50,
@@ -85,7 +88,10 @@ class Menu extends StatelessWidget {
               height: 580,
               color: Colors.white,
               child: StreamBuilder(
-                stream: product.snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection('menu')
+                    .where("storeName", isEqualTo: storeName)
+                    .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                   if (streamSnapshot.hasData) {
@@ -98,7 +104,12 @@ class Menu extends StatelessWidget {
                             child: ListTile(
                               title: Text(documentSnapshot['name']),
                               subtitle: Text(documentSnapshot['price']),
-                              onTap: () {
+                              onTap: () async {
+                                await product.add({
+                                  'storeName': storeName,
+                                  'name': documentSnapshot['name'],
+                                  'price': documentSnapshot['price'],
+                                });
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => Cart(),
@@ -109,7 +120,7 @@ class Menu extends StatelessWidget {
                           );
                         });
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),
@@ -124,33 +135,34 @@ class Menu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                  icon: Icon(Icons.home),
+                  icon: const Icon(Icons.home),
                   color: Colors.black,
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                     );
                   }),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.man,
                 ),
                 color: Colors.black,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
+                    MaterialPageRoute(builder: (context) => const UserPage()),
                   );
                 },
               ),
               IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   color: Colors.black,
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AreaSearch()),
+                      MaterialPageRoute(
+                          builder: (context) => const AreaSearch()),
                     );
                   }),
             ],
@@ -159,7 +171,7 @@ class Menu extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.shopping_cart),
+        child: const Icon(Icons.shopping_cart),
       ),
     );
   }

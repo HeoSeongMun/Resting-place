@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/restaurant.dart';
-import 'package:flutter_app/menu.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AreaSearch extends StatefulWidget {
-  AreaSearch({super.key});
+  const AreaSearch({super.key});
 
   @override
   State<AreaSearch> createState() => _AreaSearchState();
@@ -24,7 +23,7 @@ class _AreaSearchState extends State<AreaSearch> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Row(
@@ -32,8 +31,8 @@ class _AreaSearchState extends State<AreaSearch> {
                   Container(
                     width: 260,
                     height: 30,
-                    margin: EdgeInsets.only(left: 50),
-                    child: TextField(
+                    margin: const EdgeInsets.only(left: 50),
+                    child: const TextField(
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Color(0xFFAAC4FF),
@@ -52,18 +51,18 @@ class _AreaSearchState extends State<AreaSearch> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 0),
                     child: IconButton(
-                      icon: Icon(Icons.search),
+                      icon: const Icon(Icons.search),
                       onPressed: () {},
                     ),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Container(
-                margin: EdgeInsets.only(left: 50),
-                child: Text(
+                margin: const EdgeInsets.only(left: 50),
+                child: const Text(
                   "검색된 휴게소",
                   style: TextStyle(
                     fontSize: 18,
@@ -72,10 +71,10 @@ class _AreaSearchState extends State<AreaSearch> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left: 50),
+                margin: const EdgeInsets.only(left: 50),
                 height: 520,
                 width: 290,
-                color: Color(0xFFD2DAFF),
+                color: const Color(0xFFD2DAFF),
                 child: StreamBuilder(
                   stream: product.snapshots(),
                   builder: (BuildContext context,
@@ -88,11 +87,14 @@ class _AreaSearchState extends State<AreaSearch> {
                                 streamSnapshot.data!.docs[index];
                             return Card(
                               child: ListTile(
-                                title: Text(documentSnapshot['location']),
+                                title: Text(
+                                  documentSnapshot['location'],
+                                ),
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => Restaurant(),
+                                      builder: (context) => Restaurant(
+                                          documentSnapshot['location']),
                                     ),
                                   );
                                 },
@@ -100,7 +102,7 @@ class _AreaSearchState extends State<AreaSearch> {
                             );
                           });
                     }
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
@@ -115,33 +117,34 @@ class _AreaSearchState extends State<AreaSearch> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                    icon: Icon(Icons.home),
+                    icon: const Icon(Icons.home),
                     color: Colors.black,
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => const Home()),
                       );
                     }),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.man,
                   ),
                   color: Colors.black,
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => UserPage()),
+                      MaterialPageRoute(builder: (context) => const UserPage()),
                     );
                   },
                 ),
                 IconButton(
-                    icon: Icon(Icons.search),
+                    icon: const Icon(Icons.search),
                     color: Colors.black,
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AreaSearch()),
+                        MaterialPageRoute(
+                            builder: (context) => const AreaSearch()),
                       );
                     }),
               ],
@@ -150,7 +153,7 @@ class _AreaSearchState extends State<AreaSearch> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
-          child: Icon(Icons.shopping_cart),
+          child: const Icon(Icons.shopping_cart),
         ),
       ),
     );
