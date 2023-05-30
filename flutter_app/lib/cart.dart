@@ -1,12 +1,17 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/payment.dart';
+import 'package:flutter_app/signup.dart';
 
 class Cart extends StatelessWidget {
-  Cart({super.key});
+  String storeName = "";
+  String areaName = "";
+  Cart(this.storeName, this.areaName, {super.key});
 
-  final List<String> ImageList = [];
-  final List<String> TitleList = [];
-  final List<String> MoneyList = [];
+  CollectionReference product =
+      FirebaseFirestore.instance.collection('shoppingBasket');
 
   @override
   Widget build(BuildContext context) {
@@ -85,16 +90,17 @@ class Cart extends StatelessWidget {
                 margin: EdgeInsets.only(left: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "뚱스 부대찌개",
+                      storeName,
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      "영종대교휴게소(서울방면)",
+                      areaName,
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -111,25 +117,27 @@ class Cart extends StatelessWidget {
             Container(
               height: 400,
               color: Colors.white,
-              child: ListView.separated(
-                itemCount: TitleList.length,
-                padding: const EdgeInsets.all(5),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(TitleList[index]),
-                    leading: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: Image.asset(ImageList[index]),
-                    ),
-                    trailing: Text(MoneyList[index]),
-                  );
+              child: StreamBuilder(
+                stream: product.snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<dynamic> streamSnapshot) {
+                  if (streamSnapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(documentSnapshot['name']),
+                              subtitle: Text(documentSnapshot['price']),
+                              onTap: () {},
+                            ),
+                          );
+                        });
+                  }
+                  return const Center(child: CircularProgressIndicator());
                 },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(
-                  thickness: 1,
-                  color: Colors.black,
-                ),
               ),
             ),
             Container(
@@ -196,30 +204,6 @@ class Cart extends StatelessWidget {
   }
 }
 
-Widget _buildListItem(String imageUrl, String title, String money) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: ListTile(
-      leading: Image.asset(
-        imageUrl,
-        width: 50,
-        height: 50,
-        fit: BoxFit.cover,
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      trailing: Text(
-        money,
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
+Future<void> _delete(String productId) async {
+  await product.doc(productId).delete();
 }

@@ -112,7 +112,8 @@ class Menu extends StatelessWidget {
                                 });
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => Cart(),
+                                    builder: (context) => Cart(areaName,
+                                        documentSnapshot['storeName']),
                                   ),
                                 );
                               },
