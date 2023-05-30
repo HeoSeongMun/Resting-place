@@ -14,7 +14,7 @@ class PayComplete extends StatelessWidget {
               Container(
                 //color: Colors.red,
                 alignment: Alignment.topCenter,
-                margin: EdgeInsets.only(top: 15),
+                margin: EdgeInsets.only(top: 50),
                 width: 150,
                 height: 150,
                 child: Image.asset(
@@ -197,7 +197,7 @@ class PayComplete extends StatelessWidget {
                       ))),
               Container(
                   alignment: Alignment.topRight,
-                  margin: EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(top: 30, bottom: 35),
                   //color: Colors.red,
                   width: 340,
                   child: Text("n원",
@@ -206,6 +206,9 @@ class PayComplete extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ))),
+              SizedBox(
+                height: 10,
+              ),
               Expanded(
                 child: InkWell(
                   onTap: () {
@@ -216,7 +219,6 @@ class PayComplete extends StatelessWidget {
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 80),
                     width: MediaQuery.of(context).size.width,
                     height: double.infinity,
                     color: Color(0xffB1B2FF),
