@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 
 class ReviewListPage extends StatelessWidget {
+  const ReviewListPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xffB1B2FF),
-        title: Text(
-            '이용자 리뷰',
-          style: TextStyle(
-            color: Colors.black,
-          )
-        ),
+        title: Text('이용자 리뷰',
+            style: TextStyle(
+              color: Colors.black,
+            )),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-
+            Navigator.pop(context);
           },
           color: Colors.black,
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body: ListView.separated(        
+      body: ListView.separated(
         separatorBuilder: (context, index) => Divider(
           color: Colors.grey,
           thickness: 3,
@@ -30,50 +29,52 @@ class ReviewListPage extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             //contentPadding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-            title: Column(              
+            title: Column(
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 130,                  
+                  height: 130,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: 30,                        
+                        height: 30,
                         child: Text(
                           '유저 ID : ' + _reviewList[index].userId,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,                            
+                            fontSize: 15,
                           ),
                         ),
                       ),
                       Container(
-                        height: 20,                        
+                        height: 20,
                         child: Text(
                           _reviewList[index].date,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,                            
+                            fontSize: 15,
                           ),
-                        ),                        
+                        ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Container(
-                        height: 70,                        
+                        height: 70,
                         child: Text(
                           _reviewList[index].review,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,                            
+                            fontSize: 15,
                           ),
-                        ),                        
+                        ),
                       )
                     ],
                   ),
-                ),                
+                ),
               ],
-            ),                      
+            ),
           );
         },
       ),
@@ -108,7 +109,8 @@ final List<Review> _reviewList = [
   Review(
     userId: 'user_id_sample01',
     date: '2023-02-20',
-    review: '글자수체크용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용',
+    review:
+        '글자수체크용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용용',
   ),
   Review(
     userId: 'user_id_sample02',

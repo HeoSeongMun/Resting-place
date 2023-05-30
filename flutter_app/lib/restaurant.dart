@@ -20,8 +20,9 @@ class Restaurant extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 24,
+            Container(
+              color: const Color(0xFFAAC4FF),
+              height: 30,
             ),
             Container(
               height: 80,

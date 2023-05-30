@@ -21,8 +21,9 @@ class Cart extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            const SizedBox(
-              height: 24,
+            Container(
+              color: const Color(0xFFAAC4FF),
+              height: 30,
             ),
             Container(
               height: 50,
@@ -117,7 +118,7 @@ class Cart extends StatelessWidget {
               color: Colors.black,
             ),
             Container(
-              height: 400,
+              height: 545,
               color: Colors.white,
               child: StreamBuilder(
                 stream: product.snapshots(),
@@ -146,60 +147,57 @@ class Cart extends StatelessWidget {
             Container(
               height: 100,
               color: const Color(0xFFAAC4FF),
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  margin: const EdgeInsets.only(left: 15, top: 20),
-                  child: const Text(
-                    "총 주문 금액",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+              child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: const EdgeInsets.only(left: 15, top: 20),
+                      child: const Text(
+                        "총 주문 금액",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  margin: const EdgeInsets.only(left: 170, top: 50),
-                  child: const Text(
-                    "0원",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: const EdgeInsets.only(top: 55, right: 15),
+                      child: const Text(
+                        "0원",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ]),
+                  ]),
             ),
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  minimumSize: const Size(400, 50),
-                  backgroundColor: const Color(0xFFB1B2FF),
-                  side: const BorderSide(
-                    color: Colors.black,
-                    width: 1,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Payment(),
-                    ),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Payment()),
                   );
                 },
-                child: const Text(
-                  "주문하기",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
+                  height: double.infinity,
+                  color: Color(0xffB1B2FF),
+                  child: const Text(
+                    "주문하기",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
         ),
       ),

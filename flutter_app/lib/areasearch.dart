@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/restaurant.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/menu.dart';
 
 class AreaSearch extends StatefulWidget {
   const AreaSearch({super.key});
@@ -152,7 +154,12 @@ class _AreaSearchState extends State<AreaSearch> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Cart("", "")),
+            );
+          },
           child: const Icon(Icons.shopping_cart),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/home.dart';
 
 class PayComplete extends StatelessWidget {
   PayComplete({super.key});
@@ -14,12 +15,12 @@ class PayComplete extends StatelessWidget {
                 //color: Colors.red,
                 alignment: Alignment.topCenter,
                 margin: EdgeInsets.only(top: 15),
-                width: 100,
-                height: 100,
+                width: 150,
+                height: 150,
                 child: Image.asset(
-                  'assets/cashback.png',
-                  width: 100,
-                  height: 100,
+                  'assets/images/cashback.png',
+                  width: 150,
+                  height: 150,
                 ),
               ),
               Container(
@@ -58,7 +59,7 @@ class PayComplete extends StatelessWidget {
               ),
               Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 15),
+                  margin: EdgeInsets.only(top: 25),
                   //color: Colors.red,
                   width: 340,
                   child: Text("결제정보",
@@ -74,52 +75,101 @@ class PayComplete extends StatelessWidget {
                 width: 340,
               ),
               Container(
-                margin: EdgeInsets.only(top: 10),
                 width: 340,
-                child: Text(
-                  "요청금액",
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                margin: EdgeInsets.only(
+                  top: 40,
+                ),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: const [
+                        Text(
+                          "요청금액",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "주문금액",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 230,
+                    ),
+                    Column(
+                      children: const [
+                        Text(
+                          "0원",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "0원",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               Container(
-                  margin: EdgeInsets.only(top: 3),
-                  width: 340,
-                  child: Text("주문금액",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ))),
+                height: 100,
+                width: 340,
+                margin: EdgeInsets.only(top: 40),
+                color: Color(0xffD2DAFF),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        margin: const EdgeInsets.only(left: 10, top: 15),
+                        child: const Text(
+                          "총 마일리지 할인 금액",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        margin: const EdgeInsets.only(top: 70, right: 15),
+                        child: const Text(
+                          "n원",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ]),
+              ),
               Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 40),
-                  color: Color(0xffD2DAFF),
-                  height: 40,
-                  width: 340,
-                  child: Text("  총 마일리지 할인 금액",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ))),
-              Container(
-                  alignment: Alignment.bottomRight,
-                  color: Color(0xffD2DAFF),
-                  height: 20,
-                  width: 340,
-                  child: Text("n원  ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ))),
-              Container(
-                  alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(top: 50),
                   //color: Colors.red,
                   width: 340,
                   child: Text("결제 금액",
@@ -129,7 +179,7 @@ class PayComplete extends StatelessWidget {
                         color: Colors.black,
                       ))),
               Container(
-                margin: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(top: 15),
                 color: Colors.black26,
                 height: 2,
                 width: 340,
@@ -147,7 +197,7 @@ class PayComplete extends StatelessWidget {
                       ))),
               Container(
                   alignment: Alignment.topRight,
-                  margin: EdgeInsets.only(top: 5),
+                  margin: EdgeInsets.only(top: 30),
                   //color: Colors.red,
                   width: 340,
                   child: Text("n원",
@@ -156,17 +206,30 @@ class PayComplete extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ))),
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(top: 30),
-                color: Color(0xffB1B2FF),
-                height: 68.4,
-                child: Text("확인",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    )),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 80),
+                    width: MediaQuery.of(context).size.width,
+                    height: double.infinity,
+                    color: Color(0xffB1B2FF),
+                    child: const Text(
+                      "확인",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

@@ -25,7 +25,7 @@ class Payment extends StatelessWidget {
         body: Column(
           children: [
             const SizedBox(
-              height: 24,
+              height: 35,
             ),
             Container(
               height: 50,
@@ -54,11 +54,11 @@ class Payment extends StatelessWidget {
             ),
             Container(
               height: 1.3,
-              width: 360,
+              width: 390,
               color: Colors.black,
             ),
             Container(
-              margin: const EdgeInsets.only(left: 20, top: 20, right: 20),
+              margin: const EdgeInsets.only(left: 20, top: 40, right: 20),
               alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,14 +67,14 @@ class Payment extends StatelessWidget {
                   Column(
                     children: const [
                       Text(
-                        "요청 금액",
+                        "요청금액",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Text(
                         "주문금액",
@@ -111,15 +111,15 @@ class Payment extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 40,
             ),
             Container(
               height: 1.5,
-              width: 360,
+              width: 390,
               color: Colors.black26,
             ),
             const SizedBox(
-              height: 25,
+              height: 40,
             ),
             Container(
               margin: const EdgeInsets.only(left: 20, right: 20),
@@ -207,15 +207,15 @@ class Payment extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
             Container(
               height: 1.5,
-              width: 360,
+              width: 390,
               color: Colors.black26,
             ),
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
             Container(
               height: 70,
@@ -224,13 +224,35 @@ class Payment extends StatelessWidget {
                 color: Color(0xFFD2DAFF),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
+              child: Container(
+                margin: EdgeInsets.only(left: 15, right: 15),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "결제 금액",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Text(
+                        "0원",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
             const SizedBox(
-              height: 15,
+              height: 40,
             ),
             Container(
               height: 1.8,
-              width: 360,
+              width: 390,
               color: Colors.black,
             ),
             const SizedBox(
@@ -238,7 +260,7 @@ class Payment extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.centerLeft,
-              margin: const EdgeInsets.only(left: 25),
+              margin: const EdgeInsets.only(left: 25, top: 10, bottom: 20),
               child: const Text(
                 "결제 수단",
                 style: TextStyle(
@@ -248,7 +270,7 @@ class Payment extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 15,
             ),
             SizedBox(
               width: 300,
@@ -264,7 +286,7 @@ class Payment extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 44,
             ),
             Expanded(
               child: Row(
@@ -276,7 +298,7 @@ class Payment extends StatelessWidget {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      width: 100,
+                      width: 119,
                       height: double.infinity,
                       color: Colors.grey,
                       child: const Text(
@@ -323,7 +345,9 @@ class Payment extends StatelessWidget {
                       child: const Text(
                         "결제",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                   ),
