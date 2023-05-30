@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/cart.dart';
@@ -12,6 +13,8 @@ class Menu extends StatelessWidget {
 
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
+
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +112,7 @@ class Menu extends StatelessWidget {
                                   'storeName': storeName,
                                   'name': documentSnapshot['name'],
                                   'price': documentSnapshot['price'],
+                                  'userUid': user!.uid,
                                 });
                                 Navigator.of(context).push(
                                   MaterialPageRoute(

@@ -1,12 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'completepayment.dart';
 
 class Payment extends StatelessWidget {
   Payment({super.key});
 
-  CollectionReference product =
+  String name = '';
+  String price = '';
+  String storeName = '';
+
+  CollectionReference SBproduct =
       FirebaseFirestore.instance.collection('shoppingBasket');
+
+  CollectionReference order = FirebaseFirestore.instance.collection('order');
+
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +288,28 @@ class Payment extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      await product.doc().delete();
+                      Query query =
+                          SBproduct.where('userUid', isEqualTo: user!.uid);
+                      QuerySnapshot querySnapshot = await query.get();
+                      List<QueryDocumentSnapshot> documents =
+                          querySnapshot.docs;
+                      for (QueryDocumentSnapshot document in documents) {
+                        // 'name', 'price', 'storeName' 필드 값 가져오기
+                        name = document.get('name');
+                        price = document.get('price');
+                        storeName = document.get('storeName');
+                      }
+                      await order.add({
+                        'name': name,
+                        'price': price,
+                        'storName': storeName,
+                      });
+
+                      //유저 uid 비교해서 해당하는 문서 삭제
+
+                      for (QueryDocumentSnapshot document in documents) {
+                        await document.reference.delete();
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => PayComplete()),
