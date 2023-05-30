@@ -46,7 +46,7 @@ class UserPage extends StatelessWidget {
                                 child: CircleAvatar(
                                   radius: 70,
                                   backgroundImage:
-                                      AssetImage('assets/sample.jpg'),
+                                      AssetImage('assets/images/appicon.png'),
                                 ),
                               ),
                               SizedBox(width: 50),
