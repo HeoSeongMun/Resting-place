@@ -7,6 +7,8 @@ import 'package:flutter_app/signup.dart';
 class Cart extends StatelessWidget {
   String storeName = "";
   String areaName = "";
+  String name = "";
+  String price = "";
   Cart(this.storeName, this.areaName, {super.key});
 
   CollectionReference product =
@@ -69,7 +71,22 @@ class Cart extends StatelessWidget {
                             width: 2,
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          Query query =
+                              product.where('userUid', isEqualTo: user!.uid);
+                          QuerySnapshot querySnapshot = await query.get();
+                          List<QueryDocumentSnapshot> documents =
+                              querySnapshot.docs;
+                          for (QueryDocumentSnapshot document in documents) {
+                            // 'name', 'price', 'storeName' 필드 값 가져오기
+                            name = document.get('name');
+                            price = document.get('price');
+                            storeName = document.get('storeName');
+                          }
+                          for (QueryDocumentSnapshot document in documents) {
+                            await document.reference.delete();
+                          }
+                        },
                         child: const Text(
                           "전체삭제",
                           style: TextStyle(
