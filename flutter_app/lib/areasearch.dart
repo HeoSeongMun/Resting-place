@@ -33,7 +33,7 @@ class _AreaSearchState extends State<AreaSearch> {
         backgroundColor: Colors.white,
         body: GestureDetector(
           onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
+            FocusScope.of(context).unfocus();
           },
           child: SingleChildScrollView(
             child: Column(
@@ -46,11 +46,10 @@ class _AreaSearchState extends State<AreaSearch> {
                   children: [
                     Container(
                       padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                      width: 280,
-                      margin: EdgeInsets.only(left: 50),
+                      width: 335,
+                      margin: EdgeInsets.only(left: 10),
                       child: TextField(
                         focusNode: focusNode,
-                        autofocus: true,
                         controller: filter,
                         style: TextStyle(
                           fontSize: 15,
@@ -58,10 +57,9 @@ class _AreaSearchState extends State<AreaSearch> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Color(0xFFAAC4FF),
-                          prefix: Icon(
+                          icon: Icon(
                             Icons.search,
                             color: Colors.black,
-                            size: 20,
                           ),
                           suffixIcon: focusNode.hasFocus
                               ? IconButton(
