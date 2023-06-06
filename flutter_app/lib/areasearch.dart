@@ -4,7 +4,6 @@ import 'package:flutter_app/home.dart';
 import 'package:flutter_app/restaurant.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app/menu.dart';
 
 class AreaSearch extends StatefulWidget {
   const AreaSearch({super.key});
@@ -14,101 +13,160 @@ class AreaSearch extends StatefulWidget {
 }
 
 class _AreaSearchState extends State<AreaSearch> {
+  final TextEditingController filter = TextEditingController();
   CollectionReference product = FirebaseFirestore.instance.collection('area');
+  FocusNode focusNode = FocusNode();
+  String searchText = "";
+
+  _AreaSearchState() {
+    filter.addListener(() {
+      setState(() {
+        searchText = filter.text;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(
-                height: 50,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: 260,
-                    height: 30,
-                    margin: const EdgeInsets.only(left: 50),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Color(0xFFAAC4FF),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: Colors.black12),
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                      width: 280,
+                      margin: EdgeInsets.only(left: 50),
+                      child: TextField(
+                        focusNode: focusNode,
+                        autofocus: true,
+                        controller: filter,
+                        style: TextStyle(
+                          fontSize: 15,
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: Colors.black12),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Color(0xFFAAC4FF),
+                          prefix: Icon(
+                            Icons.search,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                          suffixIcon: focusNode.hasFocus
+                              ? IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      filter.clear();
+                                      searchText = "";
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    size: 20,
+                                  ),
+                                )
+                              : Container(),
+                          hintText: '검색',
+                          labelStyle: TextStyle(color: Colors.grey[400]),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
                         ),
-                        border: OutlineInputBorder(),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0),
-                    child: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {},
+                    focusNode.hasFocus
+                        ? Container(
+                            child: TextButton(
+                              child: Text('취소'),
+                              onPressed: () {
+                                setState(() {
+                                  filter.clear();
+                                  searchText = "";
+                                  focusNode.unfocus();
+                                });
+                              },
+                            ),
+                          )
+                        : Expanded(
+                            flex: 0,
+                            child: Container(),
+                          ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 50),
+                  child: const Text(
+                    "검색된 휴게소",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 50),
-                child: const Text(
-                  "검색된 휴게소",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 50),
+                  height: 520,
+                  width: 290,
+                  color: const Color(0xFFD2DAFF),
+                  child: StreamBuilder(
+                    stream: product.snapshots(),
+                    builder: (context, streamSnapshot) {
+                      if (streamSnapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: streamSnapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              var documentSnapshot =
+                                  streamSnapshot.data!.docs[index].data()
+                                      as Map<String, dynamic>;
+                              if (searchText.isEmpty) {
+                                return Card(
+                                  child: ListTile(
+                                    title: Text(
+                                      documentSnapshot['location'],
+                                    ),
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => Restaurant(
+                                              documentSnapshot['location']),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              }
+                              return Container();
+                            });
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    },
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 50),
-                height: 520,
-                width: 290,
-                color: const Color(0xFFD2DAFF),
-                child: StreamBuilder(
-                  stream: product.snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                    if (streamSnapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: streamSnapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            final DocumentSnapshot documentSnapshot =
-                                streamSnapshot.data!.docs[index];
-                            return Card(
-                              child: ListTile(
-                                title: Text(
-                                  documentSnapshot['location'],
-                                ),
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Restaurant(
-                                          documentSnapshot['location']),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          });
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: BottomAppBar(
