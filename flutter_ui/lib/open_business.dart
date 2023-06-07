@@ -5,7 +5,7 @@ import 'package:flutter_ui/mainpage.dart';
 
 class OpenBusiness extends StatelessWidget {
   OpenBusiness({super.key});
-
+  String storeName = "";
   final user = FirebaseAuth.instance.currentUser;
 
   CollectionReference product = FirebaseFirestore.instance.collection('order');
