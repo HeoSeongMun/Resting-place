@@ -17,6 +17,7 @@ class _AreaSearchState extends State<AreaSearch> {
   CollectionReference product = FirebaseFirestore.instance.collection('area');
   FocusNode focusNode = FocusNode();
   String searchText = "";
+  List<Map<String, dynamic>> data = [];
 
   _AreaSearchState() {
     filter.addListener(() {
@@ -24,6 +25,10 @@ class _AreaSearchState extends State<AreaSearch> {
         searchText = filter.text;
       });
     });
+  }
+
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -51,6 +56,11 @@ class _AreaSearchState extends State<AreaSearch> {
                       child: TextField(
                         focusNode: focusNode,
                         controller: filter,
+                        onChanged: (val) {
+                          setState(() {
+                            searchText = val;
+                          });
+                        },
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -136,20 +146,38 @@ class _AreaSearchState extends State<AreaSearch> {
                         return ListView.builder(
                             itemCount: streamSnapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              var documentSnapshot =
-                                  streamSnapshot.data!.docs[index].data()
-                                      as Map<String, dynamic>;
+                              var data = streamSnapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
                               if (searchText.isEmpty) {
                                 return Card(
                                   child: ListTile(
                                     title: Text(
-                                      documentSnapshot['location'],
+                                      data['location'],
                                     ),
                                     onTap: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (context) => Restaurant(
-                                              documentSnapshot['location']),
+                                          builder: (context) =>
+                                              Restaurant(data['location']),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              }
+                              if (data['location']
+                                  .toString()
+                                  .contains(searchText)) {
+                                return Card(
+                                  child: ListTile(
+                                    title: Text(
+                                      data['location'],
+                                    ),
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              Restaurant(data['location']),
                                         ),
                                       );
                                     },
