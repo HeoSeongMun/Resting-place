@@ -9,7 +9,7 @@ class Payment extends StatelessWidget {
   String name = '';
   String price = '';
   String storeName = '';
-
+  String location = '';
   CollectionReference SBproduct =
       FirebaseFirestore.instance.collection('shoppingBasket');
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/menu.dart';
@@ -146,7 +147,14 @@ class Restaurant extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Cart(),
+            ),
+          );
+        },
         child: const Icon(Icons.shopping_cart),
       ),
     );

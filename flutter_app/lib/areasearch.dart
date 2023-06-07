@@ -241,7 +241,9 @@ class _AreaSearchState extends State<AreaSearch> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Cart("", "")),
+              MaterialPageRoute(
+                builder: (context) => Cart(),
+              ),
             );
           },
           child: const Icon(Icons.shopping_cart),

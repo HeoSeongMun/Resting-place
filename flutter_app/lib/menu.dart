@@ -11,10 +11,9 @@ class Menu extends StatelessWidget {
   String storeName = '';
   String areaName = '';
   Menu(this.areaName, this.storeName, {super.key});
-
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
-
+  CollectionReference product1 = FirebaseFirestore.instance.collection('area');
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -151,12 +150,12 @@ class Menu extends StatelessWidget {
                                     'storeName': storeName,
                                     'name': documentSnapshot['name'],
                                     'price': documentSnapshot['price'],
+                                    'location': areaName,
                                     'userUid': user!.uid,
                                   });
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => Cart(areaName,
-                                          documentSnapshot['storeName']),
+                                      builder: (context) => Cart(),
                                     ),
                                   );
                                 },
@@ -214,7 +213,14 @@ class Menu extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Cart(),
+              ),
+            );
+          },
           child: const Icon(Icons.shopping_cart),
         ),
       ),

@@ -9,7 +9,9 @@ class Cart extends StatelessWidget {
   String areaName = "";
   String name = "";
   String price = "";
-  Cart(this.storeName, this.areaName, {super.key});
+  String location = "";
+  String userUid = "";
+  Cart({super.key});
 
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
@@ -58,42 +60,45 @@ class Cart extends StatelessWidget {
                     height: 30,
                     margin: const EdgeInsets.only(left: 190),
                     child: ElevatedButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          backgroundColor:
-                              const Color.fromARGB(255, 255, 255, 255),
-                          side: const BorderSide(
-                            color: Colors.black,
-                            width: 2,
-                          ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
                         ),
-                        onPressed: () async {
-                          Query query =
-                              product.where('userUid', isEqualTo: user!.uid);
-                          QuerySnapshot querySnapshot = await query.get();
-                          List<QueryDocumentSnapshot> documents =
-                              querySnapshot.docs;
-                          for (QueryDocumentSnapshot document in documents) {
-                            // 'name', 'price', 'storeName' 필드 값 가져오기
-                            name = document.get('name');
-                            price = document.get('price');
-                            storeName = document.get('storeName');
-                          }
-                          for (QueryDocumentSnapshot document in documents) {
-                            await document.reference.delete();
-                          }
-                        },
-                        child: const Text(
-                          "전체삭제",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                        side: const BorderSide(
+                          color: Colors.black,
+                          width: 2,
+                        ),
+                      ),
+                      child: const Text(
+                        "전체삭제",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () async {
+                        Query query =
+                            product.where('userUid', isEqualTo: user!.uid);
+                        QuerySnapshot querySnapshot = await query.get();
+                        List<QueryDocumentSnapshot> documents =
+                            querySnapshot.docs;
+                        for (QueryDocumentSnapshot document in documents) {
+                          // 'name', 'price', 'storeName' 필드 값 가져오기
+                          name = document.get('name');
+                          price = document.get('price');
+                          storeName = document.get('storeName');
+                          location = document.get('location');
+                          userUid = document.get('userUid');
+                        }
+                        for (QueryDocumentSnapshot document in documents) {
+                          await document.reference.delete();
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -103,39 +108,7 @@ class Cart extends StatelessWidget {
               color: Colors.black,
             ),
             Container(
-              height: 100,
-              color: const Color(0xFFAAC4FF),
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.only(left: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      storeName,
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      areaName,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: 1.5,
-              color: Colors.black,
-            ),
-            Container(
-              height: 545,
+              height: 645,
               color: Colors.white,
               child: StreamBuilder(
                 stream: product.snapshots(),
@@ -147,17 +120,102 @@ class Cart extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final DocumentSnapshot documentSnapshot =
                             streamSnapshot.data!.docs[index];
-                        return Card(
-                          child: ListTile(
-                            title: Text(documentSnapshot['name']),
-                            subtitle: Text(documentSnapshot['price']),
-                            onTap: () {},
+                        return GestureDetector(
+                          onTap: () {
+                            debugPrint("터치");
+                          },
+                          child: Card(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(0),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          padding: EdgeInsets.only(
+                                              left: 10, top: 10, bottom: 10),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          color: Color(0xFFAAC4FF),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                documentSnapshot['storeName'],
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                documentSnapshot['location'],
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 1.8,
+                                          color: Colors.black54,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 30, top: 20),
+                                              child: Text(
+                                                documentSnapshot['name'],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 15),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            SizedBox(
+                                              width: 100,
+                                            ),
+                                            Container(
+                                              margin:
+                                                  EdgeInsets.only(right: 20),
+                                              child: Text(
+                                                documentSnapshot['price'] + '원',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ]),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
                     );
                   }
-                  return const Center(child: CircularProgressIndicator());
+                  return Container();
                 },
               ),
             ),
@@ -220,8 +278,4 @@ class Cart extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<void> _delete(String productId) async {
-  await product.doc(productId).delete();
 }
