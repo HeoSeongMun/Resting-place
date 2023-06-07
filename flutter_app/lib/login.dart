@@ -43,6 +43,7 @@ class Login extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFAAC4FF),
       appBar: AppBar(
         backgroundColor: Color(0xFFAAC4FF),
         iconTheme: IconThemeData(
@@ -53,7 +54,7 @@ class Login extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
-            Navigator.pop(context);
+            SystemNavigator.pop();
           },
         ),
       ),
@@ -90,7 +91,7 @@ class Login extends StatelessWidget {
                 margin: EdgeInsets.only(
                   top: 30,
                 ),
-                height: 355,
+                height: 356,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
