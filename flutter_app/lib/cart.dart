@@ -13,11 +13,22 @@ class Cart extends StatelessWidget {
   String price = "";
   String location = "";
   String userUid = "";
-
+  int total = 0;
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
 
   final user = FirebaseAuth.instance.currentUser;
+
+  int calculateTotal(QuerySnapshot snapshot) {
+    total = 0;
+
+    for (var doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      int fieldValue = int.parse(data['price']);
+      total += fieldValue;
+    }
+    return total;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -241,13 +252,34 @@ class Cart extends StatelessWidget {
                     Container(
                       alignment: Alignment.topLeft,
                       margin: const EdgeInsets.only(top: 55, right: 15),
-                      child: Text(
-                        '0원',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: product.snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              // 데이터 가져오는 중 로딩 상태
+                              return CircularProgressIndicator();
+                            }
+                            if (snapshot.hasError) {
+                              // 오류 발생 시 오류 메시지 출력
+                              return Text('Error: ${snapshot.error}');
+                            }
+                            if (!snapshot.hasData ||
+                                snapshot.data!.docs.isEmpty) {
+                              // 데이터가 없을 경우 처리
+                              return Container();
+                            }
+                            // 결과 출력
+                            int total = calculateTotal(snapshot.data!);
+                            return Text(
+                              '$total',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          }),
                     ),
                   ]),
             ),
@@ -259,7 +291,8 @@ class Cart extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Payment()),
+                    MaterialPageRoute(
+                        builder: (context) => Payment(total.toString())),
                   );
                 },
                 child: Container(

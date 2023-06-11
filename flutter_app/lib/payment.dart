@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'completepayment.dart';
 
 class Payment extends StatelessWidget {
-  Payment({super.key});
+  Payment(this.total, {super.key});
 
   String name = '';
   String price = '';
@@ -12,6 +12,8 @@ class Payment extends StatelessWidget {
   String location = '';
   String storeUid = '';
   String userUid = '';
+  String total = '';
+
   CollectionReference SBproduct =
       FirebaseFirestore.instance.collection('shoppingBasket');
 
@@ -67,21 +69,12 @@ class Payment extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
-                    children: const [
-                      Text(
-                        "요청금액",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                    children: [
                       Text(
                         "주문금액",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -90,21 +83,12 @@ class Payment extends StatelessWidget {
                     width: 230,
                   ),
                   Column(
-                    children: const [
+                    children: [
                       Text(
-                        "0원",
+                        total + '원',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "0원",
-                        style: TextStyle(
-                          fontSize: 13,
                         ),
                       ),
                     ],
