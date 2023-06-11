@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/home.dart';
 
 class PayComplete extends StatelessWidget {
-  PayComplete({super.key});
+  PayComplete(this.total, {super.key});
+  String total = '';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -59,7 +61,7 @@ class PayComplete extends StatelessWidget {
               ),
               Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 25),
+                  margin: EdgeInsets.only(top: 40),
                   //color: Colors.red,
                   width: 340,
                   child: Text("결제정보",
@@ -69,7 +71,7 @@ class PayComplete extends StatelessWidget {
                         color: Colors.black,
                       ))),
               Container(
-                margin: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(top: 20),
                 color: Colors.black26,
                 height: 2,
                 width: 340,
@@ -77,6 +79,8 @@ class PayComplete extends StatelessWidget {
               Container(
                 width: 340,
                 margin: EdgeInsets.only(
+                  left: 15,
+                  right: 15,
                   top: 40,
                 ),
                 alignment: Alignment.centerLeft,
@@ -85,45 +89,25 @@ class PayComplete extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
-                      children: const [
-                        Text(
-                          "요청금액",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                      children: [
                         Text(
                           "주문금액",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(
-                      width: 230,
+                      width: 180,
                     ),
                     Column(
-                      children: const [
+                      children: [
                         Text(
-                          "0원",
+                          total + '원',
                           style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "0원",
-                          style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

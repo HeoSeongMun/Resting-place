@@ -54,7 +54,7 @@ class Payment extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 30,
             ),
             Container(
               height: 1.3,
@@ -62,7 +62,7 @@ class Payment extends StatelessWidget {
               color: Colors.black,
             ),
             Container(
-              margin: const EdgeInsets.only(left: 20, top: 40, right: 20),
+              margin: const EdgeInsets.only(left: 15, top: 40, right: 15),
               alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,7 +73,7 @@ class Payment extends StatelessWidget {
                       Text(
                         "주문금액",
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -87,7 +87,7 @@ class Payment extends StatelessWidget {
                       Text(
                         total + '원',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -223,8 +223,8 @@ class Payment extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      const Text(
-                        "0원",
+                      Text(
+                        total + '원',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.black,
@@ -272,7 +272,7 @@ class Payment extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 44,
+              height: 60,
             ),
             Expanded(
               child: Row(
@@ -324,7 +324,8 @@ class Payment extends StatelessWidget {
                       }
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PayComplete()),
+                        MaterialPageRoute(
+                            builder: (context) => PayComplete(total)),
                       );
                     },
                     child: Container(
