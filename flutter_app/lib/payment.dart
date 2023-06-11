@@ -10,6 +10,8 @@ class Payment extends StatelessWidget {
   String price = '';
   String storeName = '';
   String location = '';
+  String storeUid = '';
+  String userUid = '';
   CollectionReference SBproduct =
       FirebaseFirestore.instance.collection('shoppingBasket');
 
@@ -320,11 +322,15 @@ class Payment extends StatelessWidget {
                         name = document.get('name');
                         price = document.get('price');
                         storeName = document.get('storeName');
+                        storeUid = document.get('storeUid');
+                        userUid = document.get('userUid');
                       }
                       await order.add({
                         'name': name,
                         'price': price,
                         'storName': storeName,
+                        'storeUid': storeUid,
+                        'userUid': userUid,
                       });
 
                       //유저 uid 비교해서 해당하는 문서 삭제

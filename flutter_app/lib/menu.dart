@@ -152,6 +152,7 @@ class Menu extends StatelessWidget {
                                     'price': documentSnapshot['price'],
                                     'location': areaName,
                                     'userUid': user!.uid,
+                                    'storeUid': documentSnapshot['storeUid'],
                                   });
                                   Navigator.of(context).push(
                                     MaterialPageRoute(

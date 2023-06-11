@@ -5,13 +5,14 @@ import 'package:flutter_app/payment.dart';
 import 'package:flutter_app/signup.dart';
 
 class Cart extends StatelessWidget {
+  Cart({super.key});
+
   String storeName = "";
   String areaName = "";
   String name = "";
   String price = "";
   String location = "";
   String userUid = "";
-  Cart({super.key});
 
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
@@ -240,8 +241,8 @@ class Cart extends StatelessWidget {
                     Container(
                       alignment: Alignment.topLeft,
                       margin: const EdgeInsets.only(top: 55, right: 15),
-                      child: const Text(
-                        "0원",
+                      child: Text(
+                        '0원',
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,

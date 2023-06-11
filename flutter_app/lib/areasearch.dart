@@ -17,7 +17,6 @@ class _AreaSearchState extends State<AreaSearch> {
   CollectionReference product = FirebaseFirestore.instance.collection('area');
   FocusNode focusNode = FocusNode();
   String searchText = "";
-  List<Map<String, dynamic>> data = [];
 
   _AreaSearchState() {
     filter.addListener(() {
