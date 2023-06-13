@@ -109,6 +109,7 @@ class Cart extends StatelessWidget {
                         for (QueryDocumentSnapshot document in documents) {
                           await document.reference.delete();
                         }
+                        total = 0;
                       },
                     ),
                   ),
@@ -123,7 +124,8 @@ class Cart extends StatelessWidget {
               height: 645,
               color: Colors.white,
               child: StreamBuilder(
-                stream: product.snapshots(),
+                stream:
+                    product.where('userUid', isEqualTo: user!.uid).snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<dynamic> streamSnapshot) {
                   if (streamSnapshot.hasData) {
@@ -268,7 +270,13 @@ class Cart extends StatelessWidget {
                             if (!snapshot.hasData ||
                                 snapshot.data!.docs.isEmpty) {
                               // 데이터가 없을 경우 처리
-                              return Container();
+                              return Text(
+                                '0원',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
                             }
                             // 결과 출력
                             int total = calculateTotal(snapshot.data!);
@@ -289,11 +297,57 @@ class Cart extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Payment(total.toString())),
-                  );
+                  if (total == 0) {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '상품이 없습니다.!',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  '상품을 추가해주세요.!',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ]),
+                          actions: <Widget>[
+                            Container(
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    "닫기",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Payment(total.toString())),
+                    );
+                  }
                 },
                 child: Container(
                   alignment: Alignment.center,

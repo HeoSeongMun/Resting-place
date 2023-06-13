@@ -184,7 +184,7 @@ class PayComplete extends StatelessWidget {
                   margin: EdgeInsets.only(top: 30, bottom: 35),
                   //color: Colors.red,
                   width: 340,
-                  child: Text("n원",
+                  child: Text(total + '원',
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
