@@ -5,10 +5,12 @@ import 'package:flutter_ui/mainpage.dart';
 
 class OpenBusiness extends StatelessWidget {
   OpenBusiness({super.key});
-  String storeName = "";
+
   final user = FirebaseAuth.instance.currentUser;
 
   CollectionReference product = FirebaseFirestore.instance.collection('order');
+  CollectionReference product1 =
+      FirebaseFirestore.instance.collection('processing');
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +150,7 @@ class OpenBusiness extends StatelessWidget {
               SingleChildScrollView(
                 child: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 520,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -173,7 +175,7 @@ class OpenBusiness extends StatelessWidget {
                           Container(
                             width: 100,
                             height: 100,
-                            color: Color(0xFFD2DAFF),
+                            color: const Color(0xFFD2DAFF),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: const [
@@ -190,7 +192,7 @@ class OpenBusiness extends StatelessWidget {
                           Container(
                             width: 100,
                             height: 100,
-                            color: Color(0xFFD2DAFF),
+                            color: const Color(0xFFD2DAFF),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: const [
@@ -207,7 +209,7 @@ class OpenBusiness extends StatelessWidget {
                           Container(
                             width: 100,
                             height: 100,
-                            color: Color(0xFFD2DAFF),
+                            color: const Color(0xFFD2DAFF),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: const [
@@ -235,7 +237,9 @@ class OpenBusiness extends StatelessWidget {
                             width: MediaQuery.of(context).size.width - 250,
                             color: const Color(0xFFD2DAFF),
                             child: StreamBuilder(
-                              stream: product.snapshots(),
+                              stream: product
+                                  .where("storeUid", isEqualTo: user!.uid)
+                                  .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                                 if (streamSnapshot.hasData) {
@@ -256,7 +260,68 @@ class OpenBusiness extends StatelessWidget {
                                             style:
                                                 const TextStyle(fontSize: 20),
                                           ),
-                                          onTap: () {},
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder: ((context) {
+                                                  return AlertDialog(
+                                                    title: const Text('주문 선택'),
+                                                    content: const Text(
+                                                        '주문을 받으시겠습니까?'),
+                                                    actions: [
+                                                      ElevatedButton(
+                                                        child: const Text('취소'),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                      ElevatedButton(
+                                                        child: const Text('확인'),
+                                                        onPressed: () async {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  ((context) {
+                                                                return AlertDialog(
+                                                                  title: const Text(
+                                                                      '주문 받기 완료'),
+                                                                  content:
+                                                                      const Text(
+                                                                          '주문 받기가 완료 되었습니다.'),
+                                                                  actions: [
+                                                                    ElevatedButton(
+                                                                      child: const Text(
+                                                                          '확인'),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        await product1
+                                                                            .add({
+                                                                          'storeName':
+                                                                              documentSnapshot['storeName'],
+                                                                          'name':
+                                                                              documentSnapshot['name'],
+                                                                          'price':
+                                                                              documentSnapshot['price'],
+                                                                          'userUid':
+                                                                              user!.uid,
+                                                                          'storeUid':
+                                                                              documentSnapshot['storeUid'],
+                                                                        });
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              }));
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                }));
+                                          },
                                         ),
                                       );
                                     },
@@ -278,71 +343,6 @@ class OpenBusiness extends StatelessWidget {
                   ],
                 ),
               ),
-
-              /*
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 50,
-                      horizontal: 165,
-                    ),
-                    child: Column(
-                      children: const [
-                        Text('text'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 80,
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF004DFD),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            child: Text(
-                              '접수',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF00226F),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            child: Text(
-                              '취소',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),*/
             ],
           ),
         ),

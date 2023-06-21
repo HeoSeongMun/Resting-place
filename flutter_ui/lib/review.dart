@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ui/mainpage.dart';
 
 class Review extends StatelessWidget {
-  const Review({super.key});
+  Review({super.key});
+
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,8 @@ class Review extends StatelessWidget {
                             width: 290,
                             child: StreamBuilder(
                               stream: FirebaseFirestore.instance
-                                  .collection('items')
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<
@@ -45,7 +49,7 @@ class Review extends StatelessWidget {
                                       style: TextButton.styleFrom(
                                           foregroundColor: Colors.black),
                                       child: Text(
-                                        docs[index]['name'],
+                                        docs[index]['storeName'],
                                         style: const TextStyle(fontSize: 40),
                                       ),
                                       onPressed: () {
@@ -69,7 +73,8 @@ class Review extends StatelessWidget {
                         width: 200,
                         child: StreamBuilder(
                           stream: FirebaseFirestore.instance
-                              .collection('items')
+                              .collection('testlogin')
+                              .where("email", isEqualTo: user!.email)
                               .snapshots(),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -79,7 +84,10 @@ class Review extends StatelessWidget {
                               itemCount: docs.length,
                               itemBuilder: (context, index) {
                                 return Text(
-                                  docs[index]['subname'],
+                                  docs[index]['restAreaName'] +
+                                      '(' +
+                                      docs[index]['direction'] +
+                                      ')',
                                   textAlign: TextAlign.center,
                                 );
                               },

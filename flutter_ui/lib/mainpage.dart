@@ -193,7 +193,7 @@ class MainPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Review(),
+                              builder: (context) => Review(),
                             ),
                           );
                         },
@@ -221,7 +221,7 @@ class MainPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Sales(),
+                              builder: (context) => Sales(),
                             ),
                           );
                         },

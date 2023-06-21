@@ -69,7 +69,7 @@ class Login extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 85),
                 child: Text(
-                  '휴게소에서 뭐먹지?',
+                  '휴잇',
                   style: TextStyle(
                     fontFamily: 'pretendard',
                     fontSize: 35,

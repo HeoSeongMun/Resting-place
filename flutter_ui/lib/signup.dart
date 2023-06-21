@@ -22,6 +22,9 @@ class Signup extends StatelessWidget {
   final TextEditingController directionController = TextEditingController();
   final TextEditingController storenameController = TextEditingController();
   final TextEditingController restareanameController = TextEditingController();
+  final TextEditingController biznumberController = TextEditingController();
+  final TextEditingController ownernameController = TextEditingController();
+  final TextEditingController phonenumberController = TextEditingController();
 
   // 테스트
   Future<void> update(DocumentSnapshot documentSnapshot) async {
@@ -91,7 +94,7 @@ class Signup extends StatelessWidget {
                       ],
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: '휴게소 이름을 적어주세요',
+                        labelText: '휴게소 이름을 적어주세요 예) "ㅁㅁ휴게소"',
                       ),
                     ),
                     const SizedBox(
@@ -114,6 +117,36 @@ class Signup extends StatelessWidget {
                         labelText: '가게 이름을 적어주세요',
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      controller: biznumberController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: '사업자 번호를 적어주세요',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      controller: ownernameController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: '요청자 이름을 적어주세요',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      controller: phonenumberController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: '요청자 전화번호를 적어주세요 예)01012341234',
+                      ),
+                    ),
                     Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
@@ -128,37 +161,39 @@ class Signup extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () async {
                             try {
+                              /*
+                              //회원가입부분
                               final newUser = await _authentication
                                   .createUserWithEmailAndPassword(
                                 email: emailController.text,
                                 password: pwController.text,
                               );
+                              */
 
                               await FirebaseFirestore.instance
-                                  .collection('testlogin')
-                                  .doc(newUser.user!.uid)
-                                  .set(
+                                  .collection('admin_request')
+                                  .add(
                                 {
-                                  'userId': idController.text,
-                                  'email': emailController.text,
-                                  'restAreaName': restareanameController.text,
+                                  'owner_nickname': idController.text,
+                                  'owner_email': emailController.text,
+                                  'restarea_name': restareanameController.text,
                                   'direction': directionController.text,
-                                  'storeName': storenameController.text,
+                                  'store_name': storenameController.text,
+                                  'owner_password': pwController.text,
+                                  'phone_number': phonenumberController.text,
+                                  'owner_name': ownernameController.text,
+                                  'biz_number': biznumberController.text,
                                 },
                               );
-
-                              if (newUser.user != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return Login();
-                                    },
-                                  ),
-                                );
-                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Login();
+                                  },
+                                ),
+                              );
                             } catch (e) {
-                              print(e);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('이메일과 비밀번호를 확인해주세요'),
@@ -167,7 +202,7 @@ class Signup extends StatelessWidget {
                               );
                             }
                           },
-                          child: const Text('회원가입'),
+                          child: const Text('요청하기'),
                         ),
                       ],
                     ),
@@ -186,7 +221,7 @@ class Signup extends StatelessWidget {
                               ),
                             );
                           },
-                          child: const Text('로그인 페이지'),
+                          child: const Text('로그인 페이지로 돌아가기'),
                         ),
                       ],
                     ),

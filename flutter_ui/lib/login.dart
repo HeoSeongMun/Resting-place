@@ -101,7 +101,7 @@ class Login extends StatelessWidget {
                               ),
                             );
                           },
-                          child: const Text('회원가입페이지'),
+                          child: const Text('회원가입 요청 페이지'),
                         ),
                       ],
                     ),
@@ -130,7 +130,6 @@ class Login extends StatelessWidget {
                                 );
                               }
                             } catch (e) {
-                              print(e);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('이메일과 비밀번호를 확인해주세요'),

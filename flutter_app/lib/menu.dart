@@ -43,7 +43,7 @@ class Menu extends StatelessWidget {
                         'assets/images/menu1.jpg',
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 70,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -66,7 +66,7 @@ class Menu extends StatelessWidget {
                           Container(
                             child: Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 150,
                                   child: Text(
                                     areaName,
@@ -77,7 +77,7 @@ class Menu extends StatelessWidget {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(left: 70),
+                                  margin: const EdgeInsets.only(left: 70),
                                   width: 70,
                                   height: 25,
                                   child: ElevatedButton(
@@ -142,24 +142,32 @@ class Menu extends StatelessWidget {
                             final DocumentSnapshot documentSnapshot =
                                 streamSnapshot.data!.docs[index];
                             return Card(
-                              child: ListTile(
-                                title: Text(documentSnapshot['name']),
-                                subtitle: Text(documentSnapshot['price']),
-                                onTap: () async {
-                                  await product.add({
-                                    'storeName': storeName,
-                                    'name': documentSnapshot['name'],
-                                    'price': documentSnapshot['price'],
-                                    'location': areaName,
-                                    'userUid': user!.uid,
-                                    'storeUid': documentSnapshot['storeUid'],
-                                  });
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Cart(),
-                                    ),
-                                  );
-                                },
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                    documentSnapshot['imageUrl'],
+                                  ),
+                                  ListTile(
+                                    title: Text(documentSnapshot['name']),
+                                    subtitle: Text(documentSnapshot['price']),
+                                    onTap: () async {
+                                      await product.add({
+                                        'storeName': storeName,
+                                        'name': documentSnapshot['name'],
+                                        'price': documentSnapshot['price'],
+                                        'location': areaName,
+                                        'userUid': user!.uid,
+                                        'storeUid':
+                                            documentSnapshot['storeUid'],
+                                      });
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => Cart(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
                             );
                           });

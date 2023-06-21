@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ui/add_menu.dart';
 import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/add_image/add_image.dart';
 
@@ -171,175 +171,60 @@ class Menu extends StatelessWidget {
                         horizontal: 97.5,
                       ),
                       child: Row(
-                        children: const [
-                          Text('품절설정'),
+                        children: [
+                          TextButton(
+                            child: const Text('메뉴추가'),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Addmenu(),
+                                ),
+                              );
+                            },
+                          )
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Row(
-                      children: const [
-                        Text('메뉴명'),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 2.0,
-                      width: double.infinity,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '메뉴명',
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 2.0,
-                      width: double.infinity,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: const [
-                        Text('가격'),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                      controller: priceController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '가격',
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 2.0,
-                      width: double.infinity,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        const Text('상품 이미지'),
-                        GestureDetector(
-                          onTap: () {
-                            showAlert(context);
-                          },
-                          child: const Icon(Icons.image),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        SizedBox(
-                          width: 240,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 100,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const SizedBox(
-                          width: 200,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: const Color(0xFF00226F),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
+              Container(
+                height: 580,
+                color: Colors.white,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('menu')
+                      .where("storeUid", isEqualTo: user!.uid)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                    if (streamSnapshot.hasData) {
+                      return ListView.builder(
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[index];
+                          return Card(
+                            child: Column(
+                              children: [
+                                Image.network(
+                                  documentSnapshot['imageUrl'],
+                                ),
+                                ListTile(
+                                  title: Text(documentSnapshot['name']),
+                                  subtitle: Text(documentSnapshot['price']),
+                                )
+                              ],
                             ),
-                            child: Text(
-                              '취소',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: const Color(0xFF004DFD),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final String name = nameController.text;
-                                final String price = priceController.text;
-
-                                // 플러터 웹 이미지 파이어베이스 스토리지 등록 4일 동안 개고생해서 해냄
-                                final refImage = FirebaseStorage.instance
-                                    .ref()
-                                    .child(subname)
-                                    .child(storeName)
-                                    .child('$name.png');
-
-                                await refImage.putData(userPickedImage!);
-
-                                await product.add({
-                                  'storeName': storeName,
-                                  'name': name,
-                                  'price': price,
-                                  'soldout': false,
-                                });
-                                nameController.text = "";
-                                priceController.text = "";
-                              },
-                              child: const Text('추가'),
-                            ),
-                            /*Text(
-                              '완료',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),*/
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          );
+                        },
+                      );
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  },
                 ),
-              )
+              ),
             ],
           ),
         ),
