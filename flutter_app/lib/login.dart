@@ -91,7 +91,7 @@ class Login extends StatelessWidget {
                 margin: EdgeInsets.only(
                   top: 30,
                 ),
-                height: 356,
+                height: 363,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(

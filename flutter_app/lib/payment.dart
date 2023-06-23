@@ -69,7 +69,7 @@ class Payment extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
-                    children: [
+                    children: const [
                       Text(
                         "주문금액",
                         style: TextStyle(
@@ -85,8 +85,8 @@ class Payment extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        total + '원',
-                        style: TextStyle(
+                        '$total원',
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -211,7 +211,7 @@ class Payment extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               child: Container(
-                margin: EdgeInsets.only(left: 15, right: 15),
+                margin: const EdgeInsets.only(left: 15, right: 15),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -224,8 +224,8 @@ class Payment extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        total + '원',
-                        style: TextStyle(
+                        '$total원',
+                        style: const TextStyle(
                           fontSize: 20,
                           color: Colors.black,
                         ),
@@ -312,7 +312,7 @@ class Payment extends StatelessWidget {
                       await order.add({
                         'name': name,
                         'price': price,
-                        'storName': storeName,
+                        'storeName': storeName,
                         'storeUid': storeUid,
                         'userUid': userUid,
                       });
