@@ -17,6 +17,7 @@ class _AreaSearchState extends State<AreaSearch> {
   CollectionReference product = FirebaseFirestore.instance.collection('area');
   FocusNode focusNode = FocusNode();
   String searchText = "";
+  List<String> uniqueData = [];
 
   _AreaSearchState() {
     filter.addListener(() {
@@ -28,6 +29,22 @@ class _AreaSearchState extends State<AreaSearch> {
 
   void initState() {
     super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    QuerySnapshot snapshot = await product.get();
+
+    Set<String> uniqueSet = Set<String>();
+
+    for (var doc in snapshot.docs) {
+      String data = doc['location'];
+      uniqueSet.add(data);
+    }
+
+    setState(() {
+      uniqueData = uniqueSet.toList();
+    });
   }
 
   @override
@@ -143,40 +160,37 @@ class _AreaSearchState extends State<AreaSearch> {
                     builder: (context, streamSnapshot) {
                       if (streamSnapshot.hasData) {
                         return ListView.builder(
-                            itemCount: streamSnapshot.data!.docs.length,
+                            itemCount: uniqueData.length,
                             itemBuilder: (context, index) {
-                              var data = streamSnapshot.data!.docs[index].data()
-                                  as Map<String, dynamic>;
+                              String data = uniqueData[index];
                               if (searchText.isEmpty) {
                                 return Card(
                                   child: ListTile(
                                     title: Text(
-                                      data['location'],
+                                      data,
                                     ),
                                     onTap: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              Restaurant(data['location']),
+                                              Restaurant(data),
                                         ),
                                       );
                                     },
                                   ),
                                 );
                               }
-                              if (data['location']
-                                  .toString()
-                                  .contains(searchText)) {
+                              if (data.toString().contains(searchText)) {
                                 return Card(
                                   child: ListTile(
                                     title: Text(
-                                      data['location'],
+                                      data,
                                     ),
                                     onTap: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              Restaurant(data['location']),
+                                              Restaurant(data),
                                         ),
                                       );
                                     },
