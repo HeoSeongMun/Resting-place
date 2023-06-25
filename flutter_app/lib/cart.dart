@@ -281,7 +281,7 @@ class Cart extends StatelessWidget {
                             // 결과 출력
                             int total = calculateTotal(snapshot.data!);
                             return Text(
-                              '$total',
+                              '$total원',
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
