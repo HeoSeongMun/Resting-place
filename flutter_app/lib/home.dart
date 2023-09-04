@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/areasearch.dart';
@@ -41,6 +42,15 @@ class _Home extends State<Home> {
         });
   }
 
+  final CarouselController _controller = CarouselController();
+  final imageList = [
+    Image.asset('assets/images/1.png', fit: BoxFit.contain),
+    Image.asset('assets/images/2.jpg', fit: BoxFit.contain),
+    Image.asset('assets/images/3.png', fit: BoxFit.contain),
+    Image.asset('assets/images/4.jpg', fit: BoxFit.contain),
+    Image.asset('assets/images/5.jpg', fit: BoxFit.contain),
+  ];
+  int _current = 0;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -62,6 +72,58 @@ class _Home extends State<Home> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              CarouselSlider(
+                carouselController: _controller,
+                options: CarouselOptions(
+                  height: 150.0,
+                  scrollDirection: Axis.horizontal,
+                  viewportFraction: 0.45, // 화면 비율
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  },
+                ),
+                items: imageList.map((image) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: image,
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: imageList.asMap().entries.map((entry) {
+                    return GestureDetector(
+                      onTap: () => _controller.animateToPage(entry.key),
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 4),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blueAccent
+                              .withOpacity(_current == entry.key ? 0.9 : 0.4),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
               SizedBox(
@@ -185,7 +247,7 @@ class _Home extends State<Home> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const UserPage()),
+                      MaterialPageRoute(builder: (context) => UserPage()),
                     );
                   },
                 ),

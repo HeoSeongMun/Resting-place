@@ -1,7 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/signup.dart';
 
 class UserInfoEditScreen extends StatelessWidget {
-  UserInfoEditScreen({super.key});
+  UserInfoEditScreen(this.useremail, {super.key});
+  String useremail = "";
+  final _authentication = FirebaseAuth.instance;
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController pwController1 = TextEditingController();
+  final TextEditingController pwController2 = TextEditingController();
+
+  CollectionReference product =
+      FirebaseFirestore.instance.collection('userinfo');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +56,12 @@ class UserInfoEditScreen extends StatelessWidget {
                     height: 40,
                     margin: EdgeInsets.only(left: 10),
                     child: TextField(
+                      controller: nameController,
                       decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                            color: Colors.grey[300],
+                            fontStyle: FontStyle.italic,
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
@@ -81,11 +100,13 @@ class UserInfoEditScreen extends StatelessWidget {
                     height: 40,
                     margin: EdgeInsets.only(left: 10),
                     child: TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
-                        hintText: 'E-mail',
+                        hintText: useremail,
                         hintStyle: TextStyle(
-                            color: Colors.grey[300],
-                            fontStyle: FontStyle.italic),
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(13)),
                           borderSide:
@@ -100,7 +121,7 @@ class UserInfoEditScreen extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(13)),
                         ),
                       ),
-                      keyboardType: TextInputType.emailAddress,
+                      enabled: false,
                     ),
                   )
                 ],
@@ -126,6 +147,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     height: 40,
                     margin: EdgeInsets.only(left: 10),
                     child: TextField(
+                      controller: pwController1,
                       obscureText: true,
                       decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -158,6 +180,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     height: 40,
                     margin: EdgeInsets.only(left: 15),
                     child: TextField(
+                      controller: pwController2,
                       obscureText: true,
                       decoration: InputDecoration(
                           isDense: true,
@@ -355,7 +378,54 @@ class UserInfoEditScreen extends StatelessWidget {
                 height: 40,
               ),
               ElevatedButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  User? _user = _authentication.currentUser;
+                  if (_user != null) {
+                    if (nameController.text != "") {
+                      if (pwController1.text != "" &&
+                          pwController2.text != "" &&
+                          pwController1.text == pwController2.text) {
+                        _user.updatePassword(pwController2.text);
+                        Query query =
+                            product.where('userUid', isEqualTo: _user.uid);
+                        QuerySnapshot querySnapshot = await query.get();
+                        final docs_id = querySnapshot.docs[0].id;
+                        product.doc('${docs_id}').update({
+                          'name': nameController.text,
+                          'password': pwController2.text,
+                        });
+                        return showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  '변경되었습니다.',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        //onWillpop에 false 전달되어 앱이 종료되지 않는다.
+                                        Navigator.pop(context, false);
+                                      },
+                                      child: Text('확인')),
+                                ],
+                              );
+                            });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('이름과 비밀번호를 다시 확인해주세요'),
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      }
+                    }
+                  }
+                },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

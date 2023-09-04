@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/login.dart';
 import 'package:flutter_app/orderedlist.dart';
@@ -7,7 +9,15 @@ import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/home.dart';
 
 class UserPage extends StatelessWidget {
-  const UserPage({super.key});
+  UserPage({super.key});
+
+  String useremail = "";
+  String username = "";
+  final user = FirebaseAuth.instance.currentUser;
+
+  CollectionReference product =
+      FirebaseFirestore.instance.collection('userinfo');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +35,8 @@ class UserPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UserInfoEditScreen()),
+                              builder: (context) =>
+                                  UserInfoEditScreen(useremail)),
                         );
                       },
                       child: Container(
@@ -56,17 +67,84 @@ class UserPage extends StatelessWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      '사용자 이름',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                    SizedBox(
+                                      height: 20,
+                                      width: 200,
+                                      child: StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('userinfo')
+                                            .where("email",
+                                                isEqualTo: user!.email)
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<dynamic> snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator(); // 데이터를 가져오는 중 로딩 표시
+                                          }
+                                          if (!snapshot.hasData ||
+                                              snapshot.data!.docs.isEmpty) {
+                                            return Container(); // 데이터가 없는 경우 처리
+                                          }
+                                          // 데이터가 있는 경우 처리
+                                          final DocumentSnapshot
+                                              documentSnapshot =
+                                              snapshot.data!.docs[0];
+                                          String name = documentSnapshot[
+                                              'name']; // 'name' 필드값 가져오기
+                                          String email =
+                                              documentSnapshot['email'];
+                                          useremail = email; // 'email' 필드값 가져오기
+                                          return Text(
+                                            textAlign: TextAlign.center,
+                                            name,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                    Text(
-                                      '사용자 ID',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 15),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                      width: 200,
+                                      child: StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('userinfo')
+                                            .where("email",
+                                                isEqualTo: user!.email)
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<dynamic> snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator(); // 데이터를 가져오는 중 로딩 표시
+                                          }
+                                          if (!snapshot.hasData ||
+                                              snapshot.data!.docs.isEmpty) {
+                                            return Container(); // 데이터가 없는 경우 처리
+                                          }
+                                          // 데이터가 있는 경우 처리
+                                          final DocumentSnapshot
+                                              documentSnapshot =
+                                              snapshot.data!.docs[0];
+                                          String name = documentSnapshot[
+                                              'name']; // 'name' 필드값 가져오기
+                                          String email = documentSnapshot[
+                                              'email']; // 'email' 필드값 가져오기
+                                          return Text(
+                                            textAlign: TextAlign.center,
+                                            email,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                     Text(
                                       '보유 마일리지\nn원',

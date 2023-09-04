@@ -203,7 +203,7 @@ class Menu extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const UserPage()),
+                      MaterialPageRoute(builder: (context) => UserPage()),
                     );
                   },
                 ),

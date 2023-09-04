@@ -49,14 +49,14 @@ class _AreaSearchState extends State<AreaSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: SingleChildScrollView(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: MaterialApp(
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -72,9 +72,9 @@ class _AreaSearchState extends State<AreaSearch> {
                       child: TextField(
                         focusNode: focusNode,
                         controller: filter,
-                        onChanged: (val) {
+                        onChanged: (text) {
                           setState(() {
-                            searchText = val;
+                            searchText = text;
                           });
                         },
                         style: TextStyle(
@@ -100,7 +100,18 @@ class _AreaSearchState extends State<AreaSearch> {
                                     size: 20,
                                   ),
                                 )
-                              : Container(),
+                              : IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      filter.clear();
+                                      searchText = "";
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    size: 20,
+                                  ),
+                                ),
                           hintText: '검색',
                           labelStyle: TextStyle(color: Colors.grey[400]),
                           focusedBorder: OutlineInputBorder(
@@ -118,23 +129,6 @@ class _AreaSearchState extends State<AreaSearch> {
                         ),
                       ),
                     ),
-                    focusNode.hasFocus
-                        ? Container(
-                            child: TextButton(
-                              child: Text('취소'),
-                              onPressed: () {
-                                setState(() {
-                                  filter.clear();
-                                  searchText = "";
-                                  focusNode.unfocus();
-                                });
-                              },
-                            ),
-                          )
-                        : Expanded(
-                            flex: 0,
-                            child: Container(),
-                          ),
                   ],
                 ),
                 const SizedBox(
@@ -207,59 +201,59 @@ class _AreaSearchState extends State<AreaSearch> {
               ],
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: Container(
-            height: 60,
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                    icon: const Icon(Icons.home),
+          bottomNavigationBar: BottomAppBar(
+            child: Container(
+              height: 60,
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                      icon: const Icon(Icons.home),
+                      color: Colors.black,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                        );
+                      }),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.man,
+                    ),
                     color: Colors.black,
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Home()),
+                        MaterialPageRoute(builder: (context) => UserPage()),
                       );
-                    }),
-                IconButton(
-                  icon: const Icon(
-                    Icons.man,
+                    },
                   ),
-                  color: Colors.black,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const UserPage()),
-                    );
-                  },
-                ),
-                IconButton(
-                    icon: const Icon(Icons.search),
-                    color: Colors.black,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AreaSearch()),
-                      );
-                    }),
-              ],
+                  IconButton(
+                      icon: const Icon(Icons.search),
+                      color: Colors.black,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AreaSearch()),
+                        );
+                      }),
+                ],
+              ),
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Cart(),
-              ),
-            );
-          },
-          child: const Icon(Icons.shopping_cart),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Cart(),
+                ),
+              );
+            },
+            child: const Icon(Icons.shopping_cart),
+          ),
         ),
       ),
     );

@@ -14,6 +14,8 @@ class Signup extends StatefulWidget {
 final _authentication = FirebaseAuth.instance;
 
 CollectionReference product = FirebaseFirestore.instance.collection('login');
+CollectionReference product1 =
+    FirebaseFirestore.instance.collection('userinfo');
 
 final TextEditingController idController = TextEditingController();
 final TextEditingController pwController = TextEditingController();
@@ -447,6 +449,12 @@ class _SignupState extends State<Signup> {
                             password: pwController.text,
                           );
                           if (newUser.user != null) {
+                            product1.add({
+                              'name': idController.text,
+                              'email': emailController.text,
+                              'password': pwController.text,
+                              'userUid': newUser.user!.uid,
+                            });
                             Navigator.push(
                               context,
                               MaterialPageRoute(
