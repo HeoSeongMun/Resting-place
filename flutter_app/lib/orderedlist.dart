@@ -85,9 +85,9 @@ class _OrderedList extends State<OrderedList> {
                       child: Container(
                         margin: EdgeInsets.only(left: 10, top: 20),
                         child: Text(
-                          "지난 주문",
+                          "지난주문",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

@@ -43,7 +43,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   carousel_slider: ^4.2.1
   percent_indicator: ^4.2.3
-
+  numberpicker: ^2.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

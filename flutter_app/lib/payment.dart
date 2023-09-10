@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'completepayment.dart';
 
 class Payment extends StatelessWidget {
@@ -19,6 +20,9 @@ class Payment extends StatelessWidget {
 
   CollectionReference order = FirebaseFirestore.instance.collection('order');
 
+  var hour = 0;
+  var minute = 0;
+  var timeFormat = "오전";
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -193,7 +197,209 @@ class Payment extends StatelessWidget {
               ),
             ),
             const SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 15, right: 15),
               height: 40,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          "도착 예상 시간 : ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, "0")} ${timeFormat}",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13)),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13),
+                          ),
+                          backgroundColor: const Color(0xFFEEF1FF),
+                          side: const BorderSide(
+                            color: Color(0xFFEEF1FF),
+                            width: 1,
+                          ),
+                        ),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: Text(
+                                    '도착 예상 시간을 정해주세요!',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  content: StatefulBuilder(
+                                      builder: (context, setState) {
+                                    return Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          NumberPicker(
+                                            minValue: 0,
+                                            maxValue: 12,
+                                            value: hour,
+                                            zeroPad: true,
+                                            infiniteLoop: true,
+                                            itemWidth: 80,
+                                            itemHeight: 60,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                hour = value;
+                                              });
+                                            },
+                                            textStyle: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 20),
+                                            selectedTextStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 30),
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                  top: BorderSide(
+                                                    color: Colors.white,
+                                                  ),
+                                                  bottom: BorderSide(
+                                                      color: Colors.white)),
+                                            ),
+                                          ),
+                                          NumberPicker(
+                                            minValue: 0,
+                                            maxValue: 59,
+                                            value: minute,
+                                            zeroPad: true,
+                                            infiniteLoop: true,
+                                            itemWidth: 80,
+                                            itemHeight: 60,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                minute = value;
+                                              });
+                                            },
+                                            textStyle: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 20),
+                                            selectedTextStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 30),
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                  top: BorderSide(
+                                                    color: Colors.white,
+                                                  ),
+                                                  bottom: BorderSide(
+                                                      color: Colors.white)),
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    timeFormat = "오전";
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                                  decoration: BoxDecoration(
+                                                      color: timeFormat == "오전"
+                                                          ? Colors.grey.shade800
+                                                          : Colors
+                                                              .grey.shade700,
+                                                      border: Border.all(
+                                                        color:
+                                                            timeFormat == "오전"
+                                                                ? Colors.grey
+                                                                : Colors.grey
+                                                                    .shade700,
+                                                      )),
+                                                  child: const Text(
+                                                    "오전",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 25),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    timeFormat = "오후";
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                                  decoration: BoxDecoration(
+                                                    color: timeFormat == "오후"
+                                                        ? Colors.grey.shade800
+                                                        : Colors.grey.shade700,
+                                                    border: Border.all(
+                                                      color: timeFormat == "오후"
+                                                          ? Colors.grey
+                                                          : Colors
+                                                              .grey.shade700,
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    "오후",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 25),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                        child: Text('취소')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                        child: Text('확인')),
+                                  ],
+                                );
+                              });
+                        },
+                        child: const Text(
+                          "예상시간\n   선택",
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ]),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Container(
               height: 1.5,
