@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/cart.dart';
+import 'package:flutter_app/delivery.dart';
 import 'package:flutter_app/login.dart';
 import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/rev_mng.dart';
@@ -68,7 +70,7 @@ class UserPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SizedBox(
-                                      height: 20,
+                                      height: 25,
                                       width: 200,
                                       child: StreamBuilder(
                                         stream: FirebaseFirestore.instance
@@ -180,6 +182,30 @@ class UserPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
+                      MaterialPageRoute(builder: (context) => Delivery()),
+                    );
+                  },
+                  child: Container(
+                    width: 360,
+                    height: 100,
+                    color: Color(0xffAAC4FF),
+                    child: Text('배송조회'),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(builder: (context) => OrderedList()),
                     );
                   },
@@ -237,42 +263,71 @@ class UserPage extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        height: 60,
-        color: Color.fromARGB(255, 255, 255, 255),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-                icon: Icon(Icons.home),
-                color: Colors.black,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  );
-                }),
-            IconButton(
-              icon: Icon(
-                Icons.man,
-              ),
-              color: Colors.black,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserPage()),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.search),
-              color: Colors.black,
-              onPressed: () {
+      bottomNavigationBar: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
+        ),
+        child: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          elevation: 20,
+          currentIndex: 4,
+          onTap: (int index) {
+            switch (index) {
+              case 0: //검색
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AreaSearch()),
                 );
-              },
+                break;
+              case 1: //장바구니
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Cart()),
+                );
+                break;
+              case 2: //홈
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+                break;
+              case 3: //주문내역
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrderedList()),
+                );
+                break;
+              case 4: //마이휴잇
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserPage()),
+                );
+                break;
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: '검색',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart_outlined),
+              label: '장바구니',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: '홈',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.receipt_long_outlined),
+              label: '주문내역',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.face),
+              label: '마이휴잇',
             ),
           ],
         ),

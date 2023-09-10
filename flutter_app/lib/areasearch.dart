@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
+import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/restaurant.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -201,46 +202,73 @@ class _AreaSearchState extends State<AreaSearch> {
               ],
             ),
           ),
-          bottomNavigationBar: BottomAppBar(
-            child: Container(
-              height: 60,
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                      icon: const Icon(Icons.home),
-                      color: Colors.black,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                        );
-                      }),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.man,
-                    ),
-                    color: Colors.black,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UserPage()),
-                      );
-                    },
-                  ),
-                  IconButton(
-                      icon: const Icon(Icons.search),
-                      color: Colors.black,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AreaSearch()),
-                        );
-                      }),
-                ],
-              ),
+          bottomNavigationBar: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(0),
+            ),
+            child: BottomNavigationBar(
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: 0,
+              elevation: 20,
+              onTap: (int index) {
+                switch (index) {
+                  case 0: //검색
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AreaSearch()),
+                    );
+                    break;
+                  case 1: //장바구니
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Cart()),
+                    );
+                    break;
+                  case 2: //홈
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                    );
+                    break;
+                  case 3: //주문내역
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OrderedList()),
+                    );
+                    break;
+                  case 4: //마이휴잇
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UserPage()),
+                    );
+                    break;
+                }
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: '검색',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart_outlined),
+                  label: '장바구니',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  label: '홈',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  label: '주문내역',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.face),
+                  label: '마이휴잇',
+                ),
+              ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
