@@ -155,45 +155,44 @@ class _AreaSearchState extends State<AreaSearch> {
                     builder: (context, streamSnapshot) {
                       if (streamSnapshot.hasData) {
                         return ListView.builder(
-                            itemCount: uniqueData.length,
-                            itemBuilder: (context, index) {
-                              String data = uniqueData[index];
-                              if (searchText.isEmpty) {
-                                return Card(
-                                  child: ListTile(
-                                    title: Text(
-                                      data,
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              Restaurant(data),
-                                        ),
-                                      );
-                                    },
+                          itemCount: uniqueData.length,
+                          itemBuilder: (context, index) {
+                            String data = uniqueData[index];
+                            if (searchText.isEmpty) {
+                              return Card(
+                                child: ListTile(
+                                  title: Text(
+                                    data,
                                   ),
-                                );
-                              }
-                              if (data.toString().contains(searchText)) {
-                                return Card(
-                                  child: ListTile(
-                                    title: Text(
-                                      data,
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              Restaurant(data),
-                                        ),
-                                      );
-                                    },
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Restaurant(data),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                            if (data.toString().contains(searchText)) {
+                              return Card(
+                                child: ListTile(
+                                  title: Text(
+                                    data,
                                   ),
-                                );
-                              }
-                              return Container();
-                            });
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Restaurant(data),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                            return Container();
+                          },
+                        );
                       }
                       return const Center(child: CircularProgressIndicator());
                     },
