@@ -230,6 +230,7 @@ class _OrderedList extends State<OrderedList> {
                       ),
                       SizedBox(height: 15),
                       Container(
+                        margin: EdgeInsets.only(left: 5, right: 5),
                         height: MediaQuery.of(context).size.height - 70,
                         child: StreamBuilder(
                           stream: FirebaseFirestore.instance
@@ -244,6 +245,7 @@ class _OrderedList extends State<OrderedList> {
                             }
                             if (streamSnapshot.hasData) {
                               return ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: uniqueData1.length,
                                 itemBuilder: (context, index) {
                                   final DocumentSnapshot documentSnapshot =
@@ -379,7 +381,7 @@ class _OrderedList extends State<OrderedList> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: 70,
+                                                width: 40,
                                               ),
                                               Container(
                                                 width: 80,
