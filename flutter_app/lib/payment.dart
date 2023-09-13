@@ -12,7 +12,6 @@ class Payment extends StatefulWidget {
 }
 
 class _Payment extends State<Payment> {
-
   String name = '';
   String price = '';
   String storeName = '';
@@ -45,26 +44,24 @@ class _Payment extends State<Payment> {
     finalprice = int.parse(total);
     getMileageData();
   }
+
   Future<void> setMileageData() async {
     final userSnapshot = await FirebaseFirestore.instance
-            .collection('userinfo')
-            .where('userUid', isEqualTo: user!.uid) // 필드 이름과 원하는 값으로 변경하세요.
-            .get();
+        .collection('userinfo')
+        .where('userUid', isEqualTo: user!.uid) // 필드 이름과 원하는 값으로 변경하세요.
+        .get();
     if (userSnapshot.docs.isNotEmpty) {
       final userDocument = userSnapshot.docs.first;
       final userDocumentId = userDocument.id;
       finalprice = int.parse(total) - discount;
       saveMileage = (finalprice / 100 * 5).toInt();
-      final updateData = {
-        'mileage': saveMileage + (mileage - discount)
-      };
+      final updateData = {'mileage': saveMileage + (mileage - discount)};
 
       await FirebaseFirestore.instance
-            .collection('userinfo')
-            .doc(userDocumentId)
-            .update(updateData);
+          .collection('userinfo')
+          .doc(userDocumentId)
+          .update(updateData);
     }
-    
   }
 
   Future<void> getMileageData() async {
@@ -87,76 +84,75 @@ class _Payment extends State<Payment> {
     TextEditingController mileageController = TextEditingController();
 
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('사용 가능 마일리지 금액 : $mileage'),          
-          content: TextField(
-            keyboardType: TextInputType.number,
-            controller: mileageController,
-            decoration: InputDecoration(
-              hintText: '사용할 마일리지 금액를 입력하세요.',
-            ),
-          ),
-          actions: <Widget> [
-            TextButton(
-              child: Text('확인'),
-              onPressed: () {
-                if (int.parse(mileageController.text) > mileage) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('금액 한도 초과'),
-                        content: Text('입력된 금액이 보유 마일리지 금액을 초과합니다.'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('확인'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text('사용 가능 마일리지 금액 : $mileage'),
+              content: TextField(
+                keyboardType: TextInputType.number,
+                controller: mileageController,
+                decoration: InputDecoration(
+                  hintText: '사용할 마일리지 금액를 입력하세요.',
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('확인'),
+                  onPressed: () {
+                    if (int.parse(mileageController.text) > mileage) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('금액 한도 초과'),
+                            content: Text('입력된 금액이 보유 마일리지 금액을 초과합니다.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('확인'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
-                    },
-                  );
-                } else if (int.parse(mileageController.text) > int.parse(total)) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('금액 초과'),
-                        content: Text('입력된 금액이 결제 금액을 초과합니다.'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('확인'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+                    } else if (int.parse(mileageController.text) >
+                        int.parse(total)) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('금액 초과'),
+                            content: Text('입력된 금액이 결제 금액을 초과합니다.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('확인'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
-                    },
-                  );
-                } else {
-                  setState(() {
-                  discount = int.parse(mileageController.text);
-                  finalprice = int.parse(total) - discount;                  
-                });                
-                Navigator.of(context).pop();
-                }
-              },
-            ),
-            TextButton(
-              child: Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ]
-        );
-      }
-    );
+                    } else {
+                      setState(() {
+                        discount = int.parse(mileageController.text);
+                        finalprice = int.parse(total) - discount;
+                      });
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+                TextButton(
+                  child: Text('취소'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ]);
+        });
   }
 
   @override
@@ -334,9 +330,10 @@ class _Payment extends State<Payment> {
               ),
             ),
 
-
             //여기서 추가
-          const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               margin: const EdgeInsets.only(left: 15, right: 15),
               height: 40,
@@ -348,11 +345,11 @@ class _Payment extends State<Payment> {
                     Text(
                       "도착 예상 시간 : ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, "0")} ${timeFormat}",
                       style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13
-                      ),
+                          fontWeight: FontWeight.bold, fontSize: 13),
                     ),
-                    const SizedBox(width: 30,),
+                    const SizedBox(
+                      width: 30,
+                    ),
                     TextButton(
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.black,
@@ -362,181 +359,170 @@ class _Payment extends State<Payment> {
                         ),
                         backgroundColor: const Color(0xFFEEF1FF),
                         side: const BorderSide(
-                          color: Color(0xFFEEF1FF),
-                          width: 1
-                        ),                        
+                            color: Color(0xFFEEF1FF), width: 1),
                       ),
                       onPressed: () {
                         showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              backgroundColor: Colors.white,
-                              title: Text(
-                                '도착 예상 시간을 정해주세요.',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              content: StatefulBuilder(
-                                builder: (BuildContext context, StateSetter setState) {
-                                return Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      NumberPicker(
-                                        minValue: 0,
-                                        maxValue: 12,
-                                        value: hour,
-                                        zeroPad: true,
-                                        infiniteLoop: true,
-                                        itemWidth: 80,
-                                        itemHeight: 60,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            hour = value;
-                                          });
-                                        },
-                                        textStyle: TextStyle(
-                                          color: Colors.grey[400],
-                                          fontSize: 20
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: Text(
+                                  '도착 예상 시간을 정해주세요.',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                content: StatefulBuilder(builder:
+                                    (BuildContext context,
+                                        StateSetter setState) {
+                                  return Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        NumberPicker(
+                                          minValue: 0,
+                                          maxValue: 12,
+                                          value: hour,
+                                          zeroPad: true,
+                                          infiniteLoop: true,
+                                          itemWidth: 80,
+                                          itemHeight: 60,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              hour = value;
+                                            });
+                                          },
+                                          textStyle: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 20),
+                                          selectedTextStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 30),
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  top: BorderSide(
+                                                    color: Colors.white,
+                                                  ),
+                                                  bottom: BorderSide(
+                                                      color: Colors.white))),
                                         ),
-                                        selectedTextStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 30
+                                        NumberPicker(
+                                          minValue: 0,
+                                          maxValue: 59,
+                                          value: minute,
+                                          zeroPad: true,
+                                          infiniteLoop: true,
+                                          itemWidth: 80,
+                                          itemHeight: 60,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              minute = value;
+                                            });
+                                          },
+                                          textStyle: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 20),
+                                          selectedTextStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 30),
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  top: BorderSide(
+                                                    color: Colors.white,
+                                                  ),
+                                                  bottom: BorderSide(
+                                                      color: Colors.white))),
                                         ),
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(
-                                              color: Colors.white,
-                                            ),
-                                            bottom: BorderSide(
-                                              color: Colors.white
-                                            )
-                                          )
-                                        ),
-                                      ),
-                                      NumberPicker(
-                                        minValue: 0,
-                                        maxValue: 59,
-                                        value: minute,
-                                        zeroPad: true,
-                                        infiniteLoop: true,
-                                        itemWidth: 80,
-                                        itemHeight: 60,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            minute = value;
-                                          });
-                                        },
-                                        textStyle: TextStyle(
-                                          color: Colors.grey[400],
-                                          fontSize: 20
-                                        ),
-                                        selectedTextStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 30
-                                        ),
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(
-                                              color: Colors.white,
-                                            ),
-                                            bottom: BorderSide(
-                                              color: Colors.white
-                                            )
-                                          )
-                                        ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                timeFormat = '오전';
-                                              });
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                                vertical: 10
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: timeFormat == '오전'
-                                                ? Colors.grey.shade800
-                                                : Colors.grey.shade700,
-                                                border: Border.all(
-                                                  color: timeFormat == '오전'
-                                                  ? Colors.grey
-                                                  : Colors.grey.shade700,
-                                                )
-                                              ),
-                                              child: const Text(
-                                                '오전',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 25
+                                        Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  timeFormat = '오전';
+                                                });
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 10),
+                                                decoration: BoxDecoration(
+                                                    color: timeFormat == '오전'
+                                                        ? Colors.grey.shade800
+                                                        : Colors.grey.shade700,
+                                                    border: Border.all(
+                                                      color: timeFormat == '오전'
+                                                          ? Colors.grey
+                                                          : Colors
+                                                              .grey.shade700,
+                                                    )),
+                                                child: const Text(
+                                                  '오전',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 25),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 15,),
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                timeFormat = '오후';
-                                              });
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                                vertical: 10
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: timeFormat == '오후'
-                                                ? Colors.grey.shade800
-                                                : Colors.grey.shade700,
-                                                border: Border.all(
-                                                  color: timeFormat == '오후'
-                                                  ? Colors.grey
-                                                  : Colors.grey.shade700,
-                                                )
-                                              ),
-                                              child: const Text(
-                                                '오후',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 25
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  timeFormat = '오후';
+                                                });
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 10),
+                                                decoration: BoxDecoration(
+                                                    color: timeFormat == '오후'
+                                                        ? Colors.grey.shade800
+                                                        : Colors.grey.shade700,
+                                                    border: Border.all(
+                                                      color: timeFormat == '오후'
+                                                          ? Colors.grey
+                                                          : Colors
+                                                              .grey.shade700,
+                                                    )),
+                                                child: const Text(
+                                                  '오후',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 25),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text('취소'),
                                   ),
-                                );
-                          }),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context, false);
-                              },
-                              child: Text('취소'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  hour = hour;
-                                  minute = minute;
-                                  timeFormat = timeFormat;
-                                });
-                                Navigator.pop(context, false);
-                              },
-                              child: Text('확인'),
-                            )
-                          ],
-                            );
-                          }
-                        );
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        hour = hour;
+                                        minute = minute;
+                                        timeFormat = timeFormat;
+                                      });
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text('확인'),
+                                  )
+                                ],
+                              );
+                            });
                       },
                       child: const Text(
                         "예상시간\n 선택",
@@ -549,8 +535,10 @@ class _Payment extends State<Payment> {
                   ],
                 ),
               ),
-            ), 
-            const SizedBox(height: 10,), //원래는 높이 40
+            ),
+            const SizedBox(
+              height: 10,
+            ), //원래는 높이 40
             //여기까지
             Container(
               height: 1.5,
@@ -664,11 +652,14 @@ class _Payment extends State<Payment> {
                         // 'name', 'price', 'storeName' 필드 값 가져오기
                         name = document.get('name');
                         price = document.get('price');
+                        location = document.get('location');
                         storeName = document.get('storeName');
                         storeUid = document.get('storeUid');
                         userUid = document.get('userUid');
                       }
                       await order.add({
+                        'ordertime': Timestamp.now().toDate(),
+                        'area_name': location,
                         'name': name,
                         'price': price,
                         'storeName': storeName,
@@ -685,7 +676,8 @@ class _Payment extends State<Payment> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PayComplete(total, discount, finalprice, saveMileage)),
+                            builder: (context) => PayComplete(
+                                total, discount, finalprice, saveMileage)),
                       );
                     },
                     child: Container(

@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ReviewListPage extends StatelessWidget {
-  const ReviewListPage({super.key});
+  ReviewListPage(this.storeName, {super.key});
+  String storeName = "";
+  CollectionReference product1 =
+      FirebaseFirestore.instance.collection('testreviewlist');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,69 +24,83 @@ class ReviewListPage extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => Divider(
-          color: Colors.grey,
-          thickness: 3,
-        ),
-        itemCount: _reviewList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            //contentPadding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-            title: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 130,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: StreamBuilder(
+        stream: product1.where("store_name", isEqualTo: storeName).snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (streamSnapshot.hasData) {
+            return ListView.separated(
+              separatorBuilder: (context, index) => Divider(
+                color: Colors.grey,
+                thickness: 3,
+              ),
+              itemCount: streamSnapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                final DocumentSnapshot documentSnapshot =
+                    streamSnapshot.data!.docs[index];
+                final Timestamp time = documentSnapshot['time'];
+                final DateTime dateTime = time.toDate();
+                return ListTile(
+                  //contentPadding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
+                  title: Column(
                     children: [
                       Container(
-                        height: 30,
-                        child: Text(
-                          '유저 ID : ' + _reviewList[index].userId,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 10),
+                              height: 30,
+                              child: Text(
+                                documentSnapshot['name'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 20,
+                              child: Text(
+                                dateTime.toString(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              child: Text(
+                                documentSnapshot['text'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Container(
-                        height: 20,
-                        child: Text(
-                          _reviewList[index].date,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 70,
-                        child: Text(
-                          _reviewList[index].review,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      )
                     ],
                   ),
-                ),
-              ],
-            ),
-          );
+                );
+              },
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
   }
 }
 
-class Review {
+
+
+/*class Review {
   final String userId;
   final String date;
   final String review;
@@ -137,4 +155,4 @@ final List<Review> _reviewList = [
     date: '2023-02-20',
     review: '리뷰글!',
   ),
-];
+];*/

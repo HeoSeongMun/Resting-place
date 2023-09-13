@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/write_review.dart';
 
 class OrderedList extends StatefulWidget {
   OrderedList({super.key});
@@ -10,8 +11,7 @@ class OrderedList extends StatefulWidget {
 class _OrderedList extends State<OrderedList> {
   final _userID = FirebaseAuth.instance.currentUser;
   final TextEditingController filter = TextEditingController();
-  CollectionReference product =
-      FirebaseFirestore.instance.collection('testorder');
+  CollectionReference product = FirebaseFirestore.instance.collection('order');
   FocusNode focusNode = FocusNode();
   String searchText = "";
   List<String> uniqueData1 = [];
@@ -36,12 +36,12 @@ class _OrderedList extends State<OrderedList> {
 
   Future<void> fetchData() async {
     QuerySnapshot snapshot =
-        await product.where('userID', isEqualTo: _userID!.email).get();
+        await product.where('userUid', isEqualTo: _userID!.uid).get();
     List<DocumentSnapshot> documents = snapshot.docs;
     documents.sort((a, b) {
-      Timestamp timeA = a['time'];
-      Timestamp timeB = b['time'];
-      return timeA.compareTo(timeB); // 내림차순 정렬
+      Timestamp timeA = a['ordertime'];
+      Timestamp timeB = b['ordertime'];
+      return timeB.compareTo(timeA); // 정렬
     });
     List<String> uniqueSet1 = [];
     List<String> uniqueSet2 = [];
@@ -52,11 +52,11 @@ class _OrderedList extends State<OrderedList> {
     Map<String, Timestamp> uniqueMap = {};
     for (var doc in documents) {
       String data1 = doc['area_name'];
-      String data2 = doc['menu_name'];
+      String data2 = doc['name'];
       String data3 = doc['status'];
-      String data4 = doc['store_name'];
-      Timestamp data5 = doc['time'];
-      String data6 = doc['tot_price'];
+      String data4 = doc['storeName'];
+      Timestamp data5 = doc['ordertime'];
+      String data6 = doc['price'];
       uniqueSet1.add(data1);
       uniqueSet2.add(data2);
       uniqueSet3.add(data3);
@@ -234,8 +234,8 @@ class _OrderedList extends State<OrderedList> {
                         height: MediaQuery.of(context).size.height - 70,
                         child: StreamBuilder(
                           stream: FirebaseFirestore.instance
-                              .collection('testorder')
-                              .where('userID', isEqualTo: _userID!.email)
+                              .collection('order')
+                              .where('userUid', isEqualTo: _userID!.uid)
                               .snapshots(),
                           builder: (BuildContext context,
                               AsyncSnapshot<dynamic> streamSnapshot) {
@@ -263,12 +263,34 @@ class _OrderedList extends State<OrderedList> {
                                       onPressed: () async {
                                         String documentID = documentSnapshot.id;
                                         await FirebaseFirestore.instance
-                                            .collection('testorder')
+                                            .collection('order')
                                             .doc(documentID)
                                             .update({'status': '완료'});
                                       },
                                       child: Text(
                                         '수령 완료',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
+                                            color: Colors.black),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xff92ABEB),
+                                      ),
+                                    );
+                                  } else if (data3 == '완료') {
+                                    actionButton = ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => WriteReview(
+                                                data1.toString(),
+                                                data4.toString()),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        '리뷰 쓰기',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10,

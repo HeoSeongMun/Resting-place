@@ -102,7 +102,7 @@ class Menu extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const ReviewListPage()),
+                                                  ReviewListPage(storeName)),
                                         );
                                       },
                                       child: const Text(
