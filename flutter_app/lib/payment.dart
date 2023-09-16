@@ -19,7 +19,7 @@ class _Payment extends State<Payment> {
   String storeUid = '';
   String userUid = '';
   String total = '';
-
+  String imageUrl = '';
   int mileage = 0;
   int discount = 0;
   int finalprice = 0;
@@ -666,6 +666,7 @@ class _Payment extends State<Payment> {
                         'storeUid': storeUid,
                         'userUid': userUid,
                         'arrivalTime': arrivalTime,
+                        'imageUrl': imageUrl,
                       });
                       setMileageData();
                       //유저 uid 비교해서 해당하는 문서 삭제

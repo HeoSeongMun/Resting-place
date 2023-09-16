@@ -36,7 +36,7 @@ class _AreaSearchState extends State<AreaSearch> {
   Future<void> fetchData() async {
     QuerySnapshot snapshot = await product.get();
 
-    Set<String> uniqueSet = Set<String>();
+    List<String> uniqueSet = [];
 
     for (var doc in snapshot.docs) {
       String data = doc['location'];
@@ -57,149 +57,189 @@ class _AreaSearchState extends State<AreaSearch> {
       child: MaterialApp(
         home: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                      width: 335,
-                      margin: EdgeInsets.only(left: 10),
-                      child: TextField(
-                        focusNode: focusNode,
-                        controller: filter,
-                        onChanged: (text) {
-                          setState(() {
-                            searchText = text;
-                          });
-                        },
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Color(0xFFAAC4FF),
-                          icon: Icon(
-                            Icons.search,
-                            color: Colors.black,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 35,
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(left: 10),
+                child: TextField(
+                  focusNode: focusNode,
+                  controller: filter,
+                  onChanged: (text) {
+                    setState(() {
+                      searchText = text;
+                    });
+                  },
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white70,
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
+                    suffixIcon: focusNode.hasFocus
+                        ? IconButton(
+                            onPressed: () {
+                              setState(() {
+                                filter.clear();
+                                searchText = "";
+                              });
+                            },
+                            icon: Icon(
+                              Icons.cancel,
+                              size: 20,
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              setState(() {
+                                filter.clear();
+                                searchText = "";
+                              });
+                            },
+                            icon: Icon(
+                              Icons.cancel,
+                              size: 20,
+                            ),
                           ),
-                          suffixIcon: focusNode.hasFocus
-                              ? IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      filter.clear();
-                                      searchText = "";
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    size: 20,
-                                  ),
-                                )
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      filter.clear();
-                                      searchText = "";
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    size: 20,
-                                  ),
-                                ),
-                          hintText: '검색',
-                          labelStyle: TextStyle(color: Colors.grey[400]),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                        ),
+                    hintText: '검색',
+                    labelStyle: TextStyle(color: Colors.grey[400]),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFAAC4FF)),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFAAC4FF)),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFAAC4FF)),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                height: MediaQuery.of(context).size.height - 190,
+                decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                      bottomLeft: Radius.circular(30.0),
+                      bottomRight: Radius.circular(30.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.7),
+                        blurRadius: 5,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 7),
+                      ),
+                    ]),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 10, top: 20),
+                            child: Text(
+                              "검색된 휴게소",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      height: MediaQuery.of(context).size.height - 280,
+                      child: StreamBuilder(
+                        stream: product.snapshots(),
+                        builder: (context, streamSnapshot) {
+                          if (streamSnapshot.hasData) {
+                            return ListView.builder(
+                              itemCount: uniqueData.length,
+                              itemBuilder: (context, index) {
+                                final DocumentSnapshot documentSnapshot =
+                                    streamSnapshot.data!.docs[index];
+                                String data = uniqueData[index];
+                                if (searchText.isEmpty) {
+                                  return Card(
+                                    child: ListTile(
+                                      leading: Image.network(
+                                        documentSnapshot['imageUrl'],
+                                        width: 100,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      title: Text(
+                                        data,
+                                      ),
+                                      subtitle: Text(
+                                        documentSnapshot['direction'],
+                                      ),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                Restaurant(data),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+                                if (data.toString().contains(searchText)) {
+                                  return Card(
+                                    child: ListTile(
+                                      leading: Image.network(
+                                        documentSnapshot['imageUrl'],
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      title: Text(
+                                        data,
+                                      ),
+                                      subtitle: Text(
+                                        documentSnapshot['direction'],
+                                      ),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                Restaurant(data),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+                                return Container();
+                              },
+                            );
+                          }
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        },
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 50),
-                  child: const Text(
-                    "검색된 휴게소",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 50),
-                  height: 520,
-                  width: 290,
-                  color: const Color(0xFFD2DAFF),
-                  child: StreamBuilder(
-                    stream: product.snapshots(),
-                    builder: (context, streamSnapshot) {
-                      if (streamSnapshot.hasData) {
-                        return ListView.builder(
-                          itemCount: uniqueData.length,
-                          itemBuilder: (context, index) {
-                            String data = uniqueData[index];
-                            if (searchText.isEmpty) {
-                              return Card(
-                                child: ListTile(
-                                  title: Text(
-                                    data,
-                                  ),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => Restaurant(data),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            }
-                            if (data.toString().contains(searchText)) {
-                              return Card(
-                                child: ListTile(
-                                  title: Text(
-                                    data,
-                                  ),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => Restaurant(data),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            }
-                            return Container();
-                          },
-                        );
-                      }
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
           bottomNavigationBar: ClipRRect(
             borderRadius: BorderRadius.only(

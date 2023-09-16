@@ -127,7 +127,7 @@ class Menu extends StatelessWidget {
                 color: Colors.black,
               ),
               Container(
-                height: 580,
+                height: MediaQuery.of(context).size.height - 170,
                 color: Colors.white,
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
@@ -145,28 +145,35 @@ class Menu extends StatelessWidget {
                             return Card(
                               child: Column(
                                 children: [
-                                  Image.network(
-                                    documentSnapshot['imageUrl'],
-                                  ),
-                                  ListTile(
-                                    title: Text(documentSnapshot['name']),
-                                    subtitle: Text(documentSnapshot['price']),
-                                    onTap: () async {
-                                      await product.add({
-                                        'storeName': storeName,
-                                        'name': documentSnapshot['name'],
-                                        'price': documentSnapshot['price'],
-                                        'location': areaName,
-                                        'userUid': user!.uid,
-                                        'storeUid':
-                                            documentSnapshot['storeUid'],
-                                      });
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => Cart(),
-                                        ),
-                                      );
-                                    },
+                                  Container(
+                                    child: ListTile(
+                                      leading: Image.network(
+                                        documentSnapshot['imageUrl'],
+                                        height: 120,
+                                        fit: BoxFit.fitHeight,
+                                      ),
+                                      title: Text(documentSnapshot['name']),
+                                      subtitle:
+                                          Text(documentSnapshot['price'] + '원'),
+                                      onTap: () async {
+                                        await product.add({
+                                          'storeName': storeName,
+                                          'name': documentSnapshot['name'],
+                                          'price': documentSnapshot['price'],
+                                          'location': areaName,
+                                          'userUid': user!.uid,
+                                          'storeUid':
+                                              documentSnapshot['storeUid'],
+                                          'imageUrl':
+                                              documentSnapshot['imageUrl'],
+                                        });
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => Cart(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),

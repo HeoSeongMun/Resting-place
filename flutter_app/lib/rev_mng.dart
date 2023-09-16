@@ -5,9 +5,10 @@ import 'package:flutter_app/write_review.dart';
 class ReviewManagementScreen extends StatelessWidget {
   ReviewManagementScreen({super.key});
 
-  CollectionReference product1 =
+  CollectionReference usercollection =
       FirebaseFirestore.instance.collection('userinfo');
-
+  CollectionReference reviewcollection =
+      FirebaseFirestore.instance.collection('testreviewlist');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
