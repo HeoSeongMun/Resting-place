@@ -4,25 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class WriteReview extends StatelessWidget {
-  WriteReview(this.areaName, this.storeName, {super.key});
+  WriteReview(this.areaName, this.storeName, this.menu, this.imageUrl,
+      {super.key});
   String storeName = '';
   String areaName = '';
-
+  String menu = '';
+  String imageUrl = '';
   String userName = '';
+
   final _userID = FirebaseAuth.instance.currentUser;
   CollectionReference product =
       FirebaseFirestore.instance.collection('testreviewlist');
   CollectionReference product1 =
       FirebaseFirestore.instance.collection('userinfo');
+  CollectionReference ordercollection =
+      FirebaseFirestore.instance.collection('order');
   final TextEditingController reviewController = TextEditingController();
   FocusNode focusNode = FocusNode();
 
   Future<void> nameData() async {
-    QuerySnapshot snapshot = await product1
+    QuerySnapshot usersnapshot = await product1
         .where('userUid', isEqualTo: _userID!.uid.toString())
         .get();
-    for (var doc in snapshot.docs) {
+    for (var doc in usersnapshot.docs) {
       userName = doc['name'];
+    }
+  }
+
+  Future<void> imageUrlData() async {
+    QuerySnapshot imagesnapshot =
+        await ordercollection.where('storeName', isEqualTo: storeName).get();
+    for (var doc in imagesnapshot.docs) {
+      imageUrl = doc['imageUrl'];
     }
   }
 
@@ -184,6 +197,7 @@ class WriteReview extends StatelessWidget {
                       onPressed: () async {
                         if (reviewController.text != '') {
                           await nameData();
+                          await imageUrlData();
                           /*Query query = product1.where('userUid',
                               isEqualTo: _userID!.uid.toString());
                           QuerySnapshot querySnapshot = await query.get();
@@ -197,9 +211,11 @@ class WriteReview extends StatelessWidget {
                             'name': userName,
                             'area_name': areaName,
                             'store_name': storeName,
+                            'menu': menu,
                             'text': reviewController.text,
                             'time': Timestamp.now(),
                             'userUid': _userID!.uid.toString(),
+                            'imageUrl': imageUrl,
                           });
                           Navigator.pop(context);
                         } else {

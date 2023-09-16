@@ -15,6 +15,7 @@ class UserPage extends StatelessWidget {
 
   String useremail = "";
   String username = "";
+
   final user = FirebaseAuth.instance.currentUser;
 
   CollectionReference product =
