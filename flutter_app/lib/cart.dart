@@ -345,7 +345,8 @@ class Cart extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Payment(total.toString())),
+                          builder: (context) =>
+                              Payment(total: total.toString())),
                     );
                   }
                 },

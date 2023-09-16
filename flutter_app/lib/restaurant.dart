@@ -3,12 +3,14 @@ import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/menu.dart';
+import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Restaurant extends StatelessWidget {
-  String areaName = '';
   Restaurant(this.areaName, {super.key});
+
+  String areaName = '';
 
   CollectionReference product =
       FirebaseFirestore.instance.collection('restaurant');
@@ -28,20 +30,21 @@ class Restaurant extends StatelessWidget {
             Container(
               height: 80,
               color: const Color(0xFFAAC4FF),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Stack(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    width: 60,
-                    height: 60,
-                    child: Icon(
-                      Icons.restaurant_outlined,
-                      size: 45,
-                      color: Colors.indigo[700],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: Icon(
+                        Icons.restaurant_outlined,
+                        size: 45,
+                        color: Colors.indigo[700],
+                      ),
                     ),
                   ),
-                  Container(
+                  Align(
+                    alignment: Alignment.center,
                     child: Text(
                       areaName,
                       style: const TextStyle(
@@ -49,14 +52,6 @@ class Restaurant extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.star_outline,
-                      size: 45,
-                    ),
-                    color: Colors.indigo[700],
                   ),
                 ],
               ),
@@ -104,46 +99,74 @@ class Restaurant extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 60,
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                  icon: const Icon(Icons.home),
-                  color: Colors.black,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Home()),
-                    );
-                  }),
-              IconButton(
-                icon: const Icon(
-                  Icons.man,
-                ),
-                color: Colors.black,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
-                  );
-                },
-              ),
-              IconButton(
-                  icon: const Icon(Icons.search),
-                  color: Colors.black,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AreaSearch()),
-                    );
-                  }),
-            ],
-          ),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
+        ),
+        child: BottomNavigationBar(
+          selectedItemColor: Colors.grey,
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          elevation: 20,
+          onTap: (int index) {
+            switch (index) {
+              case 0: //검색
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AreaSearch()),
+                );
+                break;
+              case 1: //장바구니
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Cart()),
+                );
+                break;
+              case 2: //홈
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+                break;
+              case 3: //주문내역
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrderedList()),
+                );
+                break;
+              case 4: //마이휴잇
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserPage()),
+                );
+                break;
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: '검색',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart_outlined),
+              label: '장바구니',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: '홈',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.receipt_long_outlined),
+              label: '주문내역',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.face),
+              label: '마이휴잇',
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

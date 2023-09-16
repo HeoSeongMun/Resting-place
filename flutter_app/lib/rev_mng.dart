@@ -1,8 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/write_review.dart';
 
 class ReviewManagementScreen extends StatelessWidget {
   ReviewManagementScreen({super.key});
+
+  CollectionReference usercollection =
+      FirebaseFirestore.instance.collection('userinfo');
+  CollectionReference reviewcollection =
+      FirebaseFirestore.instance.collection('testreviewlist');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,10 +41,11 @@ class ReviewManagementScreen extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () {
-                    Navigator.push(
+                    /*Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => WriteReview()),
                     );
+                    */
                     // 수정 버튼
                   },
                 ),
