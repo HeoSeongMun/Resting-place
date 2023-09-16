@@ -82,7 +82,7 @@ class UserPage extends StatelessWidget {
                                             AsyncSnapshot<dynamic> snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return CircularProgressIndicator(); // 데이터를 가져오는 중 로딩 표시
+                                            return Container(); // 데이터를 가져오는 중 로딩 표시
                                           }
                                           if (!snapshot.hasData ||
                                               snapshot.data!.docs.isEmpty) {
@@ -124,7 +124,7 @@ class UserPage extends StatelessWidget {
                                             AsyncSnapshot<dynamic> snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return CircularProgressIndicator(); // 데이터를 가져오는 중 로딩 표시
+                                            return Container(); // 데이터를 가져오는 중 로딩 표시
                                           }
                                           if (!snapshot.hasData ||
                                               snapshot.data!.docs.isEmpty) {
