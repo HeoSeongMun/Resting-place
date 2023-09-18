@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/areasearch.dart';
@@ -16,101 +20,202 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-  Future<bool> _onBackKey() async {
-    return await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Color(0xff161619),
-            title: Text(
-              '앱을 종료하시겠습니까??',
-              style: TextStyle(color: Colors.white),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    //onWillpop에 false 전달되어 앱이 종료되지 않는다.
-                    Navigator.pop(context, false);
-                  },
-                  child: Text('아니오')),
-              TextButton(
-                  onPressed: () {
-                    //onWillpop에 true가 전달되어 앱이 종료 된다.
-                    SystemNavigator.pop(); // 앱 종료
-                  },
-                  child: Text('예')),
-            ],
-          );
-        });
+  CollectionReference ordercollection =
+      FirebaseFirestore.instance.collection('order');
+  CollectionReference areacollection =
+      FirebaseFirestore.instance.collection('area');
+  CollectionReference menucollection =
+      FirebaseFirestore.instance.collection('menu');
+  final user = FirebaseAuth.instance.currentUser;
+  final CarouselController _controller = CarouselController();
+  int _current = 0; // CarouselController 첫 인덱스
+  int slotindex = 0;
+  bool isSpinning = false;
+  final Random random = Random();
+
+  List<String> imageurlData = [];
+  List<String> imageurlText = [];
+  Future<void> imageData() async {
+    Set<String> imageurlList = Set<String>();
+    QuerySnapshot snapshot = await ordercollection
+        .where('userUid', isEqualTo: user!.uid)
+        .limit(5)
+        .get();
+    snapshot.docs.forEach((doc) {
+      imageurlList.add(doc['area_name']);
+    });
+
+    List<String> imageurlList2 = [];
+    List<String> imageurltextList = [];
+    QuerySnapshot snapshot1 =
+        await areacollection.where('location', whereIn: imageurlList).get();
+
+    snapshot1.docs.forEach((doc) {
+      imageurlList2.add(doc['imageUrl']);
+      imageurltextList.add(doc['location']);
+    });
+
+    setState(() {
+      imageurlData = imageurlList2.toList();
+      imageurlText = imageurltextList.toList();
+    });
   }
 
-  final CarouselController _controller = CarouselController();
-  final imageList = [
-    Image.asset('assets/images/1.png', fit: BoxFit.contain),
-    Image.asset('assets/images/2.jpg', fit: BoxFit.contain),
-    Image.asset('assets/images/3.png', fit: BoxFit.contain),
-    Image.asset('assets/images/4.jpg', fit: BoxFit.contain),
-    Image.asset('assets/images/5.jpg', fit: BoxFit.contain),
-  ];
-  int _current = 0;
+  List<String> slotData = [];
+  //슬롯 함수
+  Future<List<String>> getItems() async {
+    QuerySnapshot querySnapshot = await menucollection.get();
+    List<String> items = [];
+    querySnapshot.docs.forEach((doc) {
+      items.add(doc['name']);
+    });
+    return items;
+  }
+
+  void spinSlotMachine(List<String> items) {
+    if (!isSpinning) {
+      setState(() {
+        isSpinning = true;
+      });
+
+      final int spins = random.nextInt(5) + 1; // 1에서 5회 돌림
+      int currentSpin = 0;
+
+      void performSpin() {
+        Future.delayed(Duration(seconds: 1), () {
+          setState(() {
+            slotindex = random.nextInt(items.length);
+            currentSpin++;
+
+            if (currentSpin < spins) {
+              performSpin();
+            } else {
+              isSpinning = false;
+            }
+          });
+        });
+      }
+
+      performSpin();
+    }
+  }
+
+  void initState() {
+    super.initState();
+    imageData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onBackKey,
       child: MaterialApp(
         home: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xFFEEF1FF), //Color(0xFF92B4EC)
           body: Column(
             children: [
               SizedBox(
                 height: 50,
               ),
               Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(left: 15),
-                child: Text(
-                  "최근 주문 휴게소",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                margin: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    color: Color(0xFFC5DFF8),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                      bottomLeft: Radius.circular(30.0),
+                      bottomRight: Radius.circular(30.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.7),
+                        blurRadius: 5,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 7),
+                      ),
+                    ]),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Column(children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 20, top: 15),
+                          child: Text(
+                            "최근 주문 휴게소",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ]),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CarouselSlider(
+                      carouselController: _controller,
+                      options: CarouselOptions(
+                        scrollDirection: Axis.horizontal,
+                        enlargeCenterPage: true, // 무한 스크롤 비활성화
+                        enableInfiniteScroll: false,
+                        initialPage: 0,
+                        viewportFraction: 0.9, // 화면 비율
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
+                        },
+                      ),
+                      items: imageurlData.asMap().entries.map((entry) {
+                        final int index = entry.key;
+                        final String image = entry.value;
+                        final String text = imageurlText[index];
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Image.network(
+                                      image.toString(),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      text,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
-                height: 10,
-              ),
-              CarouselSlider(
-                carouselController: _controller,
-                options: CarouselOptions(
-                  height: 150.0,
-                  scrollDirection: Axis.horizontal,
-                  viewportFraction: 0.45, // 화면 비율
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _current = index;
-                    });
-                  },
-                ),
-                items: imageList.map((image) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: image,
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
+                height: 5,
               ),
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: imageList.asMap().entries.map((entry) {
+                  children: imageurlData.asMap().entries.map((entry) {
                     return GestureDetector(
                       onTap: () => _controller.animateToPage(entry.key),
                       child: Container(
@@ -129,76 +234,140 @@ class _Home extends State<Home> {
                 ),
               ),
               SizedBox(
-                height: 15,
+                height: 10,
               ),
               Container(
-                  height: 40,
-                  color: Color(0xFFAAC4FF),
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    margin: EdgeInsets.only(left: 15),
-                    child: Text(
-                      "오늘 뭐먹지??",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+                margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                    color: Color(0xFFC5DFF8),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                      bottomLeft: Radius.circular(30.0),
+                      bottomRight: Radius.circular(30.0),
                     ),
-                  )),
-              Container(
-                margin: EdgeInsets.only(top: 10, bottom: 10),
-                height: 80,
-                color: Colors.white,
-                child: Row(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.7),
+                        blurRadius: 5,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 7),
+                      ),
+                    ]),
+                child: Column(
                   children: [
-                    Container(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: 40, right: 10, top: 10, bottom: 10),
-                        width: 80,
-                        height: 40,
-                        color: Colors.deepOrange,
-                      ),
-                    ),
-                    Text(
-                      "는 어떨까요??",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 90),
-                      child: ElevatedButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(60),
-                            ),
-                            primary: Colors.black,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.only(left: 19, right: 10),
-                            maximumSize: Size(65, 70),
-                            backgroundColor: Color(0xFFD2DAFF),
-                            side: BorderSide(
-                              color: Colors.black,
-                              width: 2,
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 20, top: 15),
+                            child: Text(
+                              "오늘 뭐먹지??",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                          onPressed: () {},
-                          child: Text(
-                            "결과 보기",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 10),
+                      child: FutureBuilder<List<String>>(
+                        future: getItems(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Container();
+                          } else if (snapshot.hasData &&
+                              snapshot.data!.isNotEmpty) {
+                            List<String> items = snapshot.data!;
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 180,
+                                  child: isSpinning
+                                      ? AnimatedContainer(
+                                          duration: Duration(milliseconds: 100),
+                                          child: Text(
+                                            items[random.nextInt(items.length)],
+                                            style: TextStyle(fontSize: 8),
+                                          ),
+                                        )
+                                      : Text(
+                                          items[slotindex],
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 2, left: 10),
+                                  child: Text(
+                                    "어떨까요??",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 10, right: 10),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      primary: Colors.black,
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                          top: 15,
+                                          bottom: 15),
+                                      backgroundColor: Color(0xFFFFD577),
+                                      side: BorderSide(
+                                        color: Colors.black,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      spinSlotMachine(items);
+                                    },
+                                    child: Text(
+                                      "결과\n" + "보기",
+                                      textAlign: TextAlign.center,
+                                      maxLines: 3,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
               Container(
                 height: 30,
-                color: Color(0xFFAAC4FF),
+                color: Colors.white,
                 alignment: Alignment.centerLeft,
                 child: Container(
                   margin: EdgeInsets.only(left: 15),
@@ -218,7 +387,11 @@ class _Home extends State<Home> {
                 alignment: Alignment.center,
                 color: Colors.grey,
                 height: 100,
-                child: Text("배너1"),
+                child: Image.asset(
+                  'assets/images/bu1.jpg',
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fill,
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -227,7 +400,11 @@ class _Home extends State<Home> {
                 alignment: Alignment.center,
                 color: Colors.grey,
                 height: 100,
-                child: Text("배너2"),
+                child: Image.asset(
+                  'assets/images/bu2.jpg',
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fill,
+                ),
               ),
             ],
           ),
@@ -303,5 +480,34 @@ class _Home extends State<Home> {
         ),
       ),
     );
+  }
+
+  //앱 종료 함수
+  Future<bool> _onBackKey() async {
+    return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Color(0xff161619),
+            title: Text(
+              '앱을 종료하시겠습니까??',
+              style: TextStyle(color: Colors.white),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    //onWillpop에 false 전달되어 앱이 종료되지 않는다.
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('아니오')),
+              TextButton(
+                  onPressed: () {
+                    //onWillpop에 true가 전달되어 앱이 종료 된다.
+                    SystemNavigator.pop(); // 앱 종료
+                  },
+                  child: Text('예')),
+            ],
+          );
+        });
   }
 }

@@ -7,6 +7,9 @@ class ReviewListPage extends StatelessWidget {
   String storeName = "";
   CollectionReference product1 =
       FirebaseFirestore.instance.collection('testreviewlist');
+
+  List<DocumentSnapshot> documents = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +33,12 @@ class ReviewListPage extends StatelessWidget {
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
+            documents = streamSnapshot.data!.docs;
+            documents.sort((a, b) {
+              Timestamp timeA = a['time'];
+              Timestamp timeB = b['time'];
+              return timeB.compareTo(timeA); // 정렬
+            });
             return ListView.separated(
               separatorBuilder: (context, index) => Divider(
                 color: Colors.grey,
@@ -39,7 +48,7 @@ class ReviewListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     streamSnapshot.data!.docs[index];
-                final Timestamp time = documentSnapshot['time'];
+                final Timestamp time = documents[index]['time'];
                 final DateTime dateTime = time.toDate();
                 String formattime =
                     DateFormat('yyyy-MM-dd - HH시mm분ss초').format(dateTime);
@@ -56,7 +65,7 @@ class ReviewListPage extends StatelessWidget {
                               margin: EdgeInsets.only(top: 10),
                               height: 30,
                               child: Text(
-                                documentSnapshot['name'],
+                                documents[index]['name'],
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -79,7 +88,7 @@ class ReviewListPage extends StatelessWidget {
                             ),
                             Container(
                               child: Text(
-                                documentSnapshot['text'],
+                                documents[index]['text'],
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,

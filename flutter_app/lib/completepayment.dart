@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/home.dart';
 
 class PayComplete extends StatelessWidget {
-  PayComplete(this.total, this.discount, this.finalprice, this.saveMileage, {super.key});
+  PayComplete(this.total, this.discount, this.finalprice, this.saveMileage,
+      {super.key});
   String total = '';
   int discount = 0;
   int finalprice = 0;
@@ -23,7 +24,7 @@ class PayComplete extends StatelessWidget {
                 width: 150,
                 height: 150,
                 child: Image.asset(
-                  'assets/images/cashback.png',
+                  'assets/images/dollar.gif',
                   width: 150,
                   height: 150,
                 ),
@@ -37,7 +38,6 @@ class PayComplete extends StatelessWidget {
                   "총 $saveMileage원이 마일리지로",
                   style: TextStyle(
                     fontSize: 20.0, // 글자 크기
-                    fontWeight: FontWeight.bold, // 볼드체
                     color: Colors.black, // 색상
                     letterSpacing: 3.0,
                   ),

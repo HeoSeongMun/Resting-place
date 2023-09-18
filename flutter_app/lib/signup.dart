@@ -28,6 +28,7 @@ class _SignupState extends State<Signup> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: MaterialApp(
+        theme: ThemeData(fontFamily: 'jalnan'),
         home: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
@@ -65,8 +66,7 @@ class _SignupState extends State<Signup> {
                           Text(
                             "회원가입",
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                           ),
                         ],
@@ -83,8 +83,7 @@ class _SignupState extends State<Signup> {
                           child: Text(
                             "이름",
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
                             ),
                           ),
                         ),
@@ -127,8 +126,7 @@ class _SignupState extends State<Signup> {
                           child: Text(
                             "이메일",
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
                             ),
                           ),
                         ),
@@ -177,8 +175,7 @@ class _SignupState extends State<Signup> {
                           child: Text(
                             "비밀번호",
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
                             ),
                           ),
                         ),
@@ -230,7 +227,7 @@ class _SignupState extends State<Signup> {
                                 isDense: true,
                                 hintText: "비밀번호 확인*",
                                 hintStyle: TextStyle(
-                                    color: Colors.grey[400],
+                                    color: Colors.grey[300],
                                     fontStyle: FontStyle.italic),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
@@ -263,7 +260,7 @@ class _SignupState extends State<Signup> {
                           child: Text(
                             "휴대전화",
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -278,7 +275,7 @@ class _SignupState extends State<Signup> {
                                 isDense: true,
                                 hintText: "010",
                                 hintStyle: TextStyle(
-                                    color: Colors.grey[400], fontSize: 15),
+                                    color: Colors.grey[400], fontSize: 13),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
@@ -307,7 +304,7 @@ class _SignupState extends State<Signup> {
                                 isDense: true,
                                 hintText: "0000",
                                 hintStyle: TextStyle(
-                                    color: Colors.grey[400], fontSize: 15),
+                                    color: Colors.grey[400], fontSize: 13),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
@@ -336,7 +333,7 @@ class _SignupState extends State<Signup> {
                                 isDense: true,
                                 hintText: "0000",
                                 hintStyle: TextStyle(
-                                    color: Colors.grey[400], fontSize: 15),
+                                    color: Colors.grey[400], fontSize: 13),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
@@ -403,7 +400,6 @@ class _SignupState extends State<Signup> {
                             "인증번호 입력",
                             style: TextStyle(
                               fontSize: 10,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -440,61 +436,64 @@ class _SignupState extends State<Signup> {
                     SizedBox(
                       height: 100,
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          final newUser = await _authentication
-                              .createUserWithEmailAndPassword(
-                            email: emailController.text,
-                            password: pwController.text,
-                          );
-                          if (newUser.user != null) {
-                            product1.add({
-                              'name': idController.text,
-                              'email': emailController.text,
-                              'password': pwController.text,
-                              'userUid': newUser.user!.uid,
-                            });
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Login();
-                                },
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          print(e);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('이메일과 비밀번호를 확인해주세요'),
-                              backgroundColor: Colors.blue,
+                    Builder(
+                      builder: (BuildContext context) {
+                        return ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              final newUser = await _authentication
+                                  .createUserWithEmailAndPassword(
+                                email: emailController.text,
+                                password: pwController.text,
+                              );
+                              if (newUser.user != null) {
+                                product1.add({
+                                  'name': idController.text,
+                                  'email': emailController.text,
+                                  'password': pwController.text,
+                                  'userUid': newUser.user!.uid,
+                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return Login();
+                                    },
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              print(e);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('이메일과 비밀번호를 확인해주세요'),
+                                  backgroundColor: Colors.blue,
+                                ),
+                              );
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          );
-                        }
+                            minimumSize: Size(300, 40),
+                            primary: Colors.black,
+                            backgroundColor: Color(0xFFEEF1FF),
+                            shadowColor: Colors.black,
+                            elevation: 3,
+                            side: BorderSide(
+                              color: Colors.black38,
+                              width: 2,
+                            ),
+                          ),
+                          child: Text(
+                            "가입하기",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        );
                       },
-                      style: TextButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        minimumSize: Size(300, 40),
-                        primary: Colors.black,
-                        backgroundColor: Color(0xFFEEF1FF),
-                        shadowColor: Colors.black,
-                        elevation: 3,
-                        side: BorderSide(
-                          color: Colors.black38,
-                          width: 2,
-                        ),
-                      ),
-                      child: Text(
-                        "가입하기",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ),
                   ],
                 ),

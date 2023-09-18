@@ -29,6 +29,11 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
     QuerySnapshot snapshot =
         await reviewcollection.where('userUid', isEqualTo: user!.uid).get();
     List<DocumentSnapshot> documents = snapshot.docs;
+    documents.sort((a, b) {
+      Timestamp timeA = a['time'];
+      Timestamp timeB = b['time'];
+      return timeB.compareTo(timeA); // 정렬
+    });
     List<String> imageurlList = [];
     List<String> areaeList = [];
     List<String> storeList = [];
@@ -50,13 +55,6 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
       textList.add(data5);
       timeList.add(data6);
     }
-
-    documents.sort((a, b) {
-      Timestamp timeA = a['time'];
-      Timestamp timeB = b['time'];
-      return timeA.compareTo(timeB); // 정렬
-    });
-
     setState(() {
       imageurlData = imageurlList.toList();
       areaeData = areaeList.toList();

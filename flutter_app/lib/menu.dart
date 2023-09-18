@@ -9,9 +9,10 @@ import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Menu extends StatelessWidget {
+  Menu(this.areaName, this.storeName, this.storeimageUrl, {super.key});
   String storeName = '';
   String areaName = '';
-  Menu(this.areaName, this.storeName, {super.key});
+  String storeimageUrl = '';
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
   CollectionReference product1 = FirebaseFirestore.instance.collection('area');
@@ -21,33 +22,65 @@ class Menu extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                color: const Color(0xFFAAC4FF),
-                height: 30,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 80,
-                color: const Color(0xFFAAC4FF),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      width: 60,
-                      height: 60,
-                      child: Image.asset(
-                        'assets/images/menu1.jpg',
-                      ),
+        backgroundColor: Color(0xFFEEF1FF),
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 5),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Color(0xFFD2DAFF),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.7),
+                      blurRadius: 5,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 7),
                     ),
-                    SizedBox(
-                      height: 70,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ]),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 30,
+                        height: 30,
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          iconSize: 25,
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 20, right: 15),
+                        width: 70,
+                        height: 70,
+                        child: Image.network(
+                          storeimageUrl,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
@@ -61,8 +94,8 @@ class Menu extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
+                          SizedBox(
+                            height: 17,
                           ),
                           Container(
                             child: Row(
@@ -78,7 +111,8 @@ class Menu extends StatelessWidget {
                                   ),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(left: 70),
+                                  margin: const EdgeInsets.only(
+                                      left: 50, right: 20),
                                   width: 70,
                                   height: 25,
                                   child: ElevatedButton(
@@ -116,76 +150,109 @@ class Menu extends StatelessWidget {
                               ],
                             ),
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height - 230,
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              decoration: BoxDecoration(
+                  color: Color(0xFFC5DFF8),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.7),
+                      blurRadius: 5,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 7),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 1.8,
-                color: Colors.black,
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height - 170,
-                color: Colors.white,
-                child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('menu')
-                      .where("storeName", isEqualTo: storeName)
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                    if (streamSnapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: streamSnapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            final DocumentSnapshot documentSnapshot =
-                                streamSnapshot.data!.docs[index];
-                            return Card(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: ListTile(
-                                      leading: Image.network(
-                                        documentSnapshot['imageUrl'],
-                                        height: 120,
-                                        fit: BoxFit.fitHeight,
-                                      ),
-                                      title: Text(documentSnapshot['name']),
-                                      subtitle:
-                                          Text(documentSnapshot['price'] + '원'),
-                                      onTap: () async {
-                                        await product.add({
-                                          'storeName': storeName,
-                                          'name': documentSnapshot['name'],
-                                          'price': documentSnapshot['price'],
-                                          'location': areaName,
-                                          'userUid': user!.uid,
-                                          'storeUid':
-                                              documentSnapshot['storeUid'],
-                                          'imageUrl':
-                                              documentSnapshot['imageUrl'],
-                                        });
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => Cart(),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                  ]),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('menu')
+                    .where("storeName", isEqualTo: storeName)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                  if (streamSnapshot.hasData) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[index];
+                          return Container(
+                            height: 70,
+                            margin:
+                                EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFffffff),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0),
+                                  bottomLeft: Radius.circular(25.0),
+                                  bottomRight: Radius.circular(25.0),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.7),
+                                    blurRadius: 5,
+                                    spreadRadius: 0,
+                                    offset: const Offset(0, 7),
                                   ),
-                                ],
+                                ]),
+                            child: Center(
+                              child: ListTile(
+                                leading: Image.network(
+                                  documentSnapshot['imageUrl'],
+                                  height: 120,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                                title: Text(documentSnapshot['name']),
+                                trailing: Text(
+                                  documentSnapshot['price'] + '원',
+                                ),
+                                onTap: () async {
+                                  await product.add({
+                                    'storeName': storeName,
+                                    'name': documentSnapshot['name'],
+                                    'price': documentSnapshot['price'],
+                                    'location': areaName,
+                                    'userUid': user!.uid,
+                                    'storeUid': documentSnapshot['storeUid'],
+                                    'imageUrl': documentSnapshot['imageUrl'],
+                                  });
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => Cart(),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          });
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
+                            ),
+                          );
+                        });
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         bottomNavigationBar: ClipRRect(
           borderRadius: BorderRadius.only(
@@ -193,8 +260,7 @@ class Menu extends StatelessWidget {
             topRight: Radius.circular(0),
           ),
           child: BottomNavigationBar(
-            selectedItemColor: Colors.grey,
-            unselectedItemColor: Colors.grey,
+            unselectedItemColor: Colors.black,
             showSelectedLabels: false,
             showUnselectedLabels: false,
             type: BottomNavigationBarType.fixed,
@@ -256,17 +322,6 @@ class Menu extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Cart(),
-              ),
-            );
-          },
-          child: const Icon(Icons.shopping_cart),
         ),
       ),
     );

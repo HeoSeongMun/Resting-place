@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/signup.dart';
 
 class UserInfoEditScreen extends StatelessWidget {
-  UserInfoEditScreen(this.useremail, {super.key});
+  UserInfoEditScreen(this.name, this.useremail, {super.key});
   String useremail = "";
+  String name = "";
   final _authentication = FirebaseAuth.instance;
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  late TextEditingController nameController = TextEditingController(text: name);
+  late TextEditingController emailController =
+      TextEditingController(text: useremail);
   final TextEditingController pwController1 = TextEditingController();
   final TextEditingController pwController2 = TextEditingController();
 
@@ -102,20 +104,17 @@ class UserInfoEditScreen extends StatelessWidget {
                     child: TextField(
                       controller: emailController,
                       decoration: InputDecoration(
-                        hintText: useremail,
-                        hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        filled: true,
+                        fillColor: Colors.grey[350],
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(13)),
                           borderSide:
-                              BorderSide(width: 2, color: Colors.black12),
+                              BorderSide(width: 1, color: Colors.black12),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(13)),
                           borderSide:
-                              BorderSide(width: 2, color: Colors.black12),
+                              BorderSide(width: 1, color: Colors.black12),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(13)),
