@@ -1114,10 +1114,8 @@ class _OrderedList extends State<OrderedList> {
 
   Color setColor(String status) {
     switch (status) {
-      case '주문완료':
+      case '주문중':
         return Colors.blueGrey;
-      case '주문접수':
-        return Colors.blue;
       case '조리중':
         return Colors.yellow;
       case '조리완료':

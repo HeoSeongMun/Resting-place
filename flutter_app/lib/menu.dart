@@ -15,7 +15,6 @@ class Menu extends StatelessWidget {
   String storeimageUrl = '';
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
-  CollectionReference product1 = FirebaseFirestore.instance.collection('area');
   final user = FirebaseAuth.instance.currentUser;
 
   @override
