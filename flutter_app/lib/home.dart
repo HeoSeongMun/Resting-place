@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/orderedlist.dart';
+import 'package:flutter_app/restaurant.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -34,7 +35,7 @@ class _Home extends State<Home> {
   final Random random = Random();
 
   List<String> imageurlData = [];
-  List<String> imageurlText = [];
+  List<String> locationData = [];
   Future<void> imageData() async {
     Set<String> imageurlList = Set<String>();
     QuerySnapshot snapshot = await ordercollection
@@ -46,18 +47,18 @@ class _Home extends State<Home> {
     });
 
     List<String> imageurlList2 = [];
-    List<String> imageurltextList = [];
+    List<String> locationList = [];
     QuerySnapshot snapshot1 =
         await areacollection.where('location', whereIn: imageurlList).get();
 
     snapshot1.docs.forEach((doc) {
       imageurlList2.add(doc['imageUrl']);
-      imageurltextList.add(doc['location']);
+      locationList.add(doc['location']);
     });
 
     setState(() {
       imageurlData = imageurlList2.toList();
-      imageurlText = imageurltextList.toList();
+      locationData = locationList.toList();
     });
   }
 
@@ -172,7 +173,7 @@ class _Home extends State<Home> {
                       items: imageurlData.asMap().entries.map((entry) {
                         final int index = entry.key;
                         final String image = entry.value;
-                        final String text = imageurlText[index];
+                        final String text = locationData[index];
                         return Builder(
                           builder: (BuildContext context) {
                             return Container(
@@ -182,9 +183,21 @@ class _Home extends State<Home> {
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    child: Image.network(
-                                      image.toString(),
-                                      fit: BoxFit.fill,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Restaurant(
+                                                locationData[index],
+                                                imageurlData[index]),
+                                          ),
+                                        );
+                                      },
+                                      child: Image.network(
+                                        image.toString(),
+                                        fit: BoxFit.fill,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(

@@ -52,14 +52,15 @@ class _SignupState extends State<Signup> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()),
-                                );
-                              }),
+                            icon: Icon(Icons.arrow_back),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login()),
+                              );
+                            },
+                          ),
                           SizedBox(
                             width: 110,
                           ),
@@ -461,6 +462,9 @@ class _SignupState extends State<Signup> {
                                     },
                                   ),
                                 );
+                                idController.dispose();
+                                pwController.dispose();
+                                emailController.dispose();
                               }
                             } catch (e) {
                               print(e);

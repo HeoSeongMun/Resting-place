@@ -662,6 +662,7 @@ class _Payment extends State<Payment> {
                         'area_name': location,
                         'name': name,
                         'price': price,
+                        'status': '주문중',
                         'storeName': storeName,
                         'storeUid': storeUid,
                         'userUid': userUid,

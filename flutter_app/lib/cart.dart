@@ -34,7 +34,7 @@ class Cart extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFEEF1FF),
         body: Column(
           children: [
             Container(

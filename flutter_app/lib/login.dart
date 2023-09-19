@@ -28,14 +28,9 @@ class Login extends StatelessWidget {
     }
   }
 
-  // 텍스트 폼 필드 테스트
-  String userId = "";
-  String userPw = "";
-
   final emailFocusNode = FocusNode();
   final pwFocusNode = FocusNode();
 
-  final TextEditingController idController = TextEditingController();
   final TextEditingController pwController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
 
@@ -177,6 +172,8 @@ class Login extends StatelessWidget {
                                   },
                                 ),
                               );
+                              emailController.dispose();
+                              pwController.dispose();
                             }
                           } catch (e) {
                             print(e);
@@ -187,8 +184,6 @@ class Login extends StatelessWidget {
                               ),
                             );
                           }
-                          /*final String id = idController.text;
-                                final String pw = pwController.text;*/
                         },
                         style: TextButton.styleFrom(
                             primary: Colors.black,

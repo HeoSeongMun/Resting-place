@@ -17,57 +17,8 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
 
   final user = FirebaseAuth.instance.currentUser;
 
-  List<String> imageurlData = [];
-  List<String> areaeData = [];
-  List<String> storeData = [];
-  List<String> menuData = [];
-  List<String> textData = [];
-  List<Timestamp> timeData = [];
-
-  Future<void> fetchData() async {
-    //시간순 정렬 함수
-    QuerySnapshot snapshot =
-        await reviewcollection.where('userUid', isEqualTo: user!.uid).get();
-    List<DocumentSnapshot> documents = snapshot.docs;
-    documents.sort((a, b) {
-      Timestamp timeA = a['time'];
-      Timestamp timeB = b['time'];
-      return timeB.compareTo(timeA); // 정렬
-    });
-    List<String> imageurlList = [];
-    List<String> areaeList = [];
-    List<String> storeList = [];
-    List<String> menuList = [];
-    List<String> textList = [];
-    List<Timestamp> timeList = [];
-
-    for (var doc in documents) {
-      String data1 = doc['imageUrl'].toString();
-      String data2 = doc['area_name'];
-      String data3 = doc['store_name'];
-      String data4 = doc['menu'];
-      String data5 = doc['text'];
-      Timestamp data6 = doc['time'];
-      imageurlList.add(data1);
-      areaeList.add(data2);
-      storeList.add(data3);
-      menuList.add(data4);
-      textList.add(data5);
-      timeList.add(data6);
-    }
-    setState(() {
-      imageurlData = imageurlList.toList();
-      areaeData = areaeList.toList();
-      storeData = storeList.toList();
-      menuData = menuList.toList();
-      textData = textList.toList();
-      timeData = timeList.toList();
-    });
-  }
-
   void initState() {
     super.initState();
-    fetchData();
   }
 
   @override
@@ -96,27 +47,28 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
             return Container(); // 데이터가 없는 경우 처리
           }
           if (streamSnapshot.hasData) {
+            final List<DocumentSnapshot> sortedDocs =
+                List.from(streamSnapshot.data!.docs);
+            sortedDocs.sort((a, b) {
+              Timestamp timeA = a['time'];
+              Timestamp timeB = b['time'];
+              return timeB.compareTo(timeA);
+            });
             return ListView.separated(
               separatorBuilder: (context, index) => const Divider(),
-              itemCount: imageurlData.length,
+              itemCount: sortedDocs.length,
               itemBuilder: (context, index) {
-                String data1 = imageurlData[index]; //imageUrl
-                String data2 = areaeData[index]; //area_name
-                String data3 = storeData[index]; //store_name
-                String data4 = menuData[index]; //menu
-                String data5 = textData[index]; //text
-                Timestamp data6 = timeData[index];
+                Timestamp data6 = sortedDocs[index]['time'];
                 final DateTime dateTime = data6.toDate();
-                String formattime =
-                    DateFormat('yyyy-MM-dd').format(dateTime); //time
+                String formattime = DateFormat('yyyy-MM-dd').format(dateTime);
                 return ListTile(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 10.0), // 여기서 간격 조절
-                  leading: Image.network(data1),
+                  leading: Image.network(sortedDocs[index]['imageUrl']),
                   title: Container(
                     margin: EdgeInsets.only(top: 10, bottom: 15),
                     child: Text(
-                      '휴게소 : ' + data2,
+                      '휴게소 : ' + sortedDocs[index]['area_name'],
                     ),
                   ),
                   subtitle: Column(
@@ -125,7 +77,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                         margin: EdgeInsets.only(bottom: 10),
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '음식점 : ' + data3,
+                          '음식점 : ' + sortedDocs[index]['store_name'],
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
@@ -133,7 +85,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                         margin: EdgeInsets.only(top: 10, bottom: 10),
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          data4,
+                          sortedDocs[index]['menu'],
                           style: TextStyle(fontSize: 10),
                         ),
                       ),
@@ -141,7 +93,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.only(bottom: 50),
                         child: Text(
-                          data5,
+                          sortedDocs[index]['text'],
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
@@ -172,9 +124,11 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => WriteReview(
-                                        data2, data3, data4, data1)),
+                                        sortedDocs[index]['area_name'],
+                                        sortedDocs[index]['store_name'],
+                                        sortedDocs[index]['menu'],
+                                        sortedDocs[index]['imageUrl'])),
                               );
-                              // 수정 버튼
                             },
                           ),
                         ),
@@ -186,9 +140,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                               Icons.delete,
                             ),
                             onPressed: () async {
-                              streamSnapshot.data!.docs[index].reference
-                                  .delete();
-                              fetchData();
+                              sortedDocs[index].reference.delete();
                               // 삭제 버튼
                             },
                           ),

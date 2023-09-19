@@ -772,13 +772,14 @@ class _OrderedList extends State<OrderedList> {
                                     } else if (data3 == '완료') {
                                       actionButton = ElevatedButton(
                                         onPressed: () {
-                                          Navigator.of(context).push(
+                                          Navigator.push(
+                                            context,
                                             MaterialPageRoute(
                                               builder: (context) => WriteReview(
-                                                data1.toString(),
-                                                data4.toString(),
-                                                data2.toString(),
-                                                data7.toString(),
+                                                data1,
+                                                data4,
+                                                data2,
+                                                data7,
                                               ),
                                             ),
                                           );

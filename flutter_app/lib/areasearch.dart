@@ -263,6 +263,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                                       .toString()),
                                             ),
                                           );
+                                          filter.dispose();
                                         },
                                       ),
                                     );
@@ -291,6 +292,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                                       .toString()),
                                             ),
                                           );
+                                          filter.dispose();
                                         },
                                       ),
                                     );

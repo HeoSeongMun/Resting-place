@@ -3,14 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class WriteReview extends StatelessWidget {
-  WriteReview(this.areaName, this.storeName, this.menu, this.imageUrl,
-      {super.key});
+class WriteReview extends StatefulWidget {
+  WriteReview(this.areaName, this.storeName, this.menu, this.imageUrl);
+
   String storeName = '';
   String areaName = '';
   String menu = '';
   String imageUrl = '';
   String userName = '';
+
+  @override
+  _WriteReviewState createState() => _WriteReviewState();
+}
+
+class _WriteReviewState extends State<WriteReview> {
+  String savedText = "";
+  final TextEditingController reviewController = TextEditingController();
 
   final _userID = FirebaseAuth.instance.currentUser;
   CollectionReference product =
@@ -19,66 +27,91 @@ class WriteReview extends StatelessWidget {
       FirebaseFirestore.instance.collection('userinfo');
   CollectionReference ordercollection =
       FirebaseFirestore.instance.collection('order');
-  final TextEditingController reviewController = TextEditingController();
-  FocusNode focusNode = FocusNode();
 
+  FocusNode _focusNode = FocusNode();
+
+  _WriteReviewState() {
+    reviewController.addListener(() {
+      setState(() {
+        savedText = reviewController.text;
+      });
+    });
+  }
   Future<void> nameData() async {
     QuerySnapshot usersnapshot = await product1
         .where('userUid', isEqualTo: _userID!.uid.toString())
         .get();
     for (var doc in usersnapshot.docs) {
-      userName = doc['name'];
+      widget.userName = doc['name'];
     }
   }
 
   Future<void> imageUrlData() async {
-    QuerySnapshot imagesnapshot =
-        await ordercollection.where('storeName', isEqualTo: storeName).get();
+    QuerySnapshot imagesnapshot = await ordercollection
+        .where('storeName', isEqualTo: widget.storeName)
+        .get();
     for (var doc in imagesnapshot.docs) {
-      imageUrl = doc['imageUrl'];
+      widget.imageUrl = doc['imageUrl'];
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text('리뷰쓰기',
-                style: TextStyle(
-                  color: Colors.black,
-                )),
-            centerTitle: true,
-            backgroundColor: Color(0xffAAC4FF),
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              color: Colors.black,
-              icon: Icon(Icons.arrow_back),
-            ),
-          ),
-          body: SingleChildScrollView(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'jalnan'),
+      home: Scaffold(
+        backgroundColor: Color(0xFFEEF1FF),
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 150,
-                  color: Color(0xffAAC4FF),
+                  padding: EdgeInsets.only(
+                    top: 35,
+                  ),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFD2DAFF),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30.0),
+                        bottomRight: Radius.circular(30.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.7),
+                          blurRadius: 5,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 7),
+                        ),
+                      ]),
                   child: Container(
-                    margin: EdgeInsets.only(left: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: 20,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                iconSize: 25,
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         Container(
+                          margin: EdgeInsets.only(left: 40),
                           child: Text(
-                            areaName,
+                            widget.areaName,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
@@ -89,37 +122,34 @@ class WriteReview extends StatelessWidget {
                           height: 10,
                         ),
                         Container(
+                          margin: EdgeInsets.only(left: 40),
                           child: Text(
-                            storeName,
+                            widget.storeName,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 30),
                         Container(
+                          margin: EdgeInsets.only(left: 40),
                           child: Text(
                             '음식 또는 매장에 대해 평가를 해주세요.',
                             style: TextStyle(
                               fontSize: 15,
                             ),
                           ),
-                        )
+                        ),
+                        SizedBox(height: 15),
                       ],
                     ),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 3,
-                  color: Colors.blue,
                 ),
                 SizedBox(height: 40),
                 Container(
                   width: MediaQuery.of(context).size.width - 100,
                   height: 30,
-                  color: Color(0xffAAC4FF),
                   child: Text(
                     '서비스와 맛은 어땠었나요?',
                     textAlign: TextAlign.center,
@@ -154,7 +184,6 @@ class WriteReview extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width - 100,
                   height: 30,
-                  color: Color(0xffAAC4FF),
                   child: Text(
                     '좋은점과 부족한점을 적어주세요.',
                     textAlign: TextAlign.center,
@@ -162,13 +191,11 @@ class WriteReview extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                SizedBox(
+                Container(
                   width: MediaQuery.of(context).size.width - 50,
-                  child: TextFormField(
-                    focusNode: focusNode,
+                  child: TextField(
                     controller: reviewController,
                     maxLines: 7,
-                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                         hintText: '리뷰를 작성해주세요!',
                         hintStyle: TextStyle(
@@ -187,6 +214,7 @@ class WriteReview extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         )),
+                    keyboardType: TextInputType.multiline,
                   ),
                 ),
                 SizedBox(height: 50),
@@ -196,26 +224,18 @@ class WriteReview extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (reviewController.text != '') {
+                          savedText = reviewController.text;
                           await nameData();
                           await imageUrlData();
-                          /*Query query = product1.where('userUid',
-                              isEqualTo: _userID!.uid.toString());
-                          QuerySnapshot querySnapshot = await query.get();
-                          
-                          List<QueryDocumentSnapshot> documents =
-                            querySnapshot.docs;
-                          for (QueryDocumentSnapshot document in documents){
-
-                          }*/
                           await product.add({
-                            'name': userName,
-                            'area_name': areaName,
-                            'store_name': storeName,
-                            'menu': menu,
-                            'text': reviewController.text,
+                            'name': widget.userName,
+                            'area_name': widget.areaName,
+                            'store_name': widget.storeName,
+                            'menu': widget.menu,
+                            'text': savedText,
                             'time': Timestamp.now(),
                             'userUid': _userID!.uid.toString(),
-                            'imageUrl': imageUrl,
+                            'imageUrl': widget.imageUrl,
                           });
                           Navigator.pop(context);
                         } else {
@@ -231,7 +251,15 @@ class WriteReview extends StatelessWidget {
                     )),
               ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    reviewController.dispose();
+    super.dispose();
   }
 }
