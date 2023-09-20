@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,6 +35,7 @@ class _OrderedList extends State<OrderedList> {
   List<Timestamp> uniqueData5 = [];
   List<String> uniqueData6 = [];
   List<String> uniqueData7 = [];
+  List<bool> uniqueData8 = [];
   //지난주문 저장 리스트
 
   _OrderedList() {
@@ -111,6 +114,7 @@ class _OrderedList extends State<OrderedList> {
     List<Timestamp> uniqueSet5 = [];
     List<String> uniqueSet6 = [];
     List<String> uniqueSet7 = [];
+    List<bool> uniqueSet8 = [];
 
     for (var doc in documents) {
       String data1 = doc['area_name'];
@@ -120,6 +124,7 @@ class _OrderedList extends State<OrderedList> {
       Timestamp data5 = doc['ordertime'];
       String data6 = doc['price'];
       String data7 = doc['imageUrl'];
+      bool data8 = doc['boolreview'];
       uniqueSet1.add(data1);
       uniqueSet2.add(data2);
       uniqueSet3.add(data3);
@@ -127,6 +132,7 @@ class _OrderedList extends State<OrderedList> {
       uniqueSet5.add(data5);
       uniqueSet6.add(data6);
       uniqueSet7.add(data7);
+      uniqueSet8.add(data8);
     }
 
     setState(() {
@@ -137,11 +143,19 @@ class _OrderedList extends State<OrderedList> {
       uniqueData5 = uniqueSet5.toList();
       uniqueData6 = uniqueSet6.toList();
       uniqueData7 = uniqueSet7.toList();
+      uniqueData8 = uniqueSet8.toList();
     });
   }
 
   void initState() {
     super.initState();
+    pastData();
+    ingData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     pastData();
     ingData();
   }
@@ -677,6 +691,7 @@ class _OrderedList extends State<OrderedList> {
                     ),
                   ),
                   SizedBox(height: 10),
+                  //////////////////////////////////////////////////////////////////
                   Container(
                     margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     decoration: BoxDecoration(
@@ -746,7 +761,9 @@ class _OrderedList extends State<OrderedList> {
                                     String data6 =
                                         uniqueData6[index]; //tot_price
                                     String data7 =
-                                        uniqueData6[index]; //imageUrl
+                                        uniqueData7[index]; //imageUrl
+                                    bool data8 =
+                                        uniqueData8[index]; //boolreview
                                     Widget actionButton;
                                     if (data3 == '조리완료') {
                                       actionButton = ElevatedButton(
@@ -769,7 +786,8 @@ class _OrderedList extends State<OrderedList> {
                                           primary: Color(0xff92ABEB),
                                         ),
                                       );
-                                    } else if (data3 == '완료') {
+                                    } else if (data3 == '완료' &&
+                                        data8 == false) {
                                       actionButton = ElevatedButton(
                                         onPressed: () {
                                           Navigator.push(
@@ -780,6 +798,7 @@ class _OrderedList extends State<OrderedList> {
                                                 data4,
                                                 data2,
                                                 data7,
+                                                data5,
                                               ),
                                             ),
                                           );
@@ -952,145 +971,150 @@ class _OrderedList extends State<OrderedList> {
                                             .toDate()
                                             .toString()
                                             .contains(searchText)) {
-                                      return ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        child: Card(
-                                          child: Container(
-                                            height: 150,
-                                            child: Row(
-                                              children: <Widget>[
-                                                Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  width: 150,
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        height: 75,
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(data1,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            Text(
-                                                              data5
-                                                                  .toDate()
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 10),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 75,
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              data4,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: TextStyle(
-                                                                fontSize: 13,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              data2,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: TextStyle(
-                                                                fontSize: 13,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              data6 + '원',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: TextStyle(
-                                                                  fontSize: 13,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ],
+                                      return Container(
+                                        margin: EdgeInsets.only(
+                                            left: 5, right: 5, bottom: 10),
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFFffffff),
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(25.0),
+                                              topRight: Radius.circular(25.0),
+                                              bottomLeft: Radius.circular(25.0),
+                                              bottomRight:
+                                                  Radius.circular(25.0),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.7),
+                                                blurRadius: 5,
+                                                spreadRadius: 0,
+                                                offset: const Offset(0, 7),
+                                              ),
+                                            ]),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Container(
+                                              alignment: Alignment.centerLeft,
+                                              width: 150,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    height: 75,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(data1,
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                        Text(
+                                                          data5
+                                                              .toDate()
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 10),
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(width: 30),
-                                                Container(
-                                                  width: 60,
-                                                  child: Column(
-                                                    children: [
-                                                      SizedBox(height: 15),
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        height: 30,
-                                                        color: setColor(data3),
-                                                        /*decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color: Colors.black)),*/
-                                                        child: Text(
-                                                          data3,
+                                                  Container(
+                                                    height: 75,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          data4,
+                                                          textAlign:
+                                                              TextAlign.left,
                                                           style: TextStyle(
                                                             fontSize: 13,
                                                           ),
                                                         ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 40,
-                                                ),
-                                                Container(
-                                                  width: 80,
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      SizedBox(height: 5),
-                                                      ElevatedButton(
-                                                        onPressed: () {},
-                                                        child: Text(
-                                                          '상세 주문',
+                                                        Text(
+                                                          data2,
+                                                          textAlign:
+                                                              TextAlign.left,
                                                           style: TextStyle(
+                                                            fontSize: 13,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          data6 + '원',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                              fontSize: 13,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .bold,
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Color(0xffAAC4FF),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 30),
-                                                      actionButton,
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
+                                                                      .bold),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                          ),
+                                            SizedBox(width: 30),
+                                            Container(
+                                              width: 60,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: 15),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    height: 30,
+                                                    color: setColor(data3),
+                                                    /*decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.black)),*/
+                                                    child: Text(
+                                                      data3,
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 40,
+                                            ),
+                                            Container(
+                                              width: 80,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  SizedBox(height: 5),
+                                                  ElevatedButton(
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      '상세 주문',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 10,
+                                                          color: Colors.black),
+                                                    ),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary:
+                                                          Color(0xffAAC4FF),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 30),
+                                                  actionButton,
+                                                ],
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       );
                                     }

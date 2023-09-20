@@ -105,8 +105,8 @@ class ReviewListPage extends StatelessWidget {
                       if (streamSnapshot.hasData) {
                         documents = streamSnapshot.data!.docs;
                         documents.sort((a, b) {
-                          Timestamp timeA = a['time'];
-                          Timestamp timeB = b['time'];
+                          Timestamp timeA = a['reviewtime'];
+                          Timestamp timeB = b['reviewtime'];
                           return timeB.compareTo(timeA); // 정렬
                         });
                         return ListView.separated(
@@ -120,7 +120,8 @@ class ReviewListPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final DocumentSnapshot documentSnapshot =
                                 streamSnapshot.data!.docs[index];
-                            final Timestamp time = documents[index]['time'];
+                            final Timestamp time =
+                                documents[index]['reviewtime'];
                             final DateTime dateTime = time.toDate();
                             String formattime =
                                 DateFormat('yyyy-MM-dd - HH시mm분')

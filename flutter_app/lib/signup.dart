@@ -46,7 +46,10 @@ class _SignupState extends State<Signup> {
                       height: 70,
                       decoration: BoxDecoration(
                         color: Color(0xFFAAC4FF),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
+                        ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,

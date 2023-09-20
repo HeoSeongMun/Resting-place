@@ -208,7 +208,7 @@ class PayComplete extends StatelessWidget {
                     alignment: Alignment.center,
                     width: MediaQuery.of(context).size.width,
                     height: double.infinity,
-                    color: Color(0xffB1B2FF),
+                    color: Color(0xffFFB79E),
                     child: const Text(
                       "확인",
                       style: TextStyle(

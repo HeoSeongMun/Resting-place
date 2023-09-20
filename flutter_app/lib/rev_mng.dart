@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/update_review.dart';
 import 'package:flutter_app/write_review.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +15,8 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
       FirebaseFirestore.instance.collection('userinfo');
   CollectionReference reviewcollection =
       FirebaseFirestore.instance.collection('testreviewlist');
+  CollectionReference ordercollection =
+      FirebaseFirestore.instance.collection('order');
 
   final user = FirebaseAuth.instance.currentUser;
 
@@ -50,15 +53,15 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
             final List<DocumentSnapshot> sortedDocs =
                 List.from(streamSnapshot.data!.docs);
             sortedDocs.sort((a, b) {
-              Timestamp timeA = a['time'];
-              Timestamp timeB = b['time'];
+              Timestamp timeA = a['reviewtime'];
+              Timestamp timeB = b['reviewtime'];
               return timeB.compareTo(timeA);
             });
             return ListView.separated(
               separatorBuilder: (context, index) => const Divider(),
               itemCount: sortedDocs.length,
               itemBuilder: (context, index) {
-                Timestamp data6 = sortedDocs[index]['time'];
+                Timestamp data6 = sortedDocs[index]['reviewtime'];
                 final DateTime dateTime = data6.toDate();
                 String formattime = DateFormat('yyyy-MM-dd').format(dateTime);
                 return ListTile(
@@ -123,12 +126,16 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => WriteReview(
-                                        sortedDocs[index]['area_name'],
-                                        sortedDocs[index]['store_name'],
-                                        sortedDocs[index]['menu'],
-                                        sortedDocs[index]['imageUrl'])),
+                                  builder: (context) => UpdateReview(
+                                      sortedDocs[index]['area_name'],
+                                      sortedDocs[index]['store_name'],
+                                      sortedDocs[index]['menu'],
+                                      sortedDocs[index]['imageUrl'],
+                                      sortedDocs[index]['text'],
+                                      sortedDocs[index]['reviewtime']),
+                                ),
                               );
+                              // 수정 버튼
                             },
                           ),
                         ),
@@ -141,7 +148,36 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                             ),
                             onPressed: () async {
                               sortedDocs[index].reference.delete();
-                              // 삭제 버튼
+                              // 리뷰삭제 및 order컬렉션 boolreview 필드 값 변경 버튼
+                              QuerySnapshot querySnapshot =
+                                  await ordercollection
+                                      .where('area_name',
+                                          isEqualTo: sortedDocs[index]
+                                              ['area_name'])
+                                      .where('storeName',
+                                          isEqualTo: sortedDocs[index]
+                                              ['store_name'])
+                                      .where('name',
+                                          isEqualTo: sortedDocs[index]['menu'])
+                                      .where('ordertime',
+                                          isEqualTo: sortedDocs[index]
+                                              ['ordertime'])
+                                      .where('userUid', isEqualTo: user!.uid)
+                                      .get();
+
+                              if (querySnapshot.docs.isNotEmpty) {
+                                List<QueryDocumentSnapshot> documents =
+                                    querySnapshot.docs;
+                                for (QueryDocumentSnapshot document
+                                    in documents) {
+                                  String documentId = document.id;
+                                  DocumentReference docRef =
+                                      ordercollection.doc(documentId);
+                                  docRef.update({
+                                    'boolreview': false, // 수정하려는 필드 이름과 새로운 값
+                                  });
+                                }
+                              }
                             },
                           ),
                         ),

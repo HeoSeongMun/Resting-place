@@ -16,6 +16,7 @@ class Restaurant extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
         backgroundColor: Color(0xFFEEF1FF),
         body: Column(
@@ -87,7 +88,7 @@ class Restaurant extends StatelessWidget {
               height: 15,
             ),
             Container(
-              height: MediaQuery.of(context).size.height - 390,
+              height: MediaQuery.of(context).size.height - 385,
               decoration: BoxDecoration(
                   color: Color(0xFFC5DFF8),
                   borderRadius: BorderRadius.only(
@@ -162,6 +163,7 @@ class Restaurant extends StatelessWidget {
                                 margin: EdgeInsets.only(top: 10),
                                 child: Text(
                                   '대표메뉴: ' + documentSnapshot['signaturemenu'],
+                                  style: TextStyle(fontSize: 10),
                                 ),
                               ),
                               onTap: () {
@@ -187,74 +189,75 @@ class Restaurant extends StatelessWidget {
             ),
           ],
         ),
-        bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(0),
-            topRight: Radius.circular(0),
-          ),
-          child: BottomNavigationBar(
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.black,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            elevation: 20,
-            onTap: (int index) {
-              switch (index) {
-                case 0: //검색
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AreaSearch()),
-                  );
-                  break;
-                case 1: //장바구니
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Cart()),
-                  );
-                  break;
-                case 2: //홈
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  );
-                  break;
-                case 3: //주문내역
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OrderedList()),
-                  );
-                  break;
-                case 4: //마이휴잇
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
-                  );
-                  break;
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: '검색',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart_outlined),
-                label: '장바구니',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: '홈',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.receipt_long_outlined),
-                label: '주문내역',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.face),
-                label: '마이휴잇',
-              ),
-            ],
+        bottomNavigationBar: Container(
+          height: 70,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25.0),
+              topRight: Radius.circular(25.0),
+            ),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.white,
+              type: BottomNavigationBarType.fixed,
+              elevation: 20,
+              currentIndex: 0,
+              onTap: (int index) {
+                switch (index) {
+                  case 0: //검색
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AreaSearch()),
+                    );
+                    break;
+                  case 1: //장바구니
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Cart()),
+                    );
+                    break;
+                  case 2: //홈
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                    );
+                    break;
+                  case 3: //주문내역
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OrderedList()),
+                    );
+                    break;
+                  case 4: //마이휴잇
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UserPage()),
+                    );
+                    break;
+                }
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: '검색',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart_outlined),
+                  label: '장바구니',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  label: '홈',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  label: '주문내역',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.face),
+                  label: '마이휴잇',
+                ),
+              ],
+            ),
           ),
         ),
       ),

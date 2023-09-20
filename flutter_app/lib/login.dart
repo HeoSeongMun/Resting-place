@@ -172,8 +172,6 @@ class Login extends StatelessWidget {
                                   },
                                 ),
                               );
-                              emailController.dispose();
-                              pwController.dispose();
                             }
                           } catch (e) {
                             print(e);

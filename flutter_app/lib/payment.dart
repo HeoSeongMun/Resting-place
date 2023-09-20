@@ -668,6 +668,7 @@ class _Payment extends State<Payment> {
                         'userUid': userUid,
                         'arrivalTime': arrivalTime,
                         'imageUrl': imageUrl,
+                        'boolreview': false,
                       });
                       setMileageData();
                       //유저 uid 비교해서 해당하는 문서 삭제
@@ -686,7 +687,7 @@ class _Payment extends State<Payment> {
                       alignment: Alignment.center,
                       width: 292.3,
                       height: double.infinity,
-                      color: const Color(0xFFB1B2FF),
+                      color: Color(0xffFFB79E),
                       child: const Text(
                         "결제",
                         style: TextStyle(

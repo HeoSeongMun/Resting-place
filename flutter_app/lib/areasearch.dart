@@ -59,6 +59,7 @@ class _AreaSearchState extends State<AreaSearch> {
         FocusScope.of(context).unfocus();
       },
       child: MaterialApp(
+        theme: ThemeData(fontFamily: 'jalnan'),
         home: Scaffold(
           backgroundColor: Color(0xFFEEF1FF),
           body: SingleChildScrollView(
@@ -173,7 +174,7 @@ class _AreaSearchState extends State<AreaSearch> {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                  height: MediaQuery.of(context).size.height - 200,
+                  height: MediaQuery.of(context).size.height - 220,
                   decoration: BoxDecoration(
                       color: Color(0xFFC5DFF8),
                       borderRadius: BorderRadius.only(
@@ -253,6 +254,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                         ),
                                         subtitle: Text(
                                           documentSnapshot['direction'],
+                                          style: TextStyle(fontSize: 10),
                                         ),
                                         onTap: () {
                                           Navigator.of(context).push(
@@ -263,7 +265,6 @@ class _AreaSearchState extends State<AreaSearch> {
                                                       .toString()),
                                             ),
                                           );
-                                          filter.dispose();
                                         },
                                       ),
                                     );
@@ -312,74 +313,75 @@ class _AreaSearchState extends State<AreaSearch> {
               ],
             ),
           ),
-          bottomNavigationBar: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(0),
-              topRight: Radius.circular(0),
-            ),
-            child: BottomNavigationBar(
-              unselectedItemColor: Colors.black,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              type: BottomNavigationBarType.fixed,
-              currentIndex: 0,
-              elevation: 20,
-              onTap: (int index) {
-                switch (index) {
-                  case 0: //검색
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AreaSearch()),
-                    );
-                    break;
-                  case 1: //장바구니
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Cart()),
-                    );
-                    break;
-                  case 2: //홈
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                    );
-                    break;
-                  case 3: //주문내역
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => OrderedList()),
-                    );
-                    break;
-                  case 4: //마이휴잇
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => UserPage()),
-                    );
-                    break;
-                }
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: '검색',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart_outlined),
-                  label: '장바구니',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
-                  label: '홈',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.receipt_long_outlined),
-                  label: '주문내역',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.face),
-                  label: '마이휴잇',
-                ),
-              ],
+          bottomNavigationBar: Container(
+            height: 70,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: Colors.white,
+                type: BottomNavigationBarType.fixed,
+                elevation: 20,
+                currentIndex: 0,
+                onTap: (int index) {
+                  switch (index) {
+                    case 0: //검색
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AreaSearch()),
+                      );
+                      break;
+                    case 1: //장바구니
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Cart()),
+                      );
+                      break;
+                    case 2: //홈
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
+                      break;
+                    case 3: //주문내역
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OrderedList()),
+                      );
+                      break;
+                    case 4: //마이휴잇
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserPage()),
+                      );
+                      break;
+                  }
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    label: '검색',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.shopping_cart_outlined),
+                    label: '장바구니',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined),
+                    label: '홈',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.receipt_long_outlined),
+                    label: '주문내역',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.face),
+                    label: '마이휴잇',
+                  ),
+                ],
+              ),
             ),
           ),
         ),

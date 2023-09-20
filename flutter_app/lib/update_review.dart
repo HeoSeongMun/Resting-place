@@ -3,25 +3,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class WriteReview extends StatefulWidget {
-  WriteReview(
-      this.areaName, this.storeName, this.menu, this.imageUrl, this.ordertime);
+class UpdateReview extends StatefulWidget {
+  UpdateReview(this.areaName, this.storeName, this.menu, this.imageUrl,
+      this.text, this.pasttime);
 
-  String storeName = '';
   String areaName = '';
+  String storeName = '';
   String menu = '';
   String imageUrl = '';
-  Timestamp ordertime;
+  String text = '';
+  Timestamp pasttime;
+
   String userName = '';
 
   @override
-  _WriteReviewState createState() => _WriteReviewState();
+  _UpdateReview createState() => _UpdateReview();
 }
 
-class _WriteReviewState extends State<WriteReview> {
+class _UpdateReview extends State<UpdateReview> {
   String savedText = "";
-  final TextEditingController reviewController = TextEditingController();
-
+  late TextEditingController reviewController =
+      TextEditingController(text: widget.text);
   final _userID = FirebaseAuth.instance.currentUser;
   CollectionReference product =
       FirebaseFirestore.instance.collection('testreviewlist');
@@ -39,53 +41,24 @@ class _WriteReviewState extends State<WriteReview> {
       });
     });
   }
-  Future<void> nameData() async {
-    QuerySnapshot usersnapshot = await product1
-        .where('userUid', isEqualTo: _userID!.uid.toString())
-        .get();
-    for (var doc in usersnapshot.docs) {
-      widget.userName = doc['name'];
-    }
-    setState(() {});
-  }
 
-  Future<void> imageUrlData() async {
-    QuerySnapshot imagesnapshot = await ordercollection
-        .where('storeName', isEqualTo: widget.storeName)
-        .get();
-    for (var doc in imagesnapshot.docs) {
-      widget.imageUrl = doc['imageUrl'];
-    }
-    setState(() {});
-  }
-
-  Future<void> orderboolreviewUpdate() async {
-    QuerySnapshot querySnapshot = await ordercollection
+  Future<void> updateReviewText() async {
+    QuerySnapshot querySnapshot = await product
+        .where('text', isEqualTo: widget.text)
         .where('area_name', isEqualTo: widget.areaName)
-        .where('storeName', isEqualTo: widget.storeName)
-        .where('name', isEqualTo: widget.menu)
-        .where('ordertime', isEqualTo: widget.ordertime)
+        .where('store_name', isEqualTo: widget.storeName)
+        .where('menu', isEqualTo: widget.menu)
+        .where('reviewtime', isEqualTo: widget.pasttime)
         .where('userUid', isEqualTo: _userID!.uid)
         .get();
-    if (querySnapshot.docs.isNotEmpty) {
-      List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-      for (QueryDocumentSnapshot document in documents) {
-        String documentId = document.id;
-        DocumentReference docRef = ordercollection.doc(documentId);
-        docRef.update({
-          'boolreview': true, // 수정하려는 필드 이름과 새로운 값
-        });
-      }
-    }
-    setState(() {});
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    nameData();
-    imageUrlData();
-    orderboolreviewUpdate();
+    if (querySnapshot.docs.isNotEmpty) {
+      final String documentId = querySnapshot.docs[0].id;
+      final DocumentReference docRef = product.doc(documentId);
+      docRef.update({
+        'text': savedText, // 수정하려는 필드 이름과 새로운 값
+      });
+    }
   }
 
   @override
@@ -259,20 +232,7 @@ class _WriteReviewState extends State<WriteReview> {
                       onPressed: () async {
                         if (reviewController.text != '') {
                           savedText = reviewController.text;
-                          await nameData();
-                          await imageUrlData();
-                          await product.add({
-                            'name': widget.userName,
-                            'area_name': widget.areaName,
-                            'store_name': widget.storeName,
-                            'menu': widget.menu,
-                            'text': savedText,
-                            'reviewtime': Timestamp.now(),
-                            'ordertime': widget.ordertime,
-                            'userUid': _userID!.uid.toString(),
-                            'imageUrl': widget.imageUrl,
-                          });
-                          await orderboolreviewUpdate();
+                          await updateReviewText();
                           Navigator.pop(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
