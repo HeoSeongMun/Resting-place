@@ -1,11 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui/add_image/add_image.dart';
 import 'package:flutter_ui/login.dart';
 
 class Signup extends StatelessWidget {
   Signup({super.key});
+
+  Uint8List? userPickedImage;
+
+  void pickedImage(Uint8List image) {
+    userPickedImage = image;
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: AddImage(pickedImage),
+        );
+      },
+    );
+  }
 
   final _authentication = FirebaseAuth.instance;
 
@@ -147,6 +167,24 @@ class Signup extends StatelessWidget {
                         labelText: '요청자 전화번호를 적어주세요 예)01012341234',
                       ),
                     ),
+                    Row(
+                      children: [
+                        const Text('상품 이미지'),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showAlert(context);
+                          },
+                          child: Image.network(
+                            "https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fplus.jpg?alt=media&token=bdc65d4b-639f-4457-a17a-117185f8c6f1",
+                            width: 250,
+                            height: 250,
+                          ),
+                        ),
+                      ],
+                    ),
                     Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
@@ -169,6 +207,14 @@ class Signup extends StatelessWidget {
                                 password: pwController.text,
                               );
                               */
+                              final String storename = storenameController.text;
+                              final refImage = FirebaseStorage.instance
+                                  .ref()
+                                  .child('waitImage')
+                                  .child('$storename.png');
+
+                              await refImage.putData(userPickedImage!);
+                              final imageUrl = await refImage.getDownloadURL();
 
                               await FirebaseFirestore.instance
                                   .collection('admin_request')
@@ -178,7 +224,7 @@ class Signup extends StatelessWidget {
                                   'owner_email': emailController.text,
                                   'restarea_name': restareanameController.text,
                                   'direction': directionController.text,
-                                  'store_name': storenameController.text,
+                                  'store_name': storename,
                                   'owner_password': pwController.text,
                                   'phone_number': phonenumberController.text,
                                   'owner_name': ownernameController.text,
