@@ -7,7 +7,7 @@ import 'admin_update.dart';
 
 class AdminApprove extends StatelessWidget {
   final _authentication = FirebaseAuth.instance;
-
+  CollectionReference product = FirebaseFirestore.instance.collection('area');
   String docID;
   AdminApprove({
     super.key,
@@ -77,19 +77,11 @@ class AdminApprove extends StatelessWidget {
 
   void storeInformation() async {
     Map<String, dynamic> data = <String, dynamic>{
-      'restAreaName': restAreaName,
-      'storeName': storeName,
-      'storeId': ownerID,
-      'email': ownerEmail,
       'direction': direction,
-    };
-
-    await testlogin.add(data);
-  }
-
-  void areaname() async {
-    Map<String, dynamic> data = <String, dynamic>{
-      'location': restAreaName,
+      'email': ownerEmail,
+      'restAreaName': restAreaName,
+      'storeId': ownerID,
+      'storeName': storeName,
     };
 
     await testlogin.add(data);
@@ -156,7 +148,7 @@ class AdminApprove extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AdminDelete()),
+                              builder: (context) => const AdminDelete()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -178,7 +170,7 @@ class AdminApprove extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AdminUpdate()),
+                              builder: (context) => const AdminUpdate()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -567,8 +559,14 @@ class AdminApprove extends StatelessWidget {
                                             onPressed: () async {
                                               approveRequest();
                                               storeInformation();
-                                              areaname();
+                                              // 승인했으니 대기중인 데이터 삭제
                                               denyRequest(docID);
+                                              // area컬렉션에 휴게소 이름 추가부분
+                                              // 문서 id만 다르고 휴게소 이름이 중복되서 데이터가 추가됨 추후 수정
+                                              await product.add(
+                                                {'location': restAreaName},
+                                              );
+                                              // 판매자 회원 등록 절차
                                               await _authentication
                                                   .createUserWithEmailAndPassword(
                                                 email: ownerEmail,
