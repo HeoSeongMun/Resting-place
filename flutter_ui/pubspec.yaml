@@ -40,7 +40,10 @@ dependencies:
   firebase_auth: ^4.4.0
   image_picker: ^0.8.7+5
   firebase_storage: ^11.2.1
-
+  intl: ^0.18.1
+  fl_chart: ^0.41.0
+  sketcher: ^2.2.0
+  cached_network_image: ^3.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -92,4 +95,9 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,
+  fonts:
+    - family: Jalnan
+      fonts:
+        - asset: font/Jalnan.ttf
+          weight: 200
   # see https://flutter.dev/custom-fonts/#from-packages
