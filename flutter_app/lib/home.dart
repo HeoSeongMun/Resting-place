@@ -354,7 +354,7 @@ class _Home extends State<Home> {
                                       spinSlotMachine(items);
                                     },
                                     child: Text(
-                                      "결과\n" + "보기",
+                                      "다음\n" + "추천",
                                       textAlign: TextAlign.center,
                                       maxLines: 3,
                                       style: TextStyle(

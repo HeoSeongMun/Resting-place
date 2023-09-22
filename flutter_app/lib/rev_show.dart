@@ -15,6 +15,7 @@ class ReviewListPage extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
+        backgroundColor: Color(0xFFEEF1FF),
         body: SingleChildScrollView(
           child: Column(
             children: [

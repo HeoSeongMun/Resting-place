@@ -656,20 +656,22 @@ class _Payment extends State<Payment> {
                         storeName = document.get('storeName');
                         storeUid = document.get('storeUid');
                         userUid = document.get('userUid');
+                        imageUrl = document.get('imageUrl');
+
+                        await order.add({
+                          'ordertime': Timestamp.now().toDate(),
+                          'area_name': location,
+                          'name': name,
+                          'price': price,
+                          'status': '주문중',
+                          'storeName': storeName,
+                          'storeUid': storeUid,
+                          'userUid': userUid,
+                          'arrivalTime': arrivalTime,
+                          'imageUrl': imageUrl,
+                          'boolreview': false,
+                        });
                       }
-                      await order.add({
-                        'ordertime': Timestamp.now().toDate(),
-                        'area_name': location,
-                        'name': name,
-                        'price': price,
-                        'status': '주문중',
-                        'storeName': storeName,
-                        'storeUid': storeUid,
-                        'userUid': userUid,
-                        'arrivalTime': arrivalTime,
-                        'imageUrl': imageUrl,
-                        'boolreview': false,
-                      });
                       setMileageData();
                       //유저 uid 비교해서 해당하는 문서 삭제
 

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/write_review.dart';
+import 'package:intl/intl.dart';
 
 class OrderedList extends StatefulWidget {
   OrderedList({super.key});
@@ -350,6 +351,11 @@ class _OrderedList extends State<OrderedList> {
                                         ing_priceList[index]; //tot_price
                                     String ing_imgeUrl =
                                         ing_imageUrlList[index]; //imageUrl
+                                    final DateTime dateTime =
+                                        ing_ordertime.toDate();
+                                    String formattime =
+                                        DateFormat('yyyy-MM-dd HH:mm')
+                                            .format(dateTime);
                                     Widget actionButton;
                                     if (ing_status.toString() == '조리완료') {
                                       actionButton = ElevatedButton(
@@ -406,11 +412,11 @@ class _OrderedList extends State<OrderedList> {
                                           children: <Widget>[
                                             Container(
                                               alignment: Alignment.centerLeft,
-                                              width: 150,
                                               child: Column(
                                                 children: <Widget>[
                                                   Container(
-                                                    height: 75,
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, top: 10),
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -424,9 +430,7 @@ class _OrderedList extends State<OrderedList> {
                                                                       .bold,
                                                             )),
                                                         Text(
-                                                          ing_ordertime
-                                                              .toDate()
-                                                              .toString(),
+                                                          formattime,
                                                           style: TextStyle(
                                                               fontSize: 10),
                                                         )
@@ -565,9 +569,7 @@ class _OrderedList extends State<OrderedList> {
                                                                           .bold,
                                                                 )),
                                                             Text(
-                                                              ing_ordertime
-                                                                  .toDate()
-                                                                  .toString(),
+                                                              formattime,
                                                               style: TextStyle(
                                                                   fontSize: 10),
                                                             )
@@ -764,6 +766,10 @@ class _OrderedList extends State<OrderedList> {
                                         uniqueData7[index]; //imageUrl
                                     bool data8 =
                                         uniqueData8[index]; //boolreview
+                                    final DateTime dateTime = data5.toDate();
+                                    String formattime =
+                                        DateFormat('yyyy-MM-dd HH:mm')
+                                            .format(dateTime);
                                     Widget actionButton;
                                     if (data3 == '조리완료') {
                                       actionButton = ElevatedButton(
@@ -862,9 +868,7 @@ class _OrderedList extends State<OrderedList> {
                                                                       .bold,
                                                             )),
                                                         Text(
-                                                          data5
-                                                              .toDate()
-                                                              .toString(),
+                                                          formattime,
                                                           style: TextStyle(
                                                               fontSize: 10),
                                                         )
@@ -1014,9 +1018,7 @@ class _OrderedList extends State<OrderedList> {
                                                                       .bold,
                                                             )),
                                                         Text(
-                                                          data5
-                                                              .toDate()
-                                                              .toString(),
+                                                          formattime,
                                                           style: TextStyle(
                                                               fontSize: 10),
                                                         )
