@@ -1,0 +1,6 @@
+flutter_native_splash:
+  color: "#EEF1FF"
+  image: images/appicon.gif
+  android_gravity: center
+  web_image_mode: center
+  fullscreen: true

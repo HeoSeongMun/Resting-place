@@ -44,6 +44,7 @@ dependencies:
   fl_chart: ^0.41.0
   sketcher: ^2.2.0
   cached_network_image: ^3.1.0
+  flutter_native_splash: ^2.2.19
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -100,4 +101,5 @@ flutter:
       fonts:
         - asset: font/Jalnan.ttf
           weight: 200
+
   # see https://flutter.dev/custom-fonts/#from-packages
