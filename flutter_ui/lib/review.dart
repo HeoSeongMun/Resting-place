@@ -31,7 +31,7 @@ class Review extends StatelessWidget {
                         children: [
                           SizedBox(
                             height: 60,
-                            width: 290,
+                            width: 310,
                             child: StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection('testlogin')
