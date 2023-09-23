@@ -45,6 +45,8 @@ dependencies:
   percent_indicator: ^4.2.3
   numberpicker: ^2.1.2
   intl: ^0.18.1
+  flutter_native_splash: ^2.2.19
+  flutter_spinkit: ^5.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

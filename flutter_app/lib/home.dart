@@ -36,6 +36,7 @@ class _Home extends State<Home> {
 
   List<String> imageurlData = [];
   List<String> locationData = [];
+
   Future<void> imageData() async {
     Set<String> imageurlList = Set<String>();
     QuerySnapshot snapshot = await ordercollection
@@ -50,7 +51,6 @@ class _Home extends State<Home> {
     List<String> locationList = [];
     QuerySnapshot snapshot1 =
         await areacollection.where('location', whereIn: imageurlList).get();
-
     snapshot1.docs.forEach((doc) {
       imageurlList2.add(doc['imageUrl']);
       locationList.add(doc['location']);

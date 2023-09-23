@@ -20,6 +20,7 @@ class _Payment extends State<Payment> {
   String userUid = '';
   String total = '';
   String imageUrl = '';
+  int count = 0;
   int mileage = 0;
   int discount = 0;
   int finalprice = 0;
@@ -657,6 +658,7 @@ class _Payment extends State<Payment> {
                         storeUid = document.get('storeUid');
                         userUid = document.get('userUid');
                         imageUrl = document.get('imageUrl');
+                        count = document.get('count');
 
                         await order.add({
                           'ordertime': Timestamp.now().toDate(),
@@ -669,9 +671,11 @@ class _Payment extends State<Payment> {
                           'userUid': userUid,
                           'arrivalTime': arrivalTime,
                           'imageUrl': imageUrl,
+                          'count': count,
                           'boolreview': false,
                         });
                       }
+
                       setMileageData();
                       //유저 uid 비교해서 해당하는 문서 삭제
 

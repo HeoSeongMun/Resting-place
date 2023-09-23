@@ -17,6 +17,18 @@ class Menu extends StatelessWidget {
       FirebaseFirestore.instance.collection('shoppingBasket');
   final user = FirebaseAuth.instance.currentUser;
 
+  Future<bool> checkItemExists(String itemName, String userUid) async {
+    // 아이템이 이미 쇼핑 바스켓에 있는지 확인하는 코드
+    QuerySnapshot querySnapshot = await product
+        .where('name', isEqualTo: itemName)
+        .where('userUid', isEqualTo: userUid)
+        .where('location', isEqualTo: areaName)
+        .where('storeName', isEqualTo: storeName)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -228,20 +240,43 @@ class Menu extends StatelessWidget {
                                   documentSnapshot['price'] + '원',
                                 ),
                                 onTap: () async {
-                                  await product.add({
-                                    'storeName': storeName,
-                                    'name': documentSnapshot['name'],
-                                    'price': documentSnapshot['price'],
-                                    'location': areaName,
-                                    'userUid': user!.uid,
-                                    'storeUid': documentSnapshot['storeUid'],
-                                    'imageUrl': documentSnapshot['imageUrl'],
-                                  });
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Cart(),
-                                    ),
-                                  );
+                                  bool itemExists = await checkItemExists(
+                                      documentSnapshot['name'], user!.uid);
+                                  if (!itemExists) {
+                                    await product.add({
+                                      'storeName': storeName,
+                                      'name': documentSnapshot['name'],
+                                      'price': documentSnapshot['price'],
+                                      'location': areaName,
+                                      'userUid': user!.uid,
+                                      'storeUid': documentSnapshot['storeUid'],
+                                      'imageUrl': documentSnapshot['imageUrl'],
+                                      'count': 1,
+                                    });
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Cart(),
+                                      ),
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Text("이미 장바구니에 있어요!!"),
+                                          actions: [
+                                            TextButton(
+                                              child: Text("확인"),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(); // 다이얼로그 닫기
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
                                 },
                               ),
                             ),

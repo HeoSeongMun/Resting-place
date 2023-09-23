@@ -116,9 +116,14 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                         .where('userUid', isEqualTo: user!.uid)
                         .snapshots(),
                     builder: (BuildContext context, streamSnapshot) {
+                      if (streamSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Container();
+                      }
                       if (!streamSnapshot.hasData ||
                           streamSnapshot.data!.docs.isEmpty) {
-                        return Container(); // 데이터가 없는 경우 처리
+                        return Container(
+                            child: Text('작성한 리뷰가 없습니다!')); // 데이터가 없는 경우 처리
                       }
                       if (streamSnapshot.hasData) {
                         final List<DocumentSnapshot> sortedDocs =

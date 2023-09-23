@@ -18,27 +18,6 @@ class _OrderedList extends State<OrderedList> {
   FocusNode focusNode = FocusNode();
   String searchText = "";
 
-  //진행중
-  List<String> ing_areanameList = [];
-  List<String> ing_nameList = [];
-  List<String> ing_statusList = [];
-  List<String> ing_storenameList = [];
-  List<Timestamp> ing_ordertimeList = [];
-  List<String> ing_priceList = [];
-  List<String> ing_imageUrlList = [];
-  //진행중
-
-  //지난주문 저장 리스트
-  List<String> uniqueData1 = [];
-  List<String> uniqueData2 = [];
-  List<String> uniqueData3 = [];
-  List<String> uniqueData4 = [];
-  List<Timestamp> uniqueData5 = [];
-  List<String> uniqueData6 = [];
-  List<String> uniqueData7 = [];
-  List<bool> uniqueData8 = [];
-  //지난주문 저장 리스트
-
   _OrderedList() {
     filter.addListener(() {
       setState(() {
@@ -46,119 +25,14 @@ class _OrderedList extends State<OrderedList> {
       });
     });
   }
-  List<DocumentSnapshot> documentList = [];
-  //진행중인 데이터 가져오기 및 정렬 함수
-  Future<void> ingData() async {
-    QuerySnapshot snapshot =
-        await product.where('userUid', isEqualTo: _userID!.uid).get();
-    List<DocumentSnapshot> documents =
-        snapshot.docs.where((doc) => doc['status'] != '완료').toList();
-
-    documents.sort((a, b) {
-      Timestamp timeA = a['ordertime'];
-      Timestamp timeB = b['ordertime'];
-      return timeB.compareTo(timeA); // 정렬
-    });
-    documentList = documents;
-    List<String> uniqueSet1 = [];
-    List<String> uniqueSet2 = [];
-    List<String> uniqueSet3 = [];
-    List<String> uniqueSet4 = [];
-    List<Timestamp> uniqueSet5 = [];
-    List<String> uniqueSet6 = [];
-    List<String> uniqueSet7 = [];
-
-    for (var doc in documents) {
-      String data1 = doc['area_name'];
-      String data2 = doc['name'];
-      String data3 = doc['status'];
-      String data4 = doc['storeName'];
-      Timestamp data5 = doc['ordertime'];
-      String data6 = doc['price'];
-      String data7 = doc['imageUrl'];
-      uniqueSet1.add(data1);
-      uniqueSet2.add(data2);
-      uniqueSet3.add(data3);
-      uniqueSet4.add(data4);
-      uniqueSet5.add(data5);
-      uniqueSet6.add(data6);
-      uniqueSet7.add(data7);
-    }
-
-    setState(() {
-      ing_areanameList = uniqueSet1.toList();
-      ing_nameList = uniqueSet2.toList();
-      ing_statusList = uniqueSet3.toList();
-      ing_storenameList = uniqueSet4.toList();
-      ing_ordertimeList = uniqueSet5.toList();
-      ing_priceList = uniqueSet6.toList();
-      ing_imageUrlList = uniqueSet7.toList();
-    });
-  }
-
-  //지난주문 데이터 가져오기 및 정렬 함수
-  Future<void> pastData() async {
-    QuerySnapshot snapshot = await product
-        .where('userUid', isEqualTo: _userID!.uid)
-        .where('status', isEqualTo: '완료')
-        .get();
-    List<DocumentSnapshot> documents = snapshot.docs;
-    documents.sort((a, b) {
-      Timestamp timeA = a['ordertime'];
-      Timestamp timeB = b['ordertime'];
-      return timeB.compareTo(timeA); // 정렬
-    });
-    List<String> uniqueSet1 = [];
-    List<String> uniqueSet2 = [];
-    List<String> uniqueSet3 = [];
-    List<String> uniqueSet4 = [];
-    List<Timestamp> uniqueSet5 = [];
-    List<String> uniqueSet6 = [];
-    List<String> uniqueSet7 = [];
-    List<bool> uniqueSet8 = [];
-
-    for (var doc in documents) {
-      String data1 = doc['area_name'];
-      String data2 = doc['name'];
-      String data3 = doc['status'];
-      String data4 = doc['storeName'];
-      Timestamp data5 = doc['ordertime'];
-      String data6 = doc['price'];
-      String data7 = doc['imageUrl'];
-      bool data8 = doc['boolreview'];
-      uniqueSet1.add(data1);
-      uniqueSet2.add(data2);
-      uniqueSet3.add(data3);
-      uniqueSet4.add(data4);
-      uniqueSet5.add(data5);
-      uniqueSet6.add(data6);
-      uniqueSet7.add(data7);
-      uniqueSet8.add(data8);
-    }
-
-    setState(() {
-      uniqueData1 = uniqueSet1.toList();
-      uniqueData2 = uniqueSet2.toList();
-      uniqueData3 = uniqueSet3.toList();
-      uniqueData4 = uniqueSet4.toList();
-      uniqueData5 = uniqueSet5.toList();
-      uniqueData6 = uniqueSet6.toList();
-      uniqueData7 = uniqueSet7.toList();
-      uniqueData8 = uniqueSet8.toList();
-    });
-  }
 
   void initState() {
     super.initState();
-    pastData();
-    ingData();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    pastData();
-    ingData();
   }
 
   @override
@@ -318,58 +192,58 @@ class _OrderedList extends State<OrderedList> {
                         Container(
                           margin: EdgeInsets.only(left: 5, right: 5),
                           child: StreamBuilder(
-                            stream: FirebaseFirestore.instance
-                                .collection('order')
+                            stream: product
                                 .where('userUid', isEqualTo: _userID!.uid)
+                                .where('status', isNotEqualTo: '완료')
                                 .snapshots(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> streamSnapshot) {
                               if (!streamSnapshot.hasData ||
                                   streamSnapshot.data!.docs.isEmpty) {
+                                debugPrint('데이터가 없습니다.');
                                 return Container(); // 데이터가 없는 경우 처리
+                              }
+                              if (streamSnapshot.hasError) {
+                                debugPrint('에러');
+                                Container();
                               }
                               if (streamSnapshot.hasData) {
                                 return ListView.builder(
                                   shrinkWrap: true, // 리스트뷰 크기를 자동으로 조정
                                   physics:
                                       NeverScrollableScrollPhysics(), // 스크롤 방지
-                                  itemCount: ing_areanameList.length,
+                                  itemCount: streamSnapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
-                                    final DocumentSnapshot documentSnapshot =
-                                        streamSnapshot.data!.docs[index];
-                                    String ing_areaname =
-                                        ing_areanameList[index]; //area_name
-                                    String ing_name =
-                                        ing_nameList[index]; //menu_name
-                                    String ing_status =
-                                        ing_statusList[index]; //status
-                                    String ing_storename =
-                                        ing_storenameList[index]; //store_name
-                                    Timestamp ing_ordertime =
-                                        ing_ordertimeList[index]; //time
-                                    String ing_price =
-                                        ing_priceList[index]; //tot_price
-                                    String ing_imgeUrl =
-                                        ing_imageUrlList[index]; //imageUrl
+                                    final List<DocumentSnapshot> sortedDocs =
+                                        List.from(streamSnapshot.data!.docs);
+                                    sortedDocs.sort((a, b) {
+                                      Timestamp timeA = a['ordertime'];
+                                      Timestamp timeB = b['ordertime'];
+                                      return timeB.compareTo(timeA);
+                                    });
                                     final DateTime dateTime =
-                                        ing_ordertime.toDate();
+                                        sortedDocs[index]['ordertime'].toDate();
                                     String formattime =
                                         DateFormat('yyyy-MM-dd HH:mm')
                                             .format(dateTime);
+                                    int itemPrice = int.parse(sortedDocs[index]
+                                        ['price']); // 아이템의 가격 (int 형으로 가정)
+                                    int itemcount = sortedDocs[index]['count'];
+                                    int listlPrice = itemPrice * itemcount;
+                                    String areaName =
+                                        sortedDocs[index]['area_name'];
                                     Widget actionButton;
-                                    if (ing_status.toString() == '조리완료') {
+                                    if (sortedDocs[index]['status']
+                                            .toString() ==
+                                        '조리완료') {
                                       actionButton = ElevatedButton(
                                         onPressed: () async {
                                           String documentID =
-                                              documentList[index].id;
+                                              sortedDocs[index].id;
                                           await FirebaseFirestore.instance
                                               .collection('order')
                                               .doc(documentID)
                                               .update({'status': '완료'});
-                                          setState(() {
-                                            ingData();
-                                            pastData();
-                                          });
                                         },
                                         child: Text(
                                           '수령 완료',
@@ -422,7 +296,9 @@ class _OrderedList extends State<OrderedList> {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Text(ing_areaname,
+                                                        Text(
+                                                            sortedDocs[index]
+                                                                ['area_name'],
                                                             style: TextStyle(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -445,7 +321,8 @@ class _OrderedList extends State<OrderedList> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          ing_storename,
+                                                          sortedDocs[index]
+                                                              ['storeName'],
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -453,7 +330,8 @@ class _OrderedList extends State<OrderedList> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          ing_name,
+                                                          sortedDocs[index]
+                                                              ['name'],
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -461,7 +339,9 @@ class _OrderedList extends State<OrderedList> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          ing_price + '원',
+                                                          listlPrice
+                                                                  .toString() +
+                                                              '원',
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -485,12 +365,15 @@ class _OrderedList extends State<OrderedList> {
                                                   Container(
                                                     alignment: Alignment.center,
                                                     height: 30,
-                                                    color: setColor(ing_status),
+                                                    color: setColor(
+                                                        sortedDocs[index]
+                                                            ['status']),
                                                     /*decoration: BoxDecoration(
                                                     border: Border.all(
                                                         color: Colors.black)),*/
                                                     child: Text(
-                                                      ing_status,
+                                                      sortedDocs[index]
+                                                          ['status'],
                                                       style: TextStyle(
                                                         fontSize: 13,
                                                       ),
@@ -532,153 +415,167 @@ class _OrderedList extends State<OrderedList> {
                                         ),
                                       );
                                     }
-                                    if (ing_areaname
+                                    if (areaName
                                             .toString()
                                             .contains(searchText) ||
-                                        ing_ordertime
-                                            .toDate()
+                                        formattime
                                             .toString()
                                             .contains(searchText)) {
-                                      return ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        child: Card(
-                                          child: Container(
-                                            height: 150,
-                                            child: Row(
-                                              children: <Widget>[
-                                                Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  width: 150,
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        height: 75,
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(ing_areaname,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            Text(
-                                                              formattime,
-                                                              style: TextStyle(
-                                                                  fontSize: 10),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 75,
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              ing_storename,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: TextStyle(
-                                                                fontSize: 13,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              ing_name,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: TextStyle(
-                                                                fontSize: 13,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              ing_price + '원',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: TextStyle(
-                                                                  fontSize: 13,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ],
+                                      return Container(
+                                        margin: EdgeInsets.only(
+                                            left: 5, right: 5, bottom: 10),
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFFffffff),
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(25.0),
+                                              topRight: Radius.circular(25.0),
+                                              bottomLeft: Radius.circular(25.0),
+                                              bottomRight:
+                                                  Radius.circular(25.0),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.7),
+                                                blurRadius: 5,
+                                                spreadRadius: 0,
+                                                offset: const Offset(0, 7),
+                                              ),
+                                            ]),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, top: 10),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            sortedDocs[index]
+                                                                ['area_name'],
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                        Text(
+                                                          formattime,
+                                                          style: TextStyle(
+                                                              fontSize: 10),
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(width: 30),
-                                                Container(
-                                                  width: 60,
-                                                  child: Column(
-                                                    children: [
-                                                      SizedBox(height: 15),
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        height: 30,
-                                                        color: setColor(
-                                                            ing_status),
-                                                        /*decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color: Colors.black)),*/
-                                                        child: Text(
-                                                          ing_status,
+                                                  Container(
+                                                    height: 75,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          sortedDocs[index]
+                                                              ['storeName'],
+                                                          textAlign:
+                                                              TextAlign.left,
                                                           style: TextStyle(
                                                             fontSize: 13,
                                                           ),
                                                         ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 40,
-                                                ),
-                                                Container(
-                                                  width: 80,
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      SizedBox(height: 5),
-                                                      ElevatedButton(
-                                                        onPressed: () {},
-                                                        child: Text(
-                                                          '상세 주문',
+                                                        Text(
+                                                          sortedDocs[index]
+                                                              ['name'],
+                                                          textAlign:
+                                                              TextAlign.left,
                                                           style: TextStyle(
+                                                            fontSize: 13,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          listlPrice
+                                                                  .toString() +
+                                                              '원',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                              fontSize: 13,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .bold,
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Color(0xffAAC4FF),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 30),
-                                                      actionButton,
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
+                                                                      .bold),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                          ),
+                                            SizedBox(width: 30),
+                                            Container(
+                                              width: 60,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: 15),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    height: 30,
+                                                    color: setColor(
+                                                        sortedDocs[index]
+                                                            ['status']),
+                                                    /*decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.black)),*/
+                                                    child: Text(
+                                                      sortedDocs[index]
+                                                          ['status'],
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 40,
+                                            ),
+                                            Container(
+                                              width: 80,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  SizedBox(height: 5),
+                                                  ElevatedButton(
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      '상세 주문',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 10,
+                                                          color: Colors.black),
+                                                    ),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary:
+                                                          Color(0xffAAC4FF),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 30),
+                                                  actionButton,
+                                                ],
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       );
+                                    } else {
+                                      Container();
                                     }
                                     return Container();
                                   },
@@ -736,6 +633,7 @@ class _OrderedList extends State<OrderedList> {
                             stream: FirebaseFirestore.instance
                                 .collection('order')
                                 .where('userUid', isEqualTo: _userID!.uid)
+                                .where('status', isEqualTo: '완료')
                                 .snapshots(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> streamSnapshot) {
@@ -748,34 +646,33 @@ class _OrderedList extends State<OrderedList> {
                                   shrinkWrap: true, // 리스트뷰 크기를 자동으로 조정
                                   physics:
                                       NeverScrollableScrollPhysics(), // 스크롤 방지
-                                  itemCount: uniqueData1.length,
+                                  itemCount: streamSnapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
-                                    final DocumentSnapshot documentSnapshot =
-                                        streamSnapshot.data!.docs[index];
-                                    String data1 =
-                                        uniqueData1[index]; //area_name
-                                    String data2 =
-                                        uniqueData2[index]; //menu_name
-                                    String data3 = uniqueData3[index]; //status
-                                    String data4 =
-                                        uniqueData4[index]; //store_name
-                                    Timestamp data5 = uniqueData5[index]; //time
-                                    String data6 =
-                                        uniqueData6[index]; //tot_price
-                                    String data7 =
-                                        uniqueData7[index]; //imageUrl
-                                    bool data8 =
-                                        uniqueData8[index]; //boolreview
-                                    final DateTime dateTime = data5.toDate();
+                                    final List<DocumentSnapshot> sortedDocs =
+                                        List.from(streamSnapshot.data!.docs);
+                                    sortedDocs.sort((a, b) {
+                                      Timestamp timeA = a['ordertime'];
+                                      Timestamp timeB = b['ordertime'];
+                                      return timeB.compareTo(timeA);
+                                    });
+                                    final DateTime dateTime =
+                                        sortedDocs[index]['ordertime'].toDate();
                                     String formattime =
                                         DateFormat('yyyy-MM-dd HH:mm')
                                             .format(dateTime);
+                                    int itemPrice = int.parse(sortedDocs[index]
+                                        ['price']); // 아이템의 가격 (int 형으로 가정)
+                                    int itemcount = sortedDocs[index]['count'];
+
+                                    int listlPrice = itemPrice * itemcount;
+                                    String areaName =
+                                        sortedDocs[index]['area_name'];
                                     Widget actionButton;
-                                    if (data3 == '조리완료') {
+                                    if (sortedDocs[index]['status'] == '조리완료') {
                                       actionButton = ElevatedButton(
                                         onPressed: () async {
                                           String documentID =
-                                              documentSnapshot.id;
+                                              sortedDocs[index].id;
                                           await FirebaseFirestore.instance
                                               .collection('order')
                                               .doc(documentID)
@@ -792,19 +689,21 @@ class _OrderedList extends State<OrderedList> {
                                           primary: Color(0xff92ABEB),
                                         ),
                                       );
-                                    } else if (data3 == '완료' &&
-                                        data8 == false) {
+                                    } else if (sortedDocs[index]['status'] ==
+                                            '완료' &&
+                                        sortedDocs[index]['boolreview'] ==
+                                            false) {
                                       actionButton = ElevatedButton(
                                         onPressed: () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => WriteReview(
-                                                data1,
-                                                data4,
-                                                data2,
-                                                data7,
-                                                data5,
+                                                sortedDocs[index]['area_name'],
+                                                sortedDocs[index]['storeName'],
+                                                sortedDocs[index]['name'],
+                                                sortedDocs[index]['imageUrl'],
+                                                sortedDocs[index]['ordertime'],
                                               ),
                                             ),
                                           );
@@ -860,7 +759,9 @@ class _OrderedList extends State<OrderedList> {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Text(data1,
+                                                        Text(
+                                                            sortedDocs[index]
+                                                                ['area_name'],
                                                             style: TextStyle(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -883,7 +784,8 @@ class _OrderedList extends State<OrderedList> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          data4,
+                                                          sortedDocs[index]
+                                                              ['storeName'],
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -891,7 +793,8 @@ class _OrderedList extends State<OrderedList> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          data2,
+                                                          sortedDocs[index]
+                                                              ['name'],
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -899,7 +802,9 @@ class _OrderedList extends State<OrderedList> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          data6 + '원',
+                                                          listlPrice
+                                                                  .toString() +
+                                                              '원',
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -923,12 +828,15 @@ class _OrderedList extends State<OrderedList> {
                                                   Container(
                                                     alignment: Alignment.center,
                                                     height: 30,
-                                                    color: setColor(data3),
+                                                    color: setColor(
+                                                        sortedDocs[index]
+                                                            ['status']),
                                                     /*decoration: BoxDecoration(
                                                     border: Border.all(
                                                         color: Colors.black)),*/
                                                     child: Text(
-                                                      data3,
+                                                      sortedDocs[index]
+                                                          ['status'],
                                                       style: TextStyle(
                                                         fontSize: 13,
                                                       ),
@@ -970,9 +878,10 @@ class _OrderedList extends State<OrderedList> {
                                         ),
                                       );
                                     }
-                                    if (data1.toString().contains(searchText) ||
-                                        data5
-                                            .toDate()
+                                    if (areaName
+                                            .toString()
+                                            .contains(searchText) ||
+                                        formattime
                                             .toString()
                                             .contains(searchText)) {
                                       return Container(
@@ -1010,7 +919,9 @@ class _OrderedList extends State<OrderedList> {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Text(data1,
+                                                        Text(
+                                                            sortedDocs[index]
+                                                                ['area_name'],
                                                             style: TextStyle(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -1033,7 +944,8 @@ class _OrderedList extends State<OrderedList> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          data4,
+                                                          sortedDocs[index]
+                                                              ['storeName'],
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -1041,7 +953,8 @@ class _OrderedList extends State<OrderedList> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          data2,
+                                                          sortedDocs[index]
+                                                              ['name'],
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -1049,7 +962,9 @@ class _OrderedList extends State<OrderedList> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          data6 + '원',
+                                                          listlPrice
+                                                                  .toString() +
+                                                              '원',
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -1073,12 +988,15 @@ class _OrderedList extends State<OrderedList> {
                                                   Container(
                                                     alignment: Alignment.center,
                                                     height: 30,
-                                                    color: setColor(data3),
+                                                    color: setColor(
+                                                        sortedDocs[index]
+                                                            ['status']),
                                                     /*decoration: BoxDecoration(
                                                     border: Border.all(
                                                         color: Colors.black)),*/
                                                     child: Text(
-                                                      data3,
+                                                      sortedDocs[index]
+                                                          ['status'],
                                                       style: TextStyle(
                                                         fontSize: 13,
                                                       ),

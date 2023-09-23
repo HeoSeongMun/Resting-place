@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/signup.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -35,7 +36,6 @@ class Login extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
 
   CollectionReference product = FirebaseFirestore.instance.collection('login');
-
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),

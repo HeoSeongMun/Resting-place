@@ -4,32 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/payment.dart';
 import 'package:flutter_app/signup.dart';
 
-class Cart extends StatelessWidget {
+class Cart extends StatefulWidget {
   Cart({super.key});
 
-  String storeName = "";
-  String areaName = "";
-  String name = "";
-  String price = "";
-  String location = "";
-  String userUid = "";
-  int total = 0;
-  CollectionReference product =
-      FirebaseFirestore.instance.collection('shoppingBasket');
+  @override
+  State<Cart> createState() => _Cart();
+}
 
-  final user = FirebaseAuth.instance.currentUser;
+String storeName = "";
+String areaName = "";
+String name = "";
+String price = "";
+String location = "";
+String userUid = "";
+int total = 0;
+CollectionReference product =
+    FirebaseFirestore.instance.collection('shoppingBasket');
 
-  int calculateTotal(QuerySnapshot snapshot) {
-    total = 0;
+final user = FirebaseAuth.instance.currentUser;
 
-    for (var doc in snapshot.docs) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      int fieldValue = int.parse(data['price']);
-      total += fieldValue;
-    }
-    return total;
+int calculateTotal(QuerySnapshot snapshot) {
+  total = 0;
+  for (var doc in snapshot.docs) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    int fieldValue = int.parse(data['price']);
+    int count = data['count'];
+    total += (fieldValue * count);
   }
 
+  return total;
+}
+
+class _Cart extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -170,117 +176,236 @@ class Cart extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final DocumentSnapshot documentSnapshot =
                               streamSnapshot.data!.docs[index];
-                          return GestureDetector(
-                            onTap: () {
-                              debugPrint("터치");
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  left: 5, right: 5, bottom: 15),
-                              decoration: BoxDecoration(
-                                  color: Color(0xFFffffff),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(25.0),
-                                    topRight: Radius.circular(25.0),
-                                    bottomLeft: Radius.circular(25.0),
-                                    bottomRight: Radius.circular(25.0),
+                          int itemPrice = int.parse(documentSnapshot[
+                              'price']); // 아이템의 가격 (int 형으로 가정)
+                          int itemcount = documentSnapshot['count'];
+
+                          int listlPrice = itemPrice * itemcount;
+                          return Container(
+                            margin:
+                                EdgeInsets.only(left: 5, right: 5, bottom: 15),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFffffff),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0),
+                                  bottomLeft: Radius.circular(25.0),
+                                  bottomRight: Radius.circular(25.0),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.7),
+                                    blurRadius: 5,
+                                    spreadRadius: 0,
+                                    offset: const Offset(0, 7),
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.7),
-                                      blurRadius: 5,
-                                      spreadRadius: 0,
-                                      offset: const Offset(0, 7),
-                                    ),
-                                  ]),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
-                                        left: 10, top: 10, bottom: 10),
-                                    width: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFFFB79E),
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(25.0),
-                                        topRight: Radius.circular(25.0),
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          child: Text(
-                                            documentSnapshot['storeName'],
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Container(
-                                          padding: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            documentSnapshot['location'],
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.only(
+                                      left: 10, top: 10, bottom: 10),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFFFB79E),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(25.0),
+                                      topRight: Radius.circular(25.0),
                                     ),
                                   ),
-                                  Row(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(left: 20, top: 10),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          child: Image.network(
-                                            documentSnapshot['imageUrl'],
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.cover,
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              documentSnapshot['storeName'],
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
-                                        ),
+                                          SizedBox(height: 10),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              documentSnapshot['location'],
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       Container(
-                                        margin:
-                                            EdgeInsets.only(left: 20, top: 10),
-                                        child: Text(
-                                          documentSnapshot['name'],
-                                          style: TextStyle(
+                                        margin: EdgeInsets.only(right: 20),
+                                        width: 45,
+                                        child: ElevatedButton(
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors.black,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(13),
+                                            ),
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                            side: const BorderSide(
+                                              color: Colors.black,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "삭제",
+                                            style: TextStyle(
                                               fontSize: 15,
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            documentSnapshot.reference.delete();
+                                          },
                                         ),
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            right: 20, bottom: 5),
-                                        child: Text(
-                                          documentSnapshot['price'] + '원',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      margin:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        child: Image.network(
+                                          documentSnapshot['imageUrl'],
+                                          width: 70,
+                                          height: 70,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ],
-                                  )
-                                ],
-                              ),
+                                    ),
+                                    Container(
+                                      width: 150,
+                                      margin:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: Text(
+                                        documentSnapshot['name'],
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 90,
+                                      height: 45,
+                                      margin:
+                                          EdgeInsets.only(top: 10, left: 10),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffFFB79E),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(25.0),
+                                          topRight: Radius.circular(25.0),
+                                          bottomLeft: Radius.circular(25.0),
+                                          bottomRight: Radius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                            height: 30,
+                                            margin: EdgeInsets.only(bottom: 7),
+                                            child: IconButton(
+                                              icon:
+                                                  Icon(Icons.remove, size: 20),
+                                              onPressed: () async {
+                                                //감소
+                                                // 현재 아이템의 수량 가져오기
+                                                if (documentSnapshot['count'] >
+                                                    1) {
+                                                  await product
+                                                      .doc(documentSnapshot.id)
+                                                      .update({
+                                                    'count': documentSnapshot[
+                                                            'count'] -
+                                                        1,
+                                                  });
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: 25,
+                                            height: 30,
+                                            child: Text(
+                                              documentSnapshot['count']
+                                                  .toString(), // 해당 제품의 수량 표시
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                            height: 30,
+                                            margin: EdgeInsets.only(bottom: 7),
+                                            child: IconButton(
+                                              icon: Icon(Icons.add, size: 20),
+                                              onPressed: () async {
+                                                // 증가
+                                                // 현재 아이템의 수량 가져오기
+                                                await product
+                                                    .doc(documentSnapshot.id)
+                                                    .update({
+                                                  'count': documentSnapshot[
+                                                          'count'] +
+                                                      1,
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(right: 20, bottom: 5),
+                                    child: Text(
+                                      listlPrice.toString() + '원',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           );
                         },
@@ -339,7 +464,7 @@ class Cart extends StatelessWidget {
                               );
                             }
                             // 결과 출력
-                            int total = calculateTotal(snapshot.data!);
+                            total = calculateTotal(snapshot.data!);
                             return Text(
                               '$total원',
                               style: TextStyle(
