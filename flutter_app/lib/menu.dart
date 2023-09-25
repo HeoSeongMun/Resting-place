@@ -8,25 +8,39 @@ import 'package:flutter_app/rev_show.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Menu extends StatelessWidget {
+class Menu extends StatefulWidget {
   Menu(this.areaName, this.storeName, this.storeimageUrl, {super.key});
   String storeName = '';
   String areaName = '';
   String storeimageUrl = '';
+  @override
+  State<Menu> createState() => _Menu();
+}
+
+class _Menu extends State<Menu> {
   CollectionReference product =
       FirebaseFirestore.instance.collection('shoppingBasket');
+  CollectionReference ordercollection =
+      FirebaseFirestore.instance.collection('order');
   final user = FirebaseAuth.instance.currentUser;
-
+  int cartcount = 0;
+  int ordercount = 0;
   Future<bool> checkItemExists(String itemName, String userUid) async {
     // 아이템이 이미 쇼핑 바스켓에 있는지 확인하는 코드
     QuerySnapshot querySnapshot = await product
         .where('name', isEqualTo: itemName)
         .where('userUid', isEqualTo: userUid)
-        .where('location', isEqualTo: areaName)
-        .where('storeName', isEqualTo: storeName)
+        .where('location', isEqualTo: widget.areaName)
+        .where('storeName', isEqualTo: widget.storeName)
         .get();
 
     return querySnapshot.docs.isNotEmpty;
+  }
+
+  void initState() {
+    super.initState();
+    CartCount();
+    OrderCount();
   }
 
   @override
@@ -70,7 +84,7 @@ class Menu extends StatelessWidget {
                           iconSize: 25,
                           color: const Color.fromARGB(255, 0, 0, 0),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context, cartcount);
                           },
                         ),
                       ),
@@ -87,7 +101,7 @@ class Menu extends StatelessWidget {
                         width: 70,
                         height: 70,
                         child: Image.network(
-                          storeimageUrl,
+                          widget.storeimageUrl,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -99,7 +113,7 @@ class Menu extends StatelessWidget {
                             width: MediaQuery.of(context).size.width - 140,
                             margin: const EdgeInsets.only(top: 5),
                             child: Text(
-                              storeName,
+                              widget.storeName,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -115,7 +129,7 @@ class Menu extends StatelessWidget {
                                 SizedBox(
                                   width: 150,
                                   child: Text(
-                                    areaName,
+                                    widget.areaName,
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
@@ -143,13 +157,20 @@ class Menu extends StatelessWidget {
                                           width: 2,
                                         ),
                                       ),
-                                      onPressed: () {
-                                        Navigator.push(
+                                      onPressed: () async {
+                                        final result = await Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  ReviewListPage(storeName)),
+                                                  ReviewListPage(
+                                                      widget.storeName)),
                                         );
+                                        if (result != null) {
+                                          setState(() {
+                                            CartCount();
+                                            OrderCount();
+                                          });
+                                        }
                                       },
                                       child: const Text(
                                         "리뷰보기",
@@ -197,7 +218,7 @@ class Menu extends StatelessWidget {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('menu')
-                    .where("storeName", isEqualTo: storeName)
+                    .where("storeName", isEqualTo: widget.storeName)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -244,20 +265,27 @@ class Menu extends StatelessWidget {
                                       documentSnapshot['name'], user!.uid);
                                   if (!itemExists) {
                                     await product.add({
-                                      'storeName': storeName,
+                                      'storeName': widget.storeName,
                                       'name': documentSnapshot['name'],
                                       'price': documentSnapshot['price'],
-                                      'location': areaName,
+                                      'location': widget.areaName,
                                       'userUid': user!.uid,
                                       'storeUid': documentSnapshot['storeUid'],
                                       'imageUrl': documentSnapshot['imageUrl'],
                                       'count': 1,
                                     });
-                                    Navigator.of(context).push(
+                                    final result =
+                                        await Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => Cart(),
                                       ),
                                     );
+                                    if (result != null) {
+                                      setState(() {
+                                        CartCount();
+                                        OrderCount();
+                                      });
+                                    }
                                   } else {
                                     showDialog(
                                       context: context,
@@ -301,59 +329,221 @@ class Menu extends StatelessWidget {
               type: BottomNavigationBarType.fixed,
               elevation: 20,
               currentIndex: 0,
-              onTap: (int index) {
+              onTap: (int index) async {
                 switch (index) {
                   case 0: //검색
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => AreaSearch()),
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                        OrderCount();
+                      });
+                    }
                     break;
                   case 1: //장바구니
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Cart()),
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                        OrderCount();
+                      });
+                    }
                     break;
                   case 2: //홈
-                    Navigator.push(
+                    final result = await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => Home()),
+                      (route) => false,
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                        OrderCount();
+                      });
+                    }
                     break;
                   case 3: //주문내역
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => OrderedList()),
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                        OrderCount();
+                      });
+                    }
                     break;
                   case 4: //마이휴잇
-                    Navigator.push(
+                    final result = await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => UserPage()),
+                      (route) => false,
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                        OrderCount();
+                      });
+                    }
                     break;
                 }
               },
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.search),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          child: Text(
+                            '',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   label: '검색',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart_outlined),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.shopping_cart_outlined),
+                      ),
+                      if (cartcount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              cartcount.toString(),
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
                   label: '장바구니',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.home_outlined),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          child: Text(
+                            '',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   label: '홈',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.receipt_long_outlined),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.receipt_long_outlined),
+                      ),
+                      if (ordercount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              ordercount.toString(),
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                   label: '주문내역',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.face),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.face),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          child: Text(
+                            '',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   label: '마이휴잇',
                 ),
               ],
@@ -362,5 +552,29 @@ class Menu extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> CartCount() async {
+    QuerySnapshot snapshot =
+        await product.where('userUid', isEqualTo: user!.uid).get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      cartcount = count;
+    });
+  }
+
+  Future<void> OrderCount() async {
+    QuerySnapshot snapshot = await ordercollection
+        .where('userUid', isEqualTo: user!.uid)
+        .where('status', isNotEqualTo: '완료')
+        .get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      ordercount = count;
+    });
   }
 }

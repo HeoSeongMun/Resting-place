@@ -11,31 +11,64 @@ class Cart extends StatefulWidget {
   State<Cart> createState() => _Cart();
 }
 
-String storeName = "";
-String areaName = "";
-String name = "";
-String price = "";
-String location = "";
-String userUid = "";
-int total = 0;
-CollectionReference product =
-    FirebaseFirestore.instance.collection('shoppingBasket');
+class _Cart extends State<Cart> {
+  String storeName = "";
+  String areaName = "";
+  String name = "";
+  String price = "";
+  String location = "";
+  String userUid = "";
+  int total = 0;
+  CollectionReference product =
+      FirebaseFirestore.instance.collection('shoppingBasket');
+  CollectionReference ordercollection =
+      FirebaseFirestore.instance.collection('order');
+  final user = FirebaseAuth.instance.currentUser;
 
-final user = FirebaseAuth.instance.currentUser;
+  int calculateTotal(QuerySnapshot snapshot) {
+    total = 0;
+    for (var doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      int fieldValue = int.parse(data['price']);
+      int count = data['count'];
+      total += (fieldValue * count);
+    }
 
-int calculateTotal(QuerySnapshot snapshot) {
-  total = 0;
-  for (var doc in snapshot.docs) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    int fieldValue = int.parse(data['price']);
-    int count = data['count'];
-    total += (fieldValue * count);
+    return total;
   }
 
-  return total;
-}
+  int cartcount = 0;
+  Future<void> CartCount() async {
+    QuerySnapshot snapshot =
+        await product.where('userUid', isEqualTo: user!.uid).get();
 
-class _Cart extends State<Cart> {
+    int count = snapshot.docs.length;
+
+    setState(() {
+      cartcount = count;
+    });
+  }
+
+  int ordercount = 0;
+  Future<void> OrderCount() async {
+    QuerySnapshot snapshot = await ordercollection
+        .where('userUid', isEqualTo: user!.uid)
+        .where('status', isNotEqualTo: '완료')
+        .get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      ordercount = count;
+    });
+  }
+
+  void initState() {
+    super.initState();
+    CartCount();
+    OrderCount();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,7 +106,7 @@ class _Cart extends State<Cart> {
                       iconSize: 35,
                       color: const Color.fromARGB(255, 0, 0, 0),
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.pop(context, cartcount);
                       },
                     ),
                   ),
@@ -133,6 +166,10 @@ class _Cart extends State<Cart> {
                           await document.reference.delete();
                         }
                         total = 0;
+                        setState(() {
+                          CartCount();
+                          OrderCount();
+                        });
                       },
                     ),
                   ),
@@ -276,6 +313,10 @@ class _Cart extends State<Cart> {
                                           ),
                                           onPressed: () {
                                             documentSnapshot.reference.delete();
+                                            setState(() {
+                                              CartCount();
+                                              OrderCount();
+                                            });
                                           },
                                         ),
                                       ),

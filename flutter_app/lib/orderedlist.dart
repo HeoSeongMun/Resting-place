@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/order_delivery.dart';
 import 'package:flutter_app/write_review.dart';
 import 'package:intl/intl.dart';
 
@@ -15,9 +16,12 @@ class _OrderedList extends State<OrderedList> {
   final _userID = FirebaseAuth.instance.currentUser;
   final TextEditingController filter = TextEditingController();
   CollectionReference product = FirebaseFirestore.instance.collection('order');
+  CollectionReference cartcollection =
+      FirebaseFirestore.instance.collection('shoppingBasket');
   FocusNode focusNode = FocusNode();
   String searchText = "";
-
+  int cartcount = 0;
+  int ordercount = 0;
   _OrderedList() {
     filter.addListener(() {
       setState(() {
@@ -42,6 +46,7 @@ class _OrderedList extends State<OrderedList> {
         FocusScope.of(context).unfocus();
       },
       child: MaterialApp(
+        theme: ThemeData(fontFamily: 'jalnan'),
         home: Scaffold(
             backgroundColor: Color(0xFFEEF1FF),
             body: SingleChildScrollView(
@@ -76,7 +81,7 @@ class _OrderedList extends State<OrderedList> {
                               iconSize: 35,
                               color: const Color.fromARGB(255, 0, 0, 0),
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.pop(context, ordercount);
                               },
                             ),
                             Container(
@@ -248,7 +253,6 @@ class _OrderedList extends State<OrderedList> {
                                         child: Text(
                                           '수령 완료',
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
                                               fontSize: 10,
                                               color: Colors.black),
                                         ),
@@ -257,8 +261,9 @@ class _OrderedList extends State<OrderedList> {
                                         ),
                                       );
                                     } else {
-                                      actionButton =
-                                          SizedBox.shrink(); // 상태가 다른 경우 버튼을 숨김
+                                      actionButton = SizedBox(
+                                        height: 50,
+                                      ); // 상태가 다른 경우 버튼을 숨김
                                     }
                                     if (searchText.isEmpty) {
                                       return Container(
@@ -282,135 +287,212 @@ class _OrderedList extends State<OrderedList> {
                                                 offset: const Offset(0, 7),
                                               ),
                                             ]),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: 10, top: 10),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                            sortedDocs[index]
-                                                                ['area_name'],
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        Text(
-                                                          formattime,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: <Widget>[
+                                                Container(
+                                                  width: 185,
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 10, top: 10),
+                                                        child: Text(
+                                                          sortedDocs[index]
+                                                              ['area_name'],
                                                           style: TextStyle(
-                                                              fontSize: 10),
-                                                        )
-                                                      ],
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 12),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              sortedDocs[index]
+                                                                  ['storeName'],
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  sortedDocs[
+                                                                          index]
+                                                                      ['name'],
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          top:
+                                                                              2),
+                                                                  child: Text(
+                                                                    sortedDocs[index]['count']
+                                                                            .toString() +
+                                                                        '개',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Text(
+                                                              listlPrice
+                                                                      .toString() +
+                                                                  '원',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  margin: EdgeInsets.only(
+                                                      left: 1, bottom: 75),
+                                                  width: 65,
+                                                  height: 30,
+                                                  color: setColor(
+                                                      sortedDocs[index]
+                                                          ['status']),
+                                                  /*decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black)),*/
+                                                  child: Text(
+                                                    sortedDocs[index]['status'],
+                                                    style: TextStyle(
+                                                      fontSize: 13,
                                                     ),
                                                   ),
-                                                  Container(
-                                                    height: 75,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['storeName'],
-                                                          textAlign:
-                                                              TextAlign.left,
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Container(
+                                                  width: 80,
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      SizedBox(height: 5),
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) => Orderdelivery(
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'area_name'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'storeName'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'name'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'count'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'ordertime'])),
+                                                          );
+                                                        },
+                                                        child: Text(
+                                                          '주문 현황',
                                                           style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['name'],
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Color(0xffAAC4FF),
                                                         ),
-                                                        Text(
-                                                          listlPrice
-                                                                  .toString() +
-                                                              '원',
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(width: 30),
-                                            Container(
-                                              width: 60,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15),
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    height: 30,
-                                                    color: setColor(
-                                                        sortedDocs[index]
-                                                            ['status']),
-                                                    /*decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black)),*/
-                                                    child: Text(
-                                                      sortedDocs[index]
-                                                          ['status'],
-                                                      style: TextStyle(
-                                                        fontSize: 13,
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                                      SizedBox(height: 30),
+                                                      actionButton,
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 10),
+                                                  child: Text(
+                                                    formattime,
+                                                    style:
+                                                        TextStyle(fontSize: 8),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(
-                                              width: 40,
+                                              height: 10,
                                             ),
-                                            Container(
-                                              width: 80,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  SizedBox(height: 5),
-                                                  ElevatedButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      '상세 주문',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 10,
-                                                          color: Colors.black),
-                                                    ),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary:
-                                                          Color(0xffAAC4FF),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 30),
-                                                  actionButton,
-                                                ],
-                                              ),
-                                            )
                                           ],
                                         ),
                                       );
@@ -442,135 +524,186 @@ class _OrderedList extends State<OrderedList> {
                                                 offset: const Offset(0, 7),
                                               ),
                                             ]),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: 10, top: 10),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                            sortedDocs[index]
-                                                                ['area_name'],
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        Text(
-                                                          formattime,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: <Widget>[
+                                                Container(
+                                                  width: 185,
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 10, top: 10),
+                                                        child: Text(
+                                                          sortedDocs[index]
+                                                              ['area_name'],
                                                           style: TextStyle(
-                                                              fontSize: 10),
-                                                        )
-                                                      ],
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 12),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              sortedDocs[index]
+                                                                  ['storeName'],
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  sortedDocs[
+                                                                          index]
+                                                                      ['name'],
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          top:
+                                                                              2),
+                                                                  child: Text(
+                                                                    sortedDocs[index]['count']
+                                                                            .toString() +
+                                                                        '개',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Text(
+                                                              listlPrice
+                                                                      .toString() +
+                                                                  '원',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  margin: EdgeInsets.only(
+                                                      left: 1, bottom: 75),
+                                                  width: 65,
+                                                  height: 30,
+                                                  color: setColor(
+                                                      sortedDocs[index]
+                                                          ['status']),
+                                                  /*decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black)),*/
+                                                  child: Text(
+                                                    sortedDocs[index]['status'],
+                                                    style: TextStyle(
+                                                      fontSize: 13,
                                                     ),
                                                   ),
-                                                  Container(
-                                                    height: 75,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['storeName'],
-                                                          textAlign:
-                                                              TextAlign.left,
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Container(
+                                                  width: 80,
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      SizedBox(height: 5),
+                                                      ElevatedButton(
+                                                        onPressed: () {},
+                                                        child: Text(
+                                                          '주문 현황',
                                                           style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['name'],
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Color(0xffAAC4FF),
                                                         ),
-                                                        Text(
-                                                          listlPrice
-                                                                  .toString() +
-                                                              '원',
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(width: 30),
-                                            Container(
-                                              width: 60,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15),
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    height: 30,
-                                                    color: setColor(
-                                                        sortedDocs[index]
-                                                            ['status']),
-                                                    /*decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black)),*/
-                                                    child: Text(
-                                                      sortedDocs[index]
-                                                          ['status'],
-                                                      style: TextStyle(
-                                                        fontSize: 13,
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                                      SizedBox(height: 30),
+                                                      actionButton,
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 10),
+                                                  child: Text(
+                                                    formattime,
+                                                    style:
+                                                        TextStyle(fontSize: 8),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(
-                                              width: 40,
+                                              height: 10,
                                             ),
-                                            Container(
-                                              width: 80,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  SizedBox(height: 5),
-                                                  ElevatedButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      '상세 주문',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 10,
-                                                          color: Colors.black),
-                                                    ),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary:
-                                                          Color(0xffAAC4FF),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 30),
-                                                  actionButton,
-                                                ],
-                                              ),
-                                            )
                                           ],
                                         ),
                                       );
@@ -681,9 +814,9 @@ class _OrderedList extends State<OrderedList> {
                                         child: Text(
                                           '수령 완료',
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 10,
-                                              color: Colors.black),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
+                                          ),
                                         ),
                                         style: ElevatedButton.styleFrom(
                                           primary: Color(0xff92ABEB),
@@ -711,7 +844,6 @@ class _OrderedList extends State<OrderedList> {
                                         child: Text(
                                           '리뷰 쓰기',
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
                                               fontSize: 10,
                                               color: Colors.black),
                                         ),
@@ -720,8 +852,8 @@ class _OrderedList extends State<OrderedList> {
                                         ),
                                       );
                                     } else {
-                                      actionButton =
-                                          SizedBox.shrink(); // 상태가 다른 경우 버튼을 숨김
+                                      actionButton = SizedBox(
+                                          height: 50); // 상태가 다른 경우 버튼을 숨김
                                     }
                                     if (searchText.isEmpty) {
                                       return Container(
@@ -745,135 +877,186 @@ class _OrderedList extends State<OrderedList> {
                                                 offset: const Offset(0, 7),
                                               ),
                                             ]),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              width: 150,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Container(
-                                                    height: 75,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                            sortedDocs[index]
-                                                                ['area_name'],
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        Text(
-                                                          formattime,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: <Widget>[
+                                                Container(
+                                                  width: 185,
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 10, top: 10),
+                                                        child: Text(
+                                                          sortedDocs[index]
+                                                              ['area_name'],
                                                           style: TextStyle(
-                                                              fontSize: 10),
-                                                        )
-                                                      ],
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 12),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              sortedDocs[index]
+                                                                  ['storeName'],
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  sortedDocs[
+                                                                          index]
+                                                                      ['name'],
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          top:
+                                                                              2),
+                                                                  child: Text(
+                                                                    sortedDocs[index]['count']
+                                                                            .toString() +
+                                                                        '개',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Text(
+                                                              listlPrice
+                                                                      .toString() +
+                                                                  '원',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  margin: EdgeInsets.only(
+                                                      left: 1, bottom: 75),
+                                                  width: 65,
+                                                  height: 30,
+                                                  color: setColor(
+                                                      sortedDocs[index]
+                                                          ['status']),
+                                                  /*decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black)),*/
+                                                  child: Text(
+                                                    sortedDocs[index]['status'],
+                                                    style: TextStyle(
+                                                      fontSize: 13,
                                                     ),
                                                   ),
-                                                  Container(
-                                                    height: 75,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['storeName'],
-                                                          textAlign:
-                                                              TextAlign.left,
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Container(
+                                                  width: 80,
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      SizedBox(height: 5),
+                                                      ElevatedButton(
+                                                        onPressed: () {},
+                                                        child: Text(
+                                                          '주문 현황',
                                                           style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['name'],
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Color(0xffAAC4FF),
                                                         ),
-                                                        Text(
-                                                          listlPrice
-                                                                  .toString() +
-                                                              '원',
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(width: 30),
-                                            Container(
-                                              width: 60,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15),
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    height: 30,
-                                                    color: setColor(
-                                                        sortedDocs[index]
-                                                            ['status']),
-                                                    /*decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black)),*/
-                                                    child: Text(
-                                                      sortedDocs[index]
-                                                          ['status'],
-                                                      style: TextStyle(
-                                                        fontSize: 13,
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                                      SizedBox(height: 30),
+                                                      actionButton,
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 10),
+                                                  child: Text(
+                                                    formattime,
+                                                    style:
+                                                        TextStyle(fontSize: 8),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(
-                                              width: 40,
+                                              height: 10,
                                             ),
-                                            Container(
-                                              width: 80,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  SizedBox(height: 5),
-                                                  ElevatedButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      '상세 주문',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 10,
-                                                          color: Colors.black),
-                                                    ),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary:
-                                                          Color(0xffAAC4FF),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 30),
-                                                  actionButton,
-                                                ],
-                                              ),
-                                            )
                                           ],
                                         ),
                                       );
@@ -905,135 +1088,186 @@ class _OrderedList extends State<OrderedList> {
                                                 offset: const Offset(0, 7),
                                               ),
                                             ]),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              width: 150,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Container(
-                                                    height: 75,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                            sortedDocs[index]
-                                                                ['area_name'],
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        Text(
-                                                          formattime,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: <Widget>[
+                                                Container(
+                                                  width: 185,
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 10, top: 10),
+                                                        child: Text(
+                                                          sortedDocs[index]
+                                                              ['area_name'],
                                                           style: TextStyle(
-                                                              fontSize: 10),
-                                                        )
-                                                      ],
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 12),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              sortedDocs[index]
+                                                                  ['storeName'],
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  sortedDocs[
+                                                                          index]
+                                                                      ['name'],
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          top:
+                                                                              2),
+                                                                  child: Text(
+                                                                    sortedDocs[index]['count']
+                                                                            .toString() +
+                                                                        '개',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Text(
+                                                              listlPrice
+                                                                      .toString() +
+                                                                  '원',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  margin: EdgeInsets.only(
+                                                      left: 1, bottom: 75),
+                                                  width: 65,
+                                                  height: 30,
+                                                  color: setColor(
+                                                      sortedDocs[index]
+                                                          ['status']),
+                                                  /*decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black)),*/
+                                                  child: Text(
+                                                    sortedDocs[index]['status'],
+                                                    style: TextStyle(
+                                                      fontSize: 13,
                                                     ),
                                                   ),
-                                                  Container(
-                                                    height: 75,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['storeName'],
-                                                          textAlign:
-                                                              TextAlign.left,
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Container(
+                                                  width: 80,
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      SizedBox(height: 5),
+                                                      ElevatedButton(
+                                                        onPressed: () {},
+                                                        child: Text(
+                                                          '주문 현황',
                                                           style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
-                                                        Text(
-                                                          sortedDocs[index]
-                                                              ['name'],
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                            fontSize: 13,
-                                                          ),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Color(0xffAAC4FF),
                                                         ),
-                                                        Text(
-                                                          listlPrice
-                                                                  .toString() +
-                                                              '원',
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(width: 30),
-                                            Container(
-                                              width: 60,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15),
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    height: 30,
-                                                    color: setColor(
-                                                        sortedDocs[index]
-                                                            ['status']),
-                                                    /*decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black)),*/
-                                                    child: Text(
-                                                      sortedDocs[index]
-                                                          ['status'],
-                                                      style: TextStyle(
-                                                        fontSize: 13,
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                                      SizedBox(height: 30),
+                                                      actionButton,
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 10),
+                                                  child: Text(
+                                                    formattime,
+                                                    style:
+                                                        TextStyle(fontSize: 8),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(
-                                              width: 40,
+                                              height: 10,
                                             ),
-                                            Container(
-                                              width: 80,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  SizedBox(height: 5),
-                                                  ElevatedButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      '상세 주문',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 10,
-                                                          color: Colors.black),
-                                                    ),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary:
-                                                          Color(0xffAAC4FF),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 30),
-                                                  actionButton,
-                                                ],
-                                              ),
-                                            )
                                           ],
                                         ),
                                       );
@@ -1055,6 +1289,30 @@ class _OrderedList extends State<OrderedList> {
             )),
       ),
     );
+  }
+
+  Future<void> CartCount() async {
+    QuerySnapshot snapshot =
+        await cartcollection.where('userUid', isEqualTo: _userID!.uid).get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      cartcount = count;
+    });
+  }
+
+  Future<void> OrderCount() async {
+    QuerySnapshot snapshot = await product
+        .where('userUid', isEqualTo: _userID!.uid)
+        .where('status', isNotEqualTo: '완료')
+        .get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      ordercount = count;
+    });
   }
 
   Color setColor(String status) {

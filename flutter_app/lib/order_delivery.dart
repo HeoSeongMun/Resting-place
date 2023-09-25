@@ -3,21 +3,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Delivery extends StatefulWidget {
-  const Delivery({super.key});
-
+class Orderdelivery extends StatefulWidget {
+  Orderdelivery(
+      this.areaName, this.storeName, this.menu, this.count, this.ordertime,
+      {super.key});
+  String areaName = '';
+  String storeName = '';
+  String menu = '';
+  Timestamp ordertime;
+  int count;
   @override
-  State<StatefulWidget> createState() => _Delivery();
+  State<StatefulWidget> createState() => _Orderdelivery();
 }
 
-class _Delivery extends State<Delivery> {
+class _Orderdelivery extends State<Orderdelivery> {
   //유저아이디 받아오는거 기본생성자에 넣어둬야함
   final _userID = FirebaseAuth.instance.currentUser;
   List<dynamic> setOrder0 = [];
   List<dynamic> setOrder1 = [];
   List<dynamic> setOrder2 = [];
-  List<dynamic> setOrder3 = [];
-  List<dynamic> setOrder4 = [];
+  bool _isExpanded = false; // 컨테이너 확장 여부
 
   @override
   void initState() {
@@ -93,10 +98,6 @@ class _Delivery extends State<Delivery> {
                 height: 20,
               ),
               getOrderContainer(setOrder0),
-              getOrderContainer(setOrder1),
-              getOrderContainer(setOrder2),
-              getOrderContainer(setOrder3),
-              getOrderContainer(setOrder4),
             ],
           ),
         ),
@@ -110,12 +111,15 @@ class _Delivery extends State<Delivery> {
     List<dynamic> order0 = [];
     List<dynamic> order1 = [];
     List<dynamic> order2 = [];
-    List<dynamic> order3 = [];
-    List<dynamic> order4 = [];
     //userID = 4c4PTU6c7KPFnRBtHCJtU8HNJZC2
     QuerySnapshot querySnapshot = await firestore
         .collection('order')
         .where('userUid', isEqualTo: _userID!.uid)
+        .where('area_name', isEqualTo: widget.areaName)
+        .where('storeName', isEqualTo: widget.storeName)
+        .where('name', isEqualTo: widget.menu)
+        .where('count', isEqualTo: widget.count)
+        .where('ordertime', isEqualTo: widget.ordertime)
         .where('status', isNotEqualTo: '완료')
         .get();
 
@@ -154,8 +158,7 @@ class _Delivery extends State<Delivery> {
         order1.add(data['area_name']);
         order1.add(data['name']);
         order1.add(formatTimestamp(data['ordertime']));
-        String price = (int.parse(data['price']) * data['count']).toString();
-        order1.add(price);
+        order1.add(data['price']);
         order1.add(data['status']);
         order1.add(data['storeName']);
         double indicatorValue = getProgressIndicator(data['status']);
@@ -167,15 +170,14 @@ class _Delivery extends State<Delivery> {
         setState(() {
           setOrder1 = order1.toList();
         });
-      } else if (i == 2) {
+      } else {
         DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
         order2.add(data['area_name']);
         order2.add(data['name']);
         order2.add(formatTimestamp(data['ordertime']));
-        String price = (int.parse(data['price']) * data['count']).toString();
-        order2.add(price);
+        order2.add(data['price']);
         order2.add(data['status']);
         order2.add(data['storeName']);
         double indicatorValue = getProgressIndicator(data['status']);
@@ -186,46 +188,6 @@ class _Delivery extends State<Delivery> {
         order2.add(isExpanded);
         setState(() {
           setOrder2 = order2.toList();
-        });
-      } else if (i == 3) {
-        DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        order3.add(data['area_name']);
-        order3.add(data['name']);
-        order3.add(formatTimestamp(data['ordertime']));
-        String price = (int.parse(data['price']) * data['count']).toString();
-        order3.add(price);
-        order3.add(data['status']);
-        order3.add(data['storeName']);
-        double indicatorValue = getProgressIndicator(data['status']);
-        order3.add(indicatorValue);
-        int count = data['count'];
-        order3.add(count);
-        bool isExpanded = false;
-        order3.add(isExpanded);
-        setState(() {
-          setOrder3 = order3.toList();
-        });
-      } else {
-        DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        order4.add(data['area_name']);
-        order4.add(data['name']);
-        order4.add(formatTimestamp(data['ordertime']));
-        String price = (int.parse(data['price']) * data['count']).toString();
-        order4.add(price);
-        order4.add(data['status']);
-        order4.add(data['storeName']);
-        double indicatorValue = getProgressIndicator(data['status']);
-        order4.add(indicatorValue);
-        int count = data['count'];
-        order4.add(count);
-        bool isExpanded = false;
-        order4.add(isExpanded);
-        setState(() {
-          setOrder4 = order4.toList();
         });
       }
     }

@@ -103,6 +103,11 @@ class ReviewListPage extends StatelessWidget {
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                      if (!streamSnapshot.hasData ||
+                          streamSnapshot.data!.docs.isEmpty) {
+                        return Container(
+                            child: Text('리뷰가 없습니다')); // 데이터가 없는 경우 처리
+                      }
                       if (streamSnapshot.hasData) {
                         documents = streamSnapshot.data!.docs;
                         documents.sort((a, b) {

@@ -41,7 +41,7 @@ class _Payment extends State<Payment> {
   @override
   void initState() {
     super.initState();
-    total = widget.total; //전 화면에서 받아온 total 데이터값을 현재 클래스로 불러옴
+    total = widget.total; //전 화면에서 받아온 total 데이터값
     finalprice = int.parse(total);
     getMileageData();
   }
@@ -49,7 +49,7 @@ class _Payment extends State<Payment> {
   Future<void> setMileageData() async {
     final userSnapshot = await FirebaseFirestore.instance
         .collection('userinfo')
-        .where('userUid', isEqualTo: user!.uid) // 필드 이름과 원하는 값으로 변경하세요.
+        .where('userUid', isEqualTo: user!.uid) // 필드 이름과 원하는 값으로 변경
         .get();
     if (userSnapshot.docs.isNotEmpty) {
       final userDocument = userSnapshot.docs.first;

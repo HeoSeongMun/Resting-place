@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
@@ -7,11 +8,30 @@ import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Restaurant extends StatelessWidget {
+class Restaurant extends StatefulWidget {
   Restaurant(this.areaName, this.imageUrl, {super.key});
 
   String areaName = '';
   String imageUrl = '';
+
+  @override
+  State<Restaurant> createState() => _Restaurant();
+}
+
+class _Restaurant extends State<Restaurant> {
+  CollectionReference ordercollection =
+      FirebaseFirestore.instance.collection('order');
+  CollectionReference cartcollection =
+      FirebaseFirestore.instance.collection('shoppingBasket');
+  final user = FirebaseAuth.instance.currentUser;
+  int cartcount = 0;
+  int ordercount = 0;
+
+  void initState() {
+    super.initState();
+    CartCount();
+    OrderCount();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +71,7 @@ class Restaurant extends StatelessWidget {
                           iconSize: 25,
                           color: const Color.fromARGB(255, 0, 0, 0),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context, cartcount);
                           },
                         ),
                       ),
@@ -62,7 +82,7 @@ class Restaurant extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        imageUrl,
+                        widget.imageUrl,
                         height: 150,
                         fit: BoxFit.fitHeight,
                       ),
@@ -71,7 +91,7 @@ class Restaurant extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      areaName,
+                      widget.areaName,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -111,7 +131,7 @@ class Restaurant extends StatelessWidget {
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('testlogin')
-                      .where("restAreaName", isEqualTo: areaName)
+                      .where("restAreaName", isEqualTo: widget.areaName)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -166,16 +186,21 @@ class Restaurant extends StatelessWidget {
                                   style: TextStyle(fontSize: 10),
                                 ),
                               ),
-                              onTap: () {
-                                Navigator.of(context).push(
+                              onTap: () async {
+                                final result = await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => Menu(
-                                        areaName,
+                                        widget.areaName,
                                         documentSnapshot['storeName'],
                                         documentSnapshot['storeimageUrl']
                                             .toString()),
                                   ),
                                 );
+                                if (result != null) {
+                                  setState(() {
+                                    CartCount();
+                                  });
+                                }
                               },
                             ),
                           );
@@ -201,59 +226,216 @@ class Restaurant extends StatelessWidget {
               type: BottomNavigationBarType.fixed,
               elevation: 20,
               currentIndex: 0,
-              onTap: (int index) {
+              onTap: (int index) async {
                 switch (index) {
                   case 0: //검색
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => AreaSearch()),
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                      });
+                    }
                     break;
                   case 1: //장바구니
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Cart()),
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                      });
+                    }
                     break;
                   case 2: //홈
-                    Navigator.push(
+                    final result = await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => Home()),
+                      (route) => false,
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                      });
+                    }
                     break;
                   case 3: //주문내역
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => OrderedList()),
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                      });
+                    }
                     break;
                   case 4: //마이휴잇
-                    Navigator.push(
+                    final result = await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => UserPage()),
+                      (route) => false,
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                      });
+                    }
                     break;
                 }
               },
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.search),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          child: Text(
+                            '',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   label: '검색',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart_outlined),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.shopping_cart_outlined),
+                      ),
+                      if (cartcount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              cartcount.toString(),
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
                   label: '장바구니',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.home_outlined),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          child: Text(
+                            '',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   label: '홈',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.receipt_long_outlined),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.receipt_long_outlined),
+                      ),
+                      if (ordercount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              ordercount.toString(),
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                   label: '주문내역',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.face),
+                  icon: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                          top: 10,
+                        ),
+                        child: Icon(Icons.face),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          child: Text(
+                            '',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   label: '마이휴잇',
                 ),
               ],
@@ -262,5 +444,29 @@ class Restaurant extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> CartCount() async {
+    QuerySnapshot snapshot =
+        await cartcollection.where('userUid', isEqualTo: user!.uid).get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      cartcount = count;
+    });
+  }
+
+  Future<void> OrderCount() async {
+    QuerySnapshot snapshot = await ordercollection
+        .where('userUid', isEqualTo: user!.uid)
+        .where('status', isNotEqualTo: '완료')
+        .get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      ordercount = count;
+    });
   }
 }
