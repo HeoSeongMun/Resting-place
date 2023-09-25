@@ -764,7 +764,7 @@ class _OrderedList extends State<OrderedList> {
                           margin: EdgeInsets.only(left: 5, right: 5),
                           child: StreamBuilder(
                             stream: FirebaseFirestore.instance
-                                .collection('order')
+                                .collection('complete')
                                 .where('userUid', isEqualTo: _userID!.uid)
                                 .where('status', isEqualTo: '완료')
                                 .snapshots(),

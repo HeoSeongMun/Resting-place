@@ -30,7 +30,8 @@ class _WriteReviewState extends State<WriteReview> {
       FirebaseFirestore.instance.collection('userinfo');
   CollectionReference ordercollection =
       FirebaseFirestore.instance.collection('order');
-
+  CollectionReference completecollection =
+      FirebaseFirestore.instance.collection('complete');
   FocusNode _focusNode = FocusNode();
 
   _WriteReviewState() {
@@ -51,7 +52,7 @@ class _WriteReviewState extends State<WriteReview> {
   }
 
   Future<void> imageUrlData() async {
-    QuerySnapshot imagesnapshot = await ordercollection
+    QuerySnapshot imagesnapshot = await completecollection
         .where('storeName', isEqualTo: widget.storeName)
         .get();
     for (var doc in imagesnapshot.docs) {
@@ -61,7 +62,7 @@ class _WriteReviewState extends State<WriteReview> {
   }
 
   Future<void> orderboolreviewUpdate() async {
-    QuerySnapshot querySnapshot = await ordercollection
+    QuerySnapshot querySnapshot = await completecollection
         .where('area_name', isEqualTo: widget.areaName)
         .where('storeName', isEqualTo: widget.storeName)
         .where('name', isEqualTo: widget.menu)
@@ -72,7 +73,7 @@ class _WriteReviewState extends State<WriteReview> {
       List<QueryDocumentSnapshot> documents = querySnapshot.docs;
       for (QueryDocumentSnapshot document in documents) {
         String documentId = document.id;
-        DocumentReference docRef = ordercollection.doc(documentId);
+        DocumentReference docRef = completecollection.doc(documentId);
         docRef.update({
           'boolreview': true, // 수정하려는 필드 이름과 새로운 값
         });

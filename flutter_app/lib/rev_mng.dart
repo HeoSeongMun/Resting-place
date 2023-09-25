@@ -17,7 +17,8 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
       FirebaseFirestore.instance.collection('testreviewlist');
   CollectionReference ordercollection =
       FirebaseFirestore.instance.collection('order');
-
+  CollectionReference completecollection =
+      FirebaseFirestore.instance.collection('complete');
   final user = FirebaseAuth.instance.currentUser;
 
   void initState() {
@@ -237,14 +238,16 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                         ),
                                         onPressed: () async {
                                           sortedDocs[index].reference.delete();
-                                          // 리뷰삭제 및 order컬렉션 boolreview 필드 값 변경 버튼
+                                          // 리뷰삭제 및 complete컬렉션 boolreview 필드 값 변경 버튼
                                           QuerySnapshot querySnapshot =
-                                              await ordercollection
+                                              await completecollection
                                                   .where('area_name',
                                                       isEqualTo:
-                                                          sortedDocs[index]
+                                                          sortedDocs[
+                                                                  index]
                                                               ['area_name'])
-                                                  .where('storeName',
+                                                  .where(
+                                                      'storeName',
                                                       isEqualTo:
                                                           sortedDocs[index]
                                                               ['store_name'])
@@ -267,7 +270,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                                 in documents) {
                                               String documentId = document.id;
                                               DocumentReference docRef =
-                                                  ordercollection
+                                                  completecollection
                                                       .doc(documentId);
                                               docRef.update({
                                                 'boolreview':
