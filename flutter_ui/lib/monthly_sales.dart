@@ -6,6 +6,7 @@ import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/sales.dart';
 import 'package:flutter_ui/specify_date.dart';
 import 'package:flutter_ui/yearly_sales.dart';
+import 'package:intl/intl.dart';
 
 class Monthlysales extends StatefulWidget {
   const Monthlysales({super.key});
@@ -91,6 +92,7 @@ class _MonthlysalesState extends State<Monthlysales> {
   final user = FirebaseAuth.instance.currentUser;
 
   int selectedMonth = 1;
+  double total = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -387,151 +389,90 @@ class _MonthlysalesState extends State<Monthlysales> {
                                 );
                               },
                             ),
-                            SizedBox(
+                            Container(
+                              margin: EdgeInsets.only(left: 50, right: 50),
                               height: 300,
                               width: 700,
-                              child: BarChart(
-                                BarChartData(
-                                  titlesData: FlTitlesData(
-                                    bottomTitles: SideTitles(
-                                      showTitles: true,
-                                      getTitles: (double value) {
-                                        switch (value.toInt()) {
-                                          case 0:
-                                            return "1월";
-                                          case 1:
-                                            return "2월";
-                                          case 2:
-                                            return "3월";
-                                          case 3:
-                                            return "4월";
-                                          case 4:
-                                            return "5월";
-                                          case 5:
-                                            return "6월";
-                                          case 6:
-                                            return "7월";
-                                          case 7:
-                                            return "8월";
-                                          case 8:
-                                            return "9월";
-                                          case 9:
-                                            return "10월";
-                                          case 10:
-                                            return "11월";
-                                          case 11:
-                                            return "12월";
-                                          default:
-                                            return "";
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  borderData: FlBorderData(
-                                    show: false,
-                                  ),
-                                  barGroups: [
-                                    BarChartGroupData(
-                                      x: 0, // 1월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-01'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 1, // 2월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-02'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 2, // 3월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-03'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 3, // 4월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-04'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 4, // 5월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-05'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 5, // 6월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-06'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 6, // 7월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-07'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 7, // 8월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-08'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 8, // 9월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-09'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 9, // 10월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-10'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 10, // 11월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-11'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    BarChartGroupData(
-                                      x: 11, // 12월 데이터
-                                      barRods: [
-                                        BarChartRodData(
-                                            y: monthlyTotal['2023-12'] ?? 0,
-                                            width: 15),
-                                      ],
-                                    ),
-                                    // 나머지 월에 대한 데이터 설정...
-                                  ],
+                              decoration: BoxDecoration(
+                                color: Color(0xFFC5DFF8),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30.0),
+                                  topRight: Radius.circular(30.0),
+                                  bottomLeft: Radius.circular(30.0),
+                                  bottomRight: Radius.circular(30.0),
                                 ),
                               ),
-                            )
+                              child: Column(
+                                children: [
+                                  StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('sales')
+                                          .where('storeUid',
+                                              isEqualTo: user!.uid)
+                                          .where('time',
+                                              isGreaterThanOrEqualTo: DateTime(
+                                                  DateTime.now().year,
+                                                  selectedMonth,
+                                                  1))
+                                          .where('time',
+                                              isLessThan: DateTime(
+                                                  DateTime.now().year,
+                                                  selectedMonth + 1,
+                                                  1))
+                                          .snapshots(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<QuerySnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        }
+
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Text('Loading...');
+                                        }
+                                        final docs = snapshot.data!.docs;
+                                        final columns = <DataColumn>[
+                                          DataColumn(label: Text('금액')),
+                                          DataColumn(label: Text('날짜')),
+                                          // 필요한 열을 추가할 수 있습니다.
+                                        ];
+                                        // DataTable에 사용할 행 데이터 구성
+                                        final rows = docs.map((doc) {
+                                          final data = doc.data()
+                                              as Map<String, dynamic>;
+                                          final Timestamp time = data['time'];
+                                          final DateTime dateTime =
+                                              time.toDate();
+                                          String formattime =
+                                              DateFormat('yyyy-MM-dd - HH시mm분')
+                                                  .format(dateTime);
+                                          double totalPrice = 0;
+
+                                          // 선택한 달의 'price' 값을 더합니다.
+                                          for (var document
+                                              in snapshot.data!.docs) {
+                                            totalPrice +=
+                                                document['price'] as double;
+                                          }
+                                          total = totalPrice;
+                                          return DataRow(
+                                            cells: <DataCell>[
+                                              DataCell(Text(
+                                                  data['price'].toString())),
+                                              DataCell(
+                                                  Text(formattime.toString())),
+                                              // 필요한 셀을 추가하거나 수정할 수 있습니다.
+                                            ],
+                                          );
+                                        }).toList();
+                                        return DataTable(
+                                            columns: columns, rows: rows);
+                                      }),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
