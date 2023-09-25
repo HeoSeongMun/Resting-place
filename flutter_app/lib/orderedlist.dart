@@ -837,6 +837,7 @@ class _OrderedList extends State<OrderedList> {
                                                 sortedDocs[index]['name'],
                                                 sortedDocs[index]['imageUrl'],
                                                 sortedDocs[index]['ordertime'],
+                                                sortedDocs[index]['storeUid'],
                                               ),
                                             ),
                                           );

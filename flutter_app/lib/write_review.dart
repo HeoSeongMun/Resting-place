@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class WriteReview extends StatefulWidget {
-  WriteReview(
-      this.areaName, this.storeName, this.menu, this.imageUrl, this.ordertime);
+  WriteReview(this.areaName, this.storeName, this.menu, this.imageUrl,
+      this.ordertime, this.storeUid);
 
   String storeName = '';
   String areaName = '';
   String menu = '';
   String imageUrl = '';
   Timestamp ordertime;
+  String storeUid = '';
   String userName = '';
 
   @override
@@ -271,6 +272,7 @@ class _WriteReviewState extends State<WriteReview> {
                             'ordertime': widget.ordertime,
                             'userUid': _userID!.uid.toString(),
                             'imageUrl': widget.imageUrl,
+                            'storeUid': widget.storeUid,
                           });
                           await orderboolreviewUpdate();
                           Navigator.pop(context);
