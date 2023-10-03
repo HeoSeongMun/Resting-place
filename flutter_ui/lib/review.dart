@@ -6,6 +6,7 @@ import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/menu.dart';
 import 'package:flutter_ui/open_business.dart';
 import 'package:flutter_ui/sales.dart';
+import 'package:intl/intl.dart';
 
 class Review extends StatelessWidget {
   Review({super.key});
@@ -375,7 +376,7 @@ class Review extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF8F9FE4),
+                          color: Color(0xFFC5DFF8),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: Padding(
@@ -385,56 +386,112 @@ class Review extends StatelessWidget {
                             children: [
                               Container(
                                 margin:
-                                    const EdgeInsets.only(left: 50, right: 50),
+                                    const EdgeInsets.only(left: 20, right: 20),
                                 height: 520,
-                                width:
-                                    300, //MediaQuery.of(context).size.width - 250,
-                                color: const Color(0xFFD2DAFF),
-                                child: Container(
-                                  child: StreamBuilder(
-                                    stream: reviewcollection
-                                        .where("storeUid", isEqualTo: user!.uid)
-                                        .snapshots(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<QuerySnapshot>
-                                            streamSnapshot) {
-                                      if (streamSnapshot.hasData) {
-                                        return ListView.builder(
-                                          itemCount:
-                                              streamSnapshot.data!.docs.length,
-                                          itemBuilder: (context, index) {
-                                            final DocumentSnapshot
-                                                documentSnapshot =
-                                                streamSnapshot
-                                                    .data!.docs[index];
-                                            return Card(
-                                              child: ListTile(
-                                                title: Text(
-                                                  documentSnapshot['name'],
-                                                  style: const TextStyle(
-                                                      fontSize: 17),
-                                                ),
-                                                subtitle: Text(
-                                                  documentSnapshot['menu'],
-                                                  style: const TextStyle(
-                                                      fontSize: 15),
-                                                ),
-                                                leading: Text(
-                                                  documentSnapshot['text']
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 12),
-                                                ),
-                                                onTap: () {},
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      }
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    },
+                                width: 700,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFC5DFF8),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0),
+                                    bottomLeft: Radius.circular(30.0),
+                                    bottomRight: Radius.circular(30.0),
                                   ),
+                                ),
+                                child: StreamBuilder(
+                                  stream: reviewcollection
+                                      .where("storeUid", isEqualTo: user!.uid)
+                                      .snapshots(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<QuerySnapshot>
+                                          streamSnapshot) {
+                                    if (streamSnapshot.hasData) {
+                                      return ListView.builder(
+                                        itemCount:
+                                            streamSnapshot.data!.docs.length,
+                                        itemBuilder: (context, index) {
+                                          final DocumentSnapshot
+                                              documentSnapshot =
+                                              streamSnapshot.data!.docs[index];
+                                          final Timestamp time =
+                                              documentSnapshot['reviewtime'];
+                                          final DateTime dateTime =
+                                              time.toDate();
+                                          String formattime =
+                                              DateFormat('yyyy-MM-dd - HH시mm분')
+                                                  .format(dateTime);
+                                          return Container(
+                                            margin: EdgeInsets.only(
+                                                left: 5, right: 5, bottom: 10),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, top: 10),
+                                                    child: Text(
+                                                      documentSnapshot['name'],
+                                                      style: TextStyle(
+                                                          fontSize: 30,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, top: 5),
+                                                    child: Text(
+                                                      '메뉴 :' +
+                                                          documentSnapshot[
+                                                              'menu'],
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, top: 20),
+                                                    child: Text(
+                                                      documentSnapshot['text'],
+                                                      style: TextStyle(
+                                                          fontSize: 25,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 10, top: 10),
+                                                        child: Text(
+                                                          formattime,
+                                                          style: TextStyle(
+                                                            fontSize: 13,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        top: 10),
+                                                    height: 2,
+                                                    color: Colors.black54,
+                                                  ),
+                                                ]),
+                                          );
+                                        },
+                                      );
+                                    }
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  },
                                 ),
                               ),
                             ],

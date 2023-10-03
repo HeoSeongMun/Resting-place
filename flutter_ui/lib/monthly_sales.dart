@@ -470,8 +470,7 @@ class _MonthlysalesState extends State<Monthlysales> {
                             ),
                             Container(
                               margin:
-                                  const EdgeInsets.only(left: 50, right: 50),
-                              height: 300,
+                                  const EdgeInsets.only(left: 10, right: 10),
                               width: 700,
                               decoration: const BoxDecoration(
                                 color: Color(0xFFC5DFF8),
@@ -483,6 +482,7 @@ class _MonthlysalesState extends State<Monthlysales> {
                                 ),
                               ),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   StreamBuilder<QuerySnapshot>(
                                       stream: FirebaseFirestore.instance
@@ -514,8 +514,16 @@ class _MonthlysalesState extends State<Monthlysales> {
                                         }
                                         final docs = snapshot.data!.docs;
                                         final columns = <DataColumn>[
-                                          const DataColumn(label: Text('금액')),
-                                          const DataColumn(label: Text('날짜')),
+                                          DataColumn(
+                                              label: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 50.0),
+                                                  child: Text('금액'))),
+                                          DataColumn(
+                                              label: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 100.0),
+                                                  child: Text('날짜'))),
                                           // 필요한 열을 추가할 수 있습니다.
                                         ];
                                         // DataTable에 사용할 행 데이터 구성
@@ -538,10 +546,18 @@ class _MonthlysalesState extends State<Monthlysales> {
                                           }
                                           return DataRow(
                                             cells: <DataCell>[
-                                              DataCell(Text(
-                                                  data['price'].toString())),
-                                              DataCell(
-                                                  Text(formattime.toString())),
+                                              DataCell(Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 50.0),
+                                                child: Text(
+                                                    data['price'].toString()),
+                                              )),
+                                              DataCell(Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          100.0), // 가로 간격을 조절
+                                                  child: Text(
+                                                      formattime.toString()))),
                                               // 필요한 셀을 추가하거나 수정할 수 있습니다.
                                             ],
                                           );
@@ -551,6 +567,9 @@ class _MonthlysalesState extends State<Monthlysales> {
                                       }),
                                 ],
                               ),
+                            ),
+                            SizedBox(
+                              height: 20,
                             ),
                             SizedBox(
                               height: 300,

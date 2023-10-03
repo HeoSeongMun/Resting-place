@@ -9,6 +9,7 @@ import 'package:flutter_ui/monthly_sales.dart';
 import 'package:flutter_ui/open_business.dart';
 import 'package:flutter_ui/review.dart';
 import 'package:flutter_ui/sales.dart';
+import 'package:intl/intl.dart';
 
 class Yearlysales extends StatefulWidget {
   const Yearlysales({super.key});
@@ -384,7 +385,7 @@ class _YearlysalesState extends State<Yearlysales> {
                     ),
                   ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(1),
@@ -448,6 +449,96 @@ class _YearlysalesState extends State<Yearlysales> {
                           ],
                         ),
                       ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        width: 700,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFC5DFF8),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                            bottomLeft: Radius.circular(30.0),
+                            bottomRight: Radius.circular(30.0),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('sales')
+                                    .where('storeUid', isEqualTo: user!.uid)
+                                    .where('time',
+                                        isGreaterThanOrEqualTo:
+                                            DateTime(selectedYear, 1, 1))
+                                    .where('time',
+                                        isLessThan:
+                                            DateTime(selectedYear + 1, 1, 1))
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  }
+
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Text('Loading...');
+                                  }
+                                  final docs = snapshot.data!.docs;
+                                  final columns = <DataColumn>[
+                                    DataColumn(
+                                        label: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 50.0),
+                                            child: Text('금액'))),
+                                    DataColumn(
+                                        label: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 100.0),
+                                            child: Text('날짜'))),
+                                    // 필요한 열을 추가할 수 있습니다.
+                                  ];
+                                  // DataTable에 사용할 행 데이터 구성
+                                  final rows = docs.map((doc) {
+                                    final data =
+                                        doc.data() as Map<String, dynamic>;
+                                    final Timestamp time = data['time'];
+                                    final DateTime dateTime = time.toDate();
+                                    String formattime =
+                                        DateFormat('yyyy-MM-dd - HH시mm분')
+                                            .format(dateTime);
+                                    double totalPrice = 0;
+
+                                    // 선택한 달의 'price' 값을 더합니다.
+                                    for (var document in snapshot.data!.docs) {
+                                      totalPrice += document['price'] as double;
+                                    }
+                                    return DataRow(
+                                      cells: <DataCell>[
+                                        DataCell(Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 50.0),
+                                          child: Text(data['price'].toString()),
+                                        )),
+                                        DataCell(Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 100.0), // 가로 간격을 조절
+                                            child:
+                                                Text(formattime.toString()))),
+                                        // 필요한 셀을 추가하거나 수정할 수 있습니다.
+                                      ],
+                                    );
+                                  }).toList();
+                                  return DataTable(
+                                      columns: columns, rows: rows);
+                                }),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       SizedBox(
                         height: 300,
                         width: 700,
@@ -501,7 +592,7 @@ class _YearlysalesState extends State<Yearlysales> {
                             }).toList(),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                   Column(
