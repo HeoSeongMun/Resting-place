@@ -144,6 +144,8 @@ class _Delivery extends State<Delivery> {
         order0.add(count);
         bool isExpanded = false;
         order0.add(isExpanded);
+        String ordernumber = data['ordernumber'];
+        order0.add(ordernumber);
         setState(() {
           setOrder0 = order0.toList();
         });
@@ -164,6 +166,8 @@ class _Delivery extends State<Delivery> {
         order1.add(count);
         bool isExpanded = false;
         order1.add(isExpanded);
+        String ordernumber = data['ordernumber'];
+        order1.add(ordernumber);
         setState(() {
           setOrder1 = order1.toList();
         });
@@ -184,6 +188,8 @@ class _Delivery extends State<Delivery> {
         order2.add(count);
         bool isExpanded = false;
         order2.add(isExpanded);
+        String ordernumber = data['ordernumber'];
+        order2.add(ordernumber);
         setState(() {
           setOrder2 = order2.toList();
         });
@@ -204,6 +210,8 @@ class _Delivery extends State<Delivery> {
         order3.add(count);
         bool isExpanded = false;
         order3.add(isExpanded);
+        String ordernumber = data['ordernumber'];
+        order3.add(ordernumber);
         setState(() {
           setOrder3 = order3.toList();
         });
@@ -224,6 +232,8 @@ class _Delivery extends State<Delivery> {
         order4.add(count);
         bool isExpanded = false;
         order4.add(isExpanded);
+        String ordernumber = data['ordernumber'];
+        order4.add(ordernumber);
         setState(() {
           setOrder4 = order4.toList();
         });
@@ -478,7 +488,31 @@ class _Delivery extends State<Delivery> {
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black)),
                                           TextSpan(
-                                              text: order[3],
+                                              text: order[3] + ' ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          TextSpan(
+                                              text: '원',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                        ]),
+                                      )),
+                                  SizedBox(height: 10),
+                                  Container(
+                                      alignment: Alignment.centerLeft,
+                                      width: MediaQuery.of(context).size.width -
+                                          200,
+                                      child: RichText(
+                                        text: TextSpan(children: <TextSpan>[
+                                          TextSpan(
+                                              text: '주문 번호 :  ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          TextSpan(
+                                              text: order[9] + ' ',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black)),

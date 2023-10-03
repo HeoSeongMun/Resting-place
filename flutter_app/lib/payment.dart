@@ -30,7 +30,7 @@ class _Payment extends State<Payment> {
   var minute = 0;
   var timeFormat = '오전';
   String arrivalTime = '';
-
+  late Timestamp ordertime;
   CollectionReference SBproduct =
       FirebaseFirestore.instance.collection('shoppingBasket');
 
@@ -156,6 +156,15 @@ class _Payment extends State<Payment> {
         });
   }
 
+  Future<String> generateOrderNumber() async {
+    //주문 번호
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance.collection('order').get();
+    int orderCount = querySnapshot.size; // 현재까지 저장된 주문의 개수
+    String orderNumber = (orderCount + 1).toString(); // 새로운 주문 번호 생성
+    return orderNumber;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -198,7 +207,7 @@ class _Payment extends State<Payment> {
               color: Colors.black,
             ),
             Container(
-              margin: const EdgeInsets.only(left: 15, top: 40, right: 15),
+              margin: const EdgeInsets.only(left: 15, top: 32, right: 15),
               alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,7 +242,7 @@ class _Payment extends State<Payment> {
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 32,
             ),
             Container(
               height: 1.5,
@@ -370,12 +379,14 @@ class _Payment extends State<Payment> {
                                 backgroundColor: Colors.white,
                                 title: Text(
                                   '도착 예상 시간을 정해주세요.',
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18),
                                 ),
                                 content: StatefulBuilder(builder:
                                     (BuildContext context,
                                         StateSetter setState) {
                                   return Container(
+                                    height: 150,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
@@ -434,70 +445,80 @@ class _Payment extends State<Payment> {
                                                   bottom: BorderSide(
                                                       color: Colors.white))),
                                         ),
-                                        Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  timeFormat = '오전';
-                                                });
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 10),
-                                                decoration: BoxDecoration(
-                                                    color: timeFormat == '오전'
-                                                        ? Colors.grey.shade800
-                                                        : Colors.grey.shade700,
-                                                    border: Border.all(
+                                        SizedBox(
+                                          width: 25,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 25),
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    timeFormat = '오전';
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                                  decoration: BoxDecoration(
                                                       color: timeFormat == '오전'
-                                                          ? Colors.grey
+                                                          ? Colors.grey.shade800
                                                           : Colors
                                                               .grey.shade700,
-                                                    )),
-                                                child: const Text(
-                                                  '오전',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 25),
+                                                      border: Border.all(
+                                                        color:
+                                                            timeFormat == '오전'
+                                                                ? Colors.grey
+                                                                : Colors.grey
+                                                                    .shade700,
+                                                      )),
+                                                  child: const Text(
+                                                    '오전',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 25),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              height: 15,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  timeFormat = '오후';
-                                                });
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 10),
-                                                decoration: BoxDecoration(
-                                                    color: timeFormat == '오후'
-                                                        ? Colors.grey.shade800
-                                                        : Colors.grey.shade700,
-                                                    border: Border.all(
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    timeFormat = '오후';
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                                  decoration: BoxDecoration(
                                                       color: timeFormat == '오후'
-                                                          ? Colors.grey
+                                                          ? Colors.grey.shade800
                                                           : Colors
                                                               .grey.shade700,
-                                                    )),
-                                                child: const Text(
-                                                  '오후',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 25),
+                                                      border: Border.all(
+                                                        color:
+                                                            timeFormat == '오후'
+                                                                ? Colors.grey
+                                                                : Colors.grey
+                                                                    .shade700,
+                                                      )),
+                                                  child: const Text(
+                                                    '오후',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 25),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         )
                                       ],
                                     ),
@@ -526,7 +547,7 @@ class _Payment extends State<Payment> {
                             });
                       },
                       child: const Text(
-                        "예상시간\n 선택",
+                        "예상시간\n\t\t 선택",
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -566,7 +587,7 @@ class _Payment extends State<Payment> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                       Text(
@@ -649,6 +670,7 @@ class _Payment extends State<Payment> {
                       QuerySnapshot querySnapshot = await query.get();
                       List<QueryDocumentSnapshot> documents =
                           querySnapshot.docs;
+                      ordertime = Timestamp.now();
                       for (QueryDocumentSnapshot document in documents) {
                         // 'name', 'price', 'storeName' 필드 값 가져오기
                         name = document.get('name');
@@ -660,8 +682,10 @@ class _Payment extends State<Payment> {
                         imageUrl = document.get('imageUrl');
                         count = document.get('count');
 
+                        String orderNumber = await generateOrderNumber();
+
                         await order.add({
-                          'ordertime': Timestamp.now().toDate(),
+                          'ordertime': ordertime.toDate(),
                           'area_name': location,
                           'name': name,
                           'price': price,
@@ -673,6 +697,7 @@ class _Payment extends State<Payment> {
                           'imageUrl': imageUrl,
                           'count': count,
                           'boolreview': false,
+                          'ordernumber': orderNumber,
                         });
                       }
 
@@ -682,12 +707,16 @@ class _Payment extends State<Payment> {
                       for (QueryDocumentSnapshot document in documents) {
                         await document.reference.delete();
                       }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PayComplete(
-                                total, discount, finalprice, saveMileage)),
-                      );
+
+                      Future.delayed(Duration(seconds: 1), () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PayComplete(total, discount,
+                                finalprice, saveMileage, ordertime),
+                          ),
+                        );
+                      });
                     },
                     child: Container(
                       alignment: Alignment.center,

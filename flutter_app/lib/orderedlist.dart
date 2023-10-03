@@ -161,7 +161,7 @@ class _OrderedList extends State<OrderedList> {
                   Container(
                     margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     decoration: BoxDecoration(
-                        color: Color(0xFFC5DFF8),
+                        color: Color(0xffFFB79E),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30.0),
                           topRight: Radius.circular(30.0),
@@ -477,11 +477,23 @@ class _OrderedList extends State<OrderedList> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.only(
-                                                      right: 15, top: 10),
+                                                      left: 10, top: 15),
+                                                  child: Text(
+                                                    '주문번호 : ' +
+                                                        sortedDocs[index]
+                                                            ['ordernumber'],
+                                                    style:
+                                                        TextStyle(fontSize: 13),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
                                                     style:
@@ -665,7 +677,33 @@ class _OrderedList extends State<OrderedList> {
                                                     children: <Widget>[
                                                       SizedBox(height: 5),
                                                       ElevatedButton(
-                                                        onPressed: () {},
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) => Orderdelivery(
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'area_name'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'storeName'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'name'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'count'],
+                                                                    sortedDocs[
+                                                                            index]
+                                                                        [
+                                                                        'ordertime'])),
+                                                          );
+                                                        },
                                                         child: Text(
                                                           '주문 현황',
                                                           style: TextStyle(
@@ -688,11 +726,23 @@ class _OrderedList extends State<OrderedList> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.only(
-                                                      right: 15, top: 10),
+                                                      left: 10, top: 15),
+                                                  child: Text(
+                                                    '주문번호 : ' +
+                                                        sortedDocs[index]
+                                                            ['ordernumber'],
+                                                    style:
+                                                        TextStyle(fontSize: 13),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
                                                     style:
@@ -1019,7 +1069,7 @@ class _OrderedList extends State<OrderedList> {
                                                     children: <Widget>[
                                                       SizedBox(height: 5),
                                                       ElevatedButton(
-                                                        onPressed: () {},
+                                                        onPressed: null,
                                                         child: Text(
                                                           '주문 현황',
                                                           style: TextStyle(
@@ -1042,11 +1092,23 @@ class _OrderedList extends State<OrderedList> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.only(
-                                                      right: 15, top: 10),
+                                                      left: 10, top: 15),
+                                                  child: Text(
+                                                    '주문번호 : ' +
+                                                        sortedDocs[index]
+                                                            ['ordernumber'],
+                                                    style:
+                                                        TextStyle(fontSize: 13),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
                                                     style:
@@ -1230,7 +1292,7 @@ class _OrderedList extends State<OrderedList> {
                                                     children: <Widget>[
                                                       SizedBox(height: 5),
                                                       ElevatedButton(
-                                                        onPressed: () {},
+                                                        onPressed: null,
                                                         child: Text(
                                                           '주문 현황',
                                                           style: TextStyle(
@@ -1253,11 +1315,23 @@ class _OrderedList extends State<OrderedList> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.only(
-                                                      right: 15, top: 10),
+                                                      left: 10, top: 15),
+                                                  child: Text(
+                                                    '주문번호 : ' +
+                                                        sortedDocs[index]
+                                                            ['ordernumber'],
+                                                    style:
+                                                        TextStyle(fontSize: 13),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
                                                     style:

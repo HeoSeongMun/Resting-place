@@ -1,13 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/home.dart';
 
-class PayComplete extends StatelessWidget {
+class PayComplete extends StatefulWidget {
   PayComplete(this.total, this.discount, this.finalprice, this.saveMileage,
+      this.ordertime,
       {super.key});
   String total = '';
   int discount = 0;
   int finalprice = 0;
   int saveMileage = 0;
+  Timestamp ordertime;
+  @override
+  State<PayComplete> createState() => _PayComplete();
+}
+
+class _PayComplete extends State<PayComplete> {
+  final _userID = FirebaseAuth.instance.currentUser;
+  CollectionReference ordercollection =
+      FirebaseFirestore.instance.collection('order');
+  CollectionReference cartcollection =
+      FirebaseFirestore.instance.collection('shoppingBasket');
+
+  int cartcount = 0;
+  int ordercount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +57,7 @@ class PayComplete extends StatelessWidget {
                 margin: EdgeInsets.only(top: 15),
                 width: 350,
                 child: Text(
-                  "총 $saveMileage원이 마일리지로",
+                  '총' + widget.saveMileage.toString() + '원이 마일리지로',
                   style: TextStyle(
                     fontSize: 20.0, // 글자 크기
                     color: Colors.black, // 색상
@@ -64,7 +86,7 @@ class PayComplete extends StatelessWidget {
               ),
               Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 40),
+                  margin: EdgeInsets.only(top: 25),
                   //color: Colors.red,
                   width: 340,
                   child: Text("결제정보",
@@ -74,7 +96,7 @@ class PayComplete extends StatelessWidget {
                         color: Colors.black,
                       ))),
               Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: EdgeInsets.only(top: 25),
                 color: Colors.black26,
                 height: 2,
                 width: 340,
@@ -84,7 +106,7 @@ class PayComplete extends StatelessWidget {
                 margin: EdgeInsets.only(
                   left: 15,
                   right: 15,
-                  top: 40,
+                  top: 20,
                 ),
                 alignment: Alignment.centerLeft,
                 child: Row(
@@ -108,7 +130,7 @@ class PayComplete extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          total + '원',
+                          widget.total + '원',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -120,9 +142,9 @@ class PayComplete extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 100,
+                height: 45,
                 width: 340,
-                margin: EdgeInsets.only(top: 40),
+                margin: EdgeInsets.only(top: 20),
                 color: Color(0xffD2DAFF),
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,9 +164,9 @@ class PayComplete extends StatelessWidget {
                       ),
                       Container(
                         alignment: Alignment.topLeft,
-                        margin: const EdgeInsets.only(top: 70, right: 15),
+                        margin: const EdgeInsets.only(top: 15, right: 15),
                         child: Text(
-                          "$discount원",
+                          widget.discount.toString() + '원',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -155,16 +177,118 @@ class PayComplete extends StatelessWidget {
                     ]),
               ),
               Container(
-                  alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 50),
-                  //color: Colors.red,
-                  width: 340,
-                  child: Text("결제 금액",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                      ))),
+                height: 150,
+                width: 340,
+                margin: EdgeInsets.only(top: 10),
+                color: Color(0xffD2DAFF),
+                child: StreamBuilder(
+                  stream: ordercollection
+                      .where('userUid', isEqualTo: _userID!.uid)
+                      .where('ordertime', isEqualTo: widget.ordertime.toDate())
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<dynamic> streamSnapshot) {
+                    if (streamSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      // 로딩 상태 처리
+                      return CircularProgressIndicator();
+                    }
+                    if (streamSnapshot.hasError) {
+                      // 에러 처리
+                      return Text('Error: ${streamSnapshot.error}');
+                    }
+                    if (!streamSnapshot.hasData ||
+                        streamSnapshot.data!.docs.isEmpty) {
+                      debugPrint('데이터가 없습니다.');
+                      print(streamSnapshot.data!.docs);
+                    }
+
+                    if (streamSnapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final List<DocumentSnapshot> sortedDocs =
+                              List.from(streamSnapshot.data!.docs);
+                          sortedDocs.sort((a, b) {
+                            String timeA = a['ordernumber'];
+                            String timeB = b['ordernumber'];
+                            return timeA.compareTo(timeB);
+                          });
+                          return Container(
+                            margin: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 180,
+                                      child: Text(
+                                        sortedDocs[index]['storeName']
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 80,
+                                    ),
+                                    Text(
+                                      '주문번호',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                        width: 180,
+                                        child: Text(sortedDocs[index]['name']
+                                            .toString())),
+                                    SizedBox(
+                                      width: 105,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(top: 5),
+                                      child: Text(sortedDocs[index]
+                                              ['ordernumber']
+                                          .toString()),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.only(top: 20),
+                //color: Colors.red,
+                width: 340,
+                child: Text(
+                  "결제 금액",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
               Container(
                 margin: EdgeInsets.only(top: 15),
                 color: Colors.black26,
@@ -184,10 +308,10 @@ class PayComplete extends StatelessWidget {
                       ))),
               Container(
                   alignment: Alignment.topRight,
-                  margin: EdgeInsets.only(top: 30, bottom: 35),
+                  margin: EdgeInsets.only(top: 30, bottom: 20),
                   //color: Colors.red,
                   width: 340,
-                  child: Text('$finalprice원',
+                  child: Text(widget.finalprice.toString() + '원',
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
@@ -198,11 +322,17 @@ class PayComplete extends StatelessWidget {
               ),
               Expanded(
                 child: InkWell(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Home()),
                     );
+                    if (result != null) {
+                      setState(() {
+                        CartCount();
+                        OrderCount();
+                      });
+                    }
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -225,5 +355,29 @@ class PayComplete extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> CartCount() async {
+    QuerySnapshot snapshot =
+        await cartcollection.where('userUid', isEqualTo: _userID!.uid).get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      cartcount = count;
+    });
+  }
+
+  Future<void> OrderCount() async {
+    QuerySnapshot snapshot = await ordercollection
+        .where('userUid', isEqualTo: _userID!.uid)
+        .where('status', isNotEqualTo: '완료')
+        .get();
+
+    int count = snapshot.docs.length;
+
+    setState(() {
+      ordercount = count;
+    });
   }
 }

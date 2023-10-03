@@ -48,7 +48,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     child: Text(
                       "이름",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -92,7 +92,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     child: Text(
                       "이메일",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -136,7 +136,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     child: Text(
                       "비밀번호",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -215,7 +215,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     child: Text(
                       "휴대전화",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -246,7 +246,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 65,
+                    width: 70,
                     height: 40,
                     margin: EdgeInsets.only(left: 5),
                     child: TextField(
@@ -271,7 +271,7 @@ class UserInfoEditScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 65,
+                    width: 70,
                     height: 40,
                     margin: EdgeInsets.only(left: 5),
                     child: TextField(

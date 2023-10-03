@@ -54,12 +54,14 @@ class _Home extends State<Home> {
 
     List<String> imageurlList2 = [];
     List<String> locationList = [];
-    QuerySnapshot snapshot1 =
-        await areacollection.where('location', whereIn: imageurlList).get();
-    snapshot1.docs.forEach((doc) {
-      imageurlList2.add(doc['imageUrl']);
-      locationList.add(doc['location']);
-    });
+    if (imageurlList.isNotEmpty) {
+      QuerySnapshot snapshot1 =
+          await areacollection.where('location', whereIn: imageurlList).get();
+      snapshot1.docs.forEach((doc) {
+        imageurlList2.add(doc['imageUrl']);
+        locationList.add(doc['location']);
+      });
+    }
 
     setState(() {
       imageurlData = imageurlList2.toList();
