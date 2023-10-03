@@ -45,6 +45,7 @@ class Signup extends StatelessWidget {
   final TextEditingController biznumberController = TextEditingController();
   final TextEditingController ownernameController = TextEditingController();
   final TextEditingController phonenumberController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
 
   // 테스트
   Future<void> update(DocumentSnapshot documentSnapshot) async {
@@ -167,6 +168,9 @@ class Signup extends StatelessWidget {
                         labelText: '요청자 전화번호를 적어주세요 예)01012341234',
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       children: [
                         const Text('상품 이미지'),
@@ -229,6 +233,7 @@ class Signup extends StatelessWidget {
                                   'phone_number': phonenumberController.text,
                                   'owner_name': ownernameController.text,
                                   'biz_number': biznumberController.text,
+                                  'addressController': addressController
                                 },
                               );
                               Navigator.push(

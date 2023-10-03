@@ -19,7 +19,8 @@ class Review extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(100),
+          padding: const EdgeInsets.fromLTRB(
+              100 /*왼*/, 30 /*위*/, 100 /*오른*/, 100 /*아래*/),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -128,6 +129,7 @@ class Review extends StatelessWidget {
                 height: 20,
               ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -150,14 +152,14 @@ class Review extends StatelessWidget {
                                   Column(
                                     children: const [
                                       Text(
-                                        '리뷰조회',
-                                        style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 40),
-                                      ),
-                                      Text(
                                         '고객님의 생각',
                                         style: TextStyle(
                                             fontFamily: "Jalnan", fontSize: 20),
+                                      ),
+                                      Text(
+                                        '리뷰관리',
+                                        style: TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 40),
                                       ),
                                     ],
                                   ),
@@ -177,7 +179,7 @@ class Review extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 15,
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -209,7 +211,7 @@ class Review extends StatelessWidget {
                                       width: 10,
                                     ),
                                     const Text(
-                                      '주문접수',
+                                      '주문관리',
                                       style: TextStyle(
                                           fontFamily: "Jalnan", fontSize: 30),
                                     ),
@@ -305,7 +307,7 @@ class Review extends StatelessWidget {
                                         width: 10,
                                       ),
                                       const Text(
-                                        '리뷰조회',
+                                        '리뷰관리',
                                         style: TextStyle(
                                             fontFamily: "Jalnan", fontSize: 30),
                                       ),
@@ -349,7 +351,7 @@ class Review extends StatelessWidget {
                                       width: 10,
                                     ),
                                     const Text(
-                                      '매출조회',
+                                      '매출관리',
                                       style: TextStyle(
                                           fontFamily: "Jalnan", fontSize: 30),
                                     ),
@@ -359,7 +361,7 @@ class Review extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 15,
                           ),
                         ],
                       ),

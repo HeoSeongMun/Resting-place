@@ -6,7 +6,6 @@ import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/menu.dart';
 import 'package:flutter_ui/monthly_sales.dart';
 import 'package:flutter_ui/review.dart';
-import 'package:flutter_ui/specify_date.dart';
 import 'package:flutter_ui/yearly_sales.dart';
 import 'package:intl/intl.dart';
 
@@ -35,7 +34,8 @@ class _SalesState extends State<Sales> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(100),
+          padding: const EdgeInsets.fromLTRB(
+              100 /*왼*/, 30 /*위*/, 100 /*오른*/, 100 /*아래*/),
           child: Column(
             children: [
               Container(
@@ -60,8 +60,8 @@ class _SalesState extends State<Sales> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: 60,
-                              width: 500,
+                              height: 80,
+                              width: 1000,
                               child: StreamBuilder(
                                 stream: FirebaseFirestore.instance
                                     .collection('testlogin')
@@ -80,7 +80,7 @@ class _SalesState extends State<Sales> {
                                           docs[index]['storeName'],
                                           style: const TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 50),
+                                              fontSize: 70),
                                         ),
                                       );
                                     },
@@ -109,14 +109,23 @@ class _SalesState extends State<Sales> {
                                   return ListView.builder(
                                     itemCount: docs.length,
                                     itemBuilder: (context, index) {
-                                      return Text(
-                                        docs[index]['restAreaName'] +
-                                            '(' +
-                                            docs[index]['direction'] +
-                                            ')',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 25),
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            docs[index]['restAreaName'],
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontFamily: "Jalnan",
+                                                fontSize: 25),
+                                          ),
+                                          Text(
+                                            '${'(' + docs[index]['direction']})',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontFamily: "Jalnan",
+                                                fontSize: 25),
+                                          ),
+                                        ],
                                       );
                                     },
                                   );
@@ -130,503 +139,246 @@ class _SalesState extends State<Sales> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF050204),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => OpenBusiness(),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: const [
-                                  Text(
-                                    '간편매출',
-                                    style: TextStyle(
-                                        fontFamily: "Jalnan",
-                                        fontSize: 50,
-                                        color: Colors.white),
-                                  ),
-                                  Text(
-                                    '간단하게 매출을 살펴보자!',
-                                    style: TextStyle(
-                                        fontFamily: "Jalnan",
-                                        fontSize: 20,
-                                        color: Colors.white),
-                                  ),
-                                  Text(
-                                    '원하는 날짜까지!',
-                                    style: TextStyle(
-                                        fontFamily: "Jalnan",
-                                        fontSize: 20,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                              CachedNetworkImage(
-                                imageUrl:
-                                    'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
-                                width: 200, // 이미지의 가로 크기
-                                height: 150, // 이미지의 세로 크기
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons
-                                        .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF050204),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => OpenBusiness(),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: const [
-                                  Text(
-                                    '월간매출',
-                                    style: TextStyle(
-                                        fontFamily: "Jalnan",
-                                        fontSize: 50,
-                                        color: Colors.white),
-                                  ),
-                                  Text(
-                                    '저번달에 얼마 벌었지? 이번달은?',
-                                    style: TextStyle(
-                                        fontFamily: "Jalnan",
-                                        fontSize: 20,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                              CachedNetworkImage(
-                                imageUrl:
-                                    'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
-                                width: 200, // 이미지의 가로 크기
-                                height: 150, // 이미지의 세로 크기
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons
-                                        .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF050204),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => OpenBusiness(),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: const [
-                                  Text(
-                                    '연간매출',
-                                    style: TextStyle(
-                                        fontFamily: "Jalnan",
-                                        fontSize: 50,
-                                        color: Colors.white),
-                                  ),
-                                  Text(
-                                    '작년에 얼마 벌었지? 이번년도는?',
-                                    style: TextStyle(
-                                        fontFamily: "Jalnan",
-                                        fontSize: 20,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                              CachedNetworkImage(
-                                imageUrl:
-                                    'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
-                                width: 200, // 이미지의 가로 크기
-                                height: 150, // 이미지의 세로 크기
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons
-                                        .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              const SizedBox(
+                height: 20,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 700,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFAAC4FF),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 100.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => OpenBusiness(),
-                                    ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    // 글자크기 때문에 흰색 짤리면 수정
-                                    horizontal: 100,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.network(
-                                        'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Forder.jpg?alt=media&token=7056226e-0f5b-4aa7-af66-6fd07879a341', // 이미지 URL 대체
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      const Text(
-                                        '주문접수',
-                                        style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Menu(),
-                                    ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    // 글자크기 때문에 흰색 짤리면 수정
-                                    horizontal: 100,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.network(
-                                        'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fmenu.png?alt=media&token=de0a949e-d6cd-4ff3-953a-118ca66ef918', // 이미지 URL 대체
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      const Text(
-                                        '메뉴관리',
-                                        style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Review(),
-                                    ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    // 글자크기 때문에 흰색 짤리면 수정
-                                    horizontal: 100,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.network(
-                                        'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Freaview.png?alt=media&token=85827149-95c6-4acc-ab4f-e2e7f76062d6', // 이미지 URL 대체
-                                        width: 53,
-                                        height: 53,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      const Text(
-                                        '리뷰조회',
-                                        style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: const Color(0xFFAAC4FF),
-                              ),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft:
-                                        Radius.circular(20.0), // 왼쪽 상단 모서리 굴곡
-                                    bottomLeft:
-                                        Radius.circular(20.0), // 왼쪽 하단 모서리 굴곡
-                                  ),
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => const Sales(),
-                                      ),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 10,
-                                      // 글자크기 때문에 흰색 짤리면 수정
-                                      horizontal: 115,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.network(
-                                          'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fsales.png?alt=media&token=a60dba24-f348-4274-ad68-455fb4c0ccbe', // 이미지 URL 대체
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        const Text(
-                                          '매출관리',
-                                          style: TextStyle(
-                                              fontFamily: "Jalnan",
-                                              fontSize: 30),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFAAC4FF),
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 60,
-                            horizontal: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF827BE6),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(30),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: const [
+                                      Text(
+                                        '얼마나 벌었을까?',
+                                        style: TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 20),
+                                      ),
+                                      Text(
+                                        '매출관리',
+                                        style: TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 40),
+                                      ),
+                                    ],
+                                  ),
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fsales.gif?alt=media&token=0aa3a760-9f61-45a5-9762-bf41a2387ef1', // GIF 이미지의 URL을 여기에 입력
+                                    width: 100, // 이미지의 가로 크기
+                                    height: 100, // 이미지의 세로 크기
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons
+                                            .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.black),
-                                child: const Text('간편매출보기'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => OpenBusiness(),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  // 글자크기 때문에 흰색 짤리면 수정
+                                  horizontal: 100,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Forder.jpg?alt=media&token=7056226e-0f5b-4aa7-af66-6fd07879a341', // 이미지 URL 대체
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Text(
+                                      '주문관리',
+                                      style: TextStyle(
+                                          fontFamily: "Jalnan", fontSize: 30),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Menu(),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  // 글자크기 때문에 흰색 짤리면 수정
+                                  horizontal: 100,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fmenu.png?alt=media&token=de0a949e-d6cd-4ff3-953a-118ca66ef918', // 이미지 URL 대체
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Text(
+                                      '메뉴관리',
+                                      style: TextStyle(
+                                          fontFamily: "Jalnan", fontSize: 30),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Review(),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  // 글자크기 때문에 흰색 짤리면 수정
+                                  horizontal: 100,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Freaview.png?alt=media&token=85827149-95c6-4acc-ab4f-e2e7f76062d6', // 이미지 URL 대체
+                                      width: 53,
+                                      height: 53,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Text(
+                                      '리뷰관리',
+                                      style: TextStyle(
+                                          fontFamily: "Jalnan", fontSize: 30),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: const Color(0xFFAAC4FF),
+                            ),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft:
+                                      Radius.circular(20.0), // 왼쪽 상단 모서리 굴곡
+                                  bottomLeft:
+                                      Radius.circular(20.0), // 왼쪽 하단 모서리 굴곡
+                                ),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => const Sales(),
                                     ),
                                   );
                                 },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    // 글자크기 때문에 흰색 짤리면 수정
+                                    horizontal: 115,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.network(
+                                        'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fsales.png?alt=media&token=a60dba24-f348-4274-ad68-455fb4c0ccbe', // 이미지 URL 대체
+                                        width: 50,
+                                        height: 50,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      const Text(
+                                        '매출관리',
+                                        style: TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 30),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFD2DAFF),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 60,
-                            horizontal: 10,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.black),
-                                child: const Text('월간매출'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const Monthlysales(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFD2DAFF),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 60,
-                            horizontal: 10,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.black),
-                                child: const Text('연간매출'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const Yearlysales(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFD2DAFF),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 61,
-                            horizontal: 10,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.black),
-                                child: const Text('날짜지정'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const Specifydate(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -973,7 +725,152 @@ class _SalesState extends State<Sales> {
                           },
                         ),
                     ],
-                  )
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF050204),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const Sales(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: Row(
+                              children: [
+                                Column(
+                                  children: const [
+                                    Text(
+                                      '간편매출',
+                                      style: TextStyle(
+                                          fontFamily: "Jalnan",
+                                          fontSize: 40,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
+                                  width: 100, // 이미지의 가로 크기
+                                  height: 100, // 이미지의 세로 크기
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons
+                                          .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF050204),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const Monthlysales(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: Row(
+                              children: [
+                                Column(
+                                  children: const [
+                                    Text(
+                                      '월간매출',
+                                      style: TextStyle(
+                                          fontFamily: "Jalnan",
+                                          fontSize: 40,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
+                                  width: 100, // 이미지의 가로 크기
+                                  height: 100, // 이미지의 세로 크기
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons
+                                          .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF050204),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const Yearlysales(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: Row(
+                              children: [
+                                Column(
+                                  children: const [
+                                    Text(
+                                      '연간매출',
+                                      style: TextStyle(
+                                          fontFamily: "Jalnan",
+                                          fontSize: 40,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
+                                  width: 100, // 이미지의 가로 크기
+                                  height: 100, // 이미지의 세로 크기
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons
+                                          .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
