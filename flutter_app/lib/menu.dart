@@ -7,12 +7,17 @@ import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/rev_show.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class Menu extends StatefulWidget {
-  Menu(this.areaName, this.storeName, this.storeimageUrl, {super.key});
+  Menu(this.areaName, this.storeName, this.storeimageUrl, this.averagegrade,
+      this.gradescount,
+      {super.key});
   String storeName = '';
   String areaName = '';
   String storeimageUrl = '';
+  double averagegrade;
+  int gradescount = 0;
   @override
   State<Menu> createState() => _Menu();
 }
@@ -109,19 +114,72 @@ class _Menu extends State<Menu> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width - 140,
-                            margin: const EdgeInsets.only(top: 5),
-                            child: Text(
-                              widget.storeName,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                          Row(
+                            children: [
+                              Container(
+                                width: 200,
+                                margin: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  widget.storeName,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Column(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                      left: 20,
+                                    ),
+                                    width: 70,
+                                    height: 25,
+                                    child: ElevatedButton(
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(13),
+                                          ),
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          side: const BorderSide(
+                                            color: Colors.black,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          final result = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReviewListPage(
+                                                        widget.storeName)),
+                                          );
+                                          if (result != null) {
+                                            setState(() {
+                                              CartCount();
+                                              OrderCount();
+                                            });
+                                          }
+                                        },
+                                        child: const Text(
+                                          "리뷰보기",
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            height: 17,
+                            height: 12,
                           ),
                           Container(
                             child: Row(
@@ -136,50 +194,60 @@ class _Menu extends State<Menu> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 50, right: 20),
-                                  width: 70,
-                                  height: 25,
-                                  child: ElevatedButton(
-                                      style: TextButton.styleFrom(
-                                        foregroundColor: Colors.black,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(13),
-                                        ),
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        side: const BorderSide(
-                                          color: Colors.black,
-                                          width: 2,
-                                        ),
+                                Column(
+                                  children: [
+                                    Container(
+                                      margin:
+                                          EdgeInsets.only(left: 55, right: 10),
+                                      width: 80,
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        '평점 : ' +
+                                            (widget.averagegrade.isNaN
+                                                ? '0'
+                                                : widget.averagegrade
+                                                    .toString()),
+                                        style: TextStyle(fontSize: 12),
                                       ),
-                                      onPressed: () async {
-                                        final result = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ReviewListPage(
-                                                      widget.storeName)),
-                                        );
-                                        if (result != null) {
-                                          setState(() {
-                                            CartCount();
-                                            OrderCount();
-                                          });
-                                        }
-                                      },
-                                      child: const Text(
-                                        "리뷰보기",
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          margin:
+                                              EdgeInsets.only(left: 40, top: 2),
+                                          child: RatingBar.builder(
+                                            initialRating:
+                                                widget.averagegrade.isNaN
+                                                    ? 0
+                                                    : widget.averagegrade,
+                                            minRating: 1,
+                                            direction: Axis.horizontal,
+                                            ignoreGestures: true,
+                                            updateOnDrag: false,
+                                            allowHalfRating: false,
+                                            itemCount: 5,
+                                            itemSize: 15,
+                                            itemBuilder: (context, _) => Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (_) {},
+                                          ),
                                         ),
-                                      )),
-                                )
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              right: 10, top: 4),
+                                          child: Text(
+                                            '( ' +
+                                                widget.gradescount.toString() +
+                                                ' )',
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -332,9 +400,10 @@ class _Menu extends State<Menu> {
               onTap: (int index) async {
                 switch (index) {
                   case 0: //검색
-                    final result = await Navigator.push(
+                    final result = await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => AreaSearch()),
+                      (route) => false,
                     );
                     if (result != null) {
                       setState(() {

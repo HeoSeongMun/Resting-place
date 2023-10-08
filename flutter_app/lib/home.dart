@@ -108,11 +108,18 @@ class _Home extends State<Home> {
     }
   }
 
+  late bool isLoading = true;
   void initState() {
-    super.initState();
     imageData();
     CartCount();
     OrderCount();
+    isLoading = true;
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -128,318 +135,349 @@ class _Home extends State<Home> {
         theme: ThemeData(fontFamily: 'jalnan'),
         home: Scaffold(
           backgroundColor: Color(0xFFEEF1FF), //Color(0xFF92B4EC)
-          body: Column(
-            children: [
-              SizedBox(
-                height: 50,
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                    color: Color(0xFFC5DFF8),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                      bottomLeft: Radius.circular(30.0),
-                      bottomRight: Radius.circular(30.0),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.7),
-                        blurRadius: 5,
-                        spreadRadius: 0,
-                        offset: const Offset(0, 7),
-                      ),
-                    ]),
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Column(children: [
+          body: isLoading
+              ? Center(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 2.5),
+                    child: Column(
+                      children: [
                         Container(
-                          margin: EdgeInsets.only(left: 20, top: 15),
-                          child: Text(
-                            "최근 주문 휴게소",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          width: 150,
+                          height: 150,
+                          child: Image.asset(
+                              'assets/images/ingappicon3.gif'), // 로딩 인디케이터
                         ),
-                      ]),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CarouselSlider(
-                      carouselController: _controller,
-                      options: CarouselOptions(
-                        scrollDirection: Axis.horizontal,
-                        enlargeCenterPage: true, // 무한 스크롤 비활성화
-                        enableInfiniteScroll: false,
-                        initialPage: 0,
-                        viewportFraction: 0.9, // 화면 비율
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _current = index;
-                          });
-                        },
-                      ),
-                      items: imageurlData.asMap().entries.map((entry) {
-                        final int index = entry.key;
-                        final String image = entry.value;
-                        final String text = locationData[index];
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: Column(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final result = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Restaurant(
-                                                locationData[index],
-                                                imageurlData[index]),
-                                          ),
-                                        );
-                                        setState(() {
-                                          CartCount();
-                                          OrderCount();
-                                        });
-                                      },
-                                      child: Image.network(
-                                        image.toString(),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    child: Text(
-                                      text,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: imageurlData.asMap().entries.map((entry) {
-                    return GestureDetector(
-                      onTap: () => _controller.animateToPage(entry.key),
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.blueAccent
-                              .withOpacity(_current == entry.key ? 0.9 : 0.4),
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(
-                    color: Color(0xFFC5DFF8),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                      bottomLeft: Radius.circular(30.0),
-                      bottomRight: Radius.circular(30.0),
+                        Text('...로딩중...')
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.7),
-                        blurRadius: 5,
-                        spreadRadius: 0,
-                        offset: const Offset(0, 7),
-                      ),
-                    ]),
-                child: Column(
+                  ),
+                )
+              : Column(
                   children: [
-                    Align(
-                      alignment: Alignment.topLeft,
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFC5DFF8),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                            bottomLeft: Radius.circular(30.0),
+                            bottomRight: Radius.circular(30.0),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.7),
+                              blurRadius: 5,
+                              spreadRadius: 0,
+                              offset: const Offset(0, 7),
+                            ),
+                          ]),
                       child: Column(
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(left: 20, top: 15),
-                            child: Text(
-                              "오늘 뭐먹지??",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 20, top: 15),
+                                child: Text(
+                                  "최근 주문 휴게소",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
+                            ]),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          CarouselSlider(
+                            carouselController: _controller,
+                            options: CarouselOptions(
+                              scrollDirection: Axis.horizontal,
+                              enlargeCenterPage: true, // 무한 스크롤 비활성화
+                              enableInfiniteScroll: false,
+                              initialPage: 0,
+                              viewportFraction: 0.9, // 화면 비율
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              },
                             ),
+                            items: imageurlData.asMap().entries.map((entry) {
+                              final int index = entry.key;
+                              final String image = entry.value;
+                              final String text = locationData[index];
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 5.0),
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          child: InkWell(
+                                            onTap: () async {
+                                              final result =
+                                                  await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Restaurant(
+                                                          locationData[index],
+                                                          imageurlData[index]),
+                                                ),
+                                              );
+                                              setState(() {
+                                                CartCount();
+                                                OrderCount();
+                                              });
+                                            },
+                                            child: Image.network(
+                                              image.toString(),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          child: Text(
+                                            text,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: imageurlData.asMap().entries.map((entry) {
+                          return GestureDetector(
+                            onTap: () => _controller.animateToPage(entry.key),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 4),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.blueAccent.withOpacity(
+                                    _current == entry.key ? 0.9 : 0.4),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: FutureBuilder<List<String>>(
-                        future: getItems(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Container();
-                          } else if (snapshot.hasData &&
-                              snapshot.data!.isNotEmpty) {
-                            List<String> items = snapshot.data!;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFC5DFF8),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                            bottomLeft: Radius.circular(30.0),
+                            bottomRight: Radius.circular(30.0),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.7),
+                              blurRadius: 5,
+                              spreadRadius: 0,
+                              offset: const Offset(0, 7),
+                            ),
+                          ]),
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(
                               children: [
                                 Container(
-                                  alignment: Alignment.center,
-                                  width: 180,
-                                  child: isSpinning
-                                      ? AnimatedContainer(
-                                          duration: Duration(milliseconds: 100),
-                                          child: Text(
-                                            items[random.nextInt(items.length)],
-                                            style: TextStyle(fontSize: 8),
-                                          ),
-                                        )
-                                      : Text(
-                                          items[slotindex],
-                                          style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 2, left: 10),
+                                  margin: EdgeInsets.only(left: 20, top: 15),
                                   child: Text(
-                                    "어떨까요??",
+                                    "오늘 뭐먹지??",
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 10, right: 10),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      primary: Colors.black,
-                                      alignment: Alignment.center,
-                                      padding: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 15,
-                                          bottom: 15),
-                                      backgroundColor: Color(0xFFFFD577),
-                                      side: BorderSide(
-                                        color: Colors.black,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      spinSlotMachine(items);
-                                    },
-                                    child: Text(
-                                      "다음\n" + "추천",
-                                      textAlign: TextAlign.center,
-                                      maxLines: 3,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                               ],
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10, bottom: 10),
+                            child: FutureBuilder<List<String>>(
+                              future: getItems(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return Container();
+                                } else if (snapshot.hasData &&
+                                    snapshot.data!.isNotEmpty) {
+                                  List<String> items = snapshot.data!;
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        width: 180,
+                                        child: isSpinning
+                                            ? AnimatedContainer(
+                                                duration:
+                                                    Duration(milliseconds: 100),
+                                                child: Text(
+                                                  items[random
+                                                      .nextInt(items.length)],
+                                                  style: TextStyle(fontSize: 8),
+                                                ),
+                                              )
+                                            : Text(
+                                                items[slotindex],
+                                                style: TextStyle(
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(top: 2, left: 10),
+                                        child: Text(
+                                          "어떨까요??",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            primary: Colors.black,
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                                top: 15,
+                                                bottom: 15),
+                                            backgroundColor: Color(0xFFFFD577),
+                                            side: BorderSide(
+                                              color: Colors.black,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            spinSlotMachine(items);
+                                          },
+                                          child: Text(
+                                            "다음\n" + "추천",
+                                            textAlign: TextAlign.center,
+                                            maxLines: 3,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 30,
+                      color: Colors.white,
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 15),
+                        child: Text(
+                          "이벤트 / 광고",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      color: Colors.grey,
+                      height: 100,
+                      child: Image.asset(
+                        'assets/images/bu1.jpg',
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      color: Colors.grey,
+                      height: 100,
+                      child: Image.asset(
+                        'assets/images/bu2.jpg',
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.fill,
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 30,
-                color: Colors.white,
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text(
-                    "이벤트 / 광고",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                alignment: Alignment.center,
-                color: Colors.grey,
-                height: 100,
-                child: Image.asset(
-                  'assets/images/bu1.jpg',
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                alignment: Alignment.center,
-                color: Colors.grey,
-                height: 100,
-                child: Image.asset(
-                  'assets/images/bu2.jpg',
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ],
-          ),
           bottomNavigationBar: Container(
             height: 70,
             child: ClipRRect(

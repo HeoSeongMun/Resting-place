@@ -22,6 +22,7 @@ class UpdateReview extends StatefulWidget {
 
 class _UpdateReview extends State<UpdateReview> {
   String savedText = "";
+  late double grade = 0;
   late TextEditingController reviewController =
       TextEditingController(text: widget.text);
   final _userID = FirebaseAuth.instance.currentUser;
@@ -42,6 +43,25 @@ class _UpdateReview extends State<UpdateReview> {
     });
   }
 
+  Future<void> gradeData() async {
+    QuerySnapshot querySnapshot = await product
+        .where('text', isEqualTo: widget.text)
+        .where('area_name', isEqualTo: widget.areaName)
+        .where('store_name', isEqualTo: widget.storeName)
+        .where('menu', isEqualTo: widget.menu)
+        .where('reviewtime', isEqualTo: widget.pasttime)
+        .where('userUid', isEqualTo: _userID!.uid)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      final String documentId = querySnapshot.docs[0].id;
+      final DocumentSnapshot documentSnapshot = querySnapshot.docs.first;
+      setState(() {
+        grade = double.parse(documentSnapshot['grade'].toString());
+        print(grade);
+      });
+    }
+  }
+
   Future<void> updateReviewText() async {
     QuerySnapshot querySnapshot = await product
         .where('text', isEqualTo: widget.text)
@@ -59,6 +79,12 @@ class _UpdateReview extends State<UpdateReview> {
         'text': savedText, // 수정하려는 필드 이름과 새로운 값
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    gradeData();
   }
 
   @override
@@ -167,9 +193,11 @@ class _UpdateReview extends State<UpdateReview> {
                   width: MediaQuery.of(context).size.width,
                   height: 100,
                   child: RatingBar.builder(
-                    initialRating: 3,
+                    initialRating: grade,
                     minRating: 1,
                     direction: Axis.horizontal,
+                    ignoreGestures: true,
+                    updateOnDrag: false,
                     allowHalfRating: false,
                     itemCount: 5,
                     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -177,9 +205,7 @@ class _UpdateReview extends State<UpdateReview> {
                       Icons.star,
                       color: Colors.amber,
                     ),
-                    onRatingUpdate: (rating) {
-                      print(rating);
-                    },
+                    onRatingUpdate: (_) {},
                   ),
                 ),
                 Container(

@@ -21,6 +21,7 @@ class WriteReview extends StatefulWidget {
 
 class _WriteReviewState extends State<WriteReview> {
   String savedText = "";
+  late double grade = 3;
   final TextEditingController reviewController = TextEditingController();
 
   final _userID = FirebaseAuth.instance.currentUser;
@@ -87,7 +88,6 @@ class _WriteReviewState extends State<WriteReview> {
     super.initState();
     nameData();
     imageUrlData();
-    orderboolreviewUpdate();
   }
 
   @override
@@ -207,7 +207,9 @@ class _WriteReviewState extends State<WriteReview> {
                       color: Colors.amber,
                     ),
                     onRatingUpdate: (rating) {
-                      print(rating);
+                      setState(() {
+                        grade = rating;
+                      });
                     },
                   ),
                 ),
@@ -274,6 +276,7 @@ class _WriteReviewState extends State<WriteReview> {
                             'userUid': _userID!.uid.toString(),
                             'imageUrl': widget.imageUrl,
                             'storeUid': widget.storeUid,
+                            'grade': grade,
                           });
                           await orderboolreviewUpdate();
                           Navigator.pop(context);

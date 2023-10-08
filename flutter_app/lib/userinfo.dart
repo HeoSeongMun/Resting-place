@@ -420,10 +420,9 @@ class _UserPage extends State<UserPage> {
                     }
                     break;
                   case 4: //마이휴잇
-                    final result = await Navigator.pushAndRemoveUntil(
+                    final result = await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => UserPage()),
-                      (route) => false,
                     );
                     if (result != null) {
                       setState(() {

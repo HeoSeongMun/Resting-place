@@ -7,6 +7,7 @@ import 'package:flutter_app/menu.dart';
 import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/userinfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class Restaurant extends StatefulWidget {
   Restaurant(this.areaName, this.imageUrl, {super.key});
@@ -23,14 +24,33 @@ class _Restaurant extends State<Restaurant> {
       FirebaseFirestore.instance.collection('order');
   CollectionReference cartcollection =
       FirebaseFirestore.instance.collection('shoppingBasket');
+  CollectionReference reviewcollection =
+      FirebaseFirestore.instance.collection('testreviewlist');
   final user = FirebaseAuth.instance.currentUser;
   int cartcount = 0;
   int ordercount = 0;
+  late int gradescount = 0;
+  late double averagegrade = 0;
 
   void initState() {
     super.initState();
     CartCount();
     OrderCount();
+  }
+
+  Future<AverageInfo> averageData(storename) async {
+    QuerySnapshot reviewsnapshot =
+        await reviewcollection.where('store_name', isEqualTo: storename).get();
+    int totalGrade = 0;
+    int numberOfGrades = reviewsnapshot.docs.length;
+    for (var doc in reviewsnapshot.docs) {
+      int grade = doc['grade'];
+      totalGrade += grade;
+    }
+    double averagegrade = totalGrade / numberOfGrades;
+    int gradescount = numberOfGrades;
+
+    return AverageInfo(averagegrade, gradescount);
   }
 
   @override
@@ -150,59 +170,149 @@ class _Restaurant extends State<Restaurant> {
                               documentSnapshot['signaturemenu'] == '') {
                             return Container();
                           }
-                          return Container(
-                            margin:
-                                EdgeInsets.only(left: 5, right: 5, bottom: 10),
-                            decoration: BoxDecoration(
-                                color: Color(0xFFffffff),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25.0),
-                                  topRight: Radius.circular(25.0),
-                                  bottomLeft: Radius.circular(25.0),
-                                  bottomRight: Radius.circular(25.0),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.7),
-                                    blurRadius: 5,
-                                    spreadRadius: 0,
-                                    offset: const Offset(0, 7),
+                          return FutureBuilder(
+                            future: averageData(
+                                documentSnapshot['storeName'].toString()),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<AverageInfo> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return SizedBox();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                double averagegrade =
+                                    snapshot.data!.averageGrade;
+                                int gradescount = snapshot.data!.gradesCount;
+                              }
+                              return Container(
+                                margin: EdgeInsets.only(
+                                    left: 5, right: 5, bottom: 10),
+                                decoration: BoxDecoration(
+                                    color: Color(0xFFffffff),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(25.0),
+                                      topRight: Radius.circular(25.0),
+                                      bottomLeft: Radius.circular(25.0),
+                                      bottomRight: Radius.circular(25.0),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.7),
+                                        blurRadius: 5,
+                                        spreadRadius: 0,
+                                        offset: const Offset(0, 7),
+                                      ),
+                                    ]),
+                                child: ListTile(
+                                  leading: Container(
+                                    margin: EdgeInsets.only(left: 5),
+                                    child: Image.network(
+                                      documentSnapshot['storeimageUrl'],
+                                      height: 120,
+                                      fit: BoxFit.fitHeight,
+                                    ),
                                   ),
-                                ]),
-                            child: ListTile(
-                              leading: Container(
-                                margin: EdgeInsets.only(left: 5),
-                                child: Image.network(
-                                  documentSnapshot['storeimageUrl'],
-                                  height: 120,
-                                  fit: BoxFit.fitHeight,
-                                ),
-                              ),
-                              title: Text(documentSnapshot['storeName']),
-                              subtitle: Container(
-                                margin: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  '대표메뉴: ' + documentSnapshot['signaturemenu'],
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ),
-                              onTap: () async {
-                                final result = await Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => Menu(
-                                        widget.areaName,
-                                        documentSnapshot['storeName'],
-                                        documentSnapshot['storeimageUrl']
-                                            .toString()),
+                                  title: Container(
+                                      margin:
+                                          EdgeInsets.only(top: 5, bottom: 5),
+                                      child:
+                                          Text(documentSnapshot['storeName'])),
+                                  subtitle: Row(
+                                    children: [
+                                      Container(
+                                        width: 170,
+                                        margin: EdgeInsets.only(top: 10),
+                                        child: Text(
+                                          '대표메뉴: ' +
+                                              documentSnapshot['signaturemenu'],
+                                          style: TextStyle(fontSize: 10),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(left: 3),
+                                            width: 70,
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              '평점 : ' +
+                                                  (snapshot.data!.averageGrade
+                                                          .isNaN
+                                                      ? '0'
+                                                      : snapshot
+                                                          .data!.averageGrade
+                                                          .toString()),
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.only(top: 2),
+                                                child: RatingBar.builder(
+                                                  initialRating: snapshot.data!
+                                                          .averageGrade.isNaN
+                                                      ? 0
+                                                      : snapshot
+                                                          .data!.averageGrade,
+                                                  minRating: 1,
+                                                  direction: Axis.horizontal,
+                                                  ignoreGestures: true,
+                                                  updateOnDrag: false,
+                                                  allowHalfRating: false,
+                                                  itemCount: 5,
+                                                  itemSize: 10,
+                                                  itemBuilder: (context, _) =>
+                                                      Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                  ),
+                                                  onRatingUpdate: (_) {},
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 5, top: 2),
+                                                child: Text(
+                                                  '(' +
+                                                      snapshot.data!.gradesCount
+                                                          .toString() +
+                                                      ')',
+                                                  style: TextStyle(fontSize: 8),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                                if (result != null) {
-                                  setState(() {
-                                    CartCount();
-                                  });
-                                }
-                              },
-                            ),
+                                  onTap: () async {
+                                    final result =
+                                        await Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Menu(
+                                            widget.areaName,
+                                            documentSnapshot['storeName'],
+                                            documentSnapshot['storeimageUrl']
+                                                .toString(),
+                                            snapshot.data!.averageGrade,
+                                            snapshot.data!.gradesCount),
+                                      ),
+                                    );
+                                    if (result != null) {
+                                      setState(() {
+                                        CartCount();
+                                      });
+                                    }
+                                  },
+                                ),
+                              );
+                            },
                           );
                         },
                       );
@@ -229,9 +339,10 @@ class _Restaurant extends State<Restaurant> {
               onTap: (int index) async {
                 switch (index) {
                   case 0: //검색
-                    final result = await Navigator.push(
+                    final result = await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => AreaSearch()),
+                      (route) => false,
                     );
                     if (result != null) {
                       setState(() {
@@ -469,4 +580,11 @@ class _Restaurant extends State<Restaurant> {
       ordercount = count;
     });
   }
+}
+
+class AverageInfo {
+  final double averageGrade;
+  final int gradesCount;
+
+  AverageInfo(this.averageGrade, this.gradesCount);
 }

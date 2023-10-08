@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui/add_image/Representative_image.dart';
+//import 'package:flutter_ui/add_image/Representative_image.dart';
 import 'package:flutter_ui/add_menu.dart';
 import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/open_business.dart';
@@ -40,7 +40,7 @@ class Menu extends StatelessWidget {
     userPickedImage = image;
   }
 
-  void showAlert(BuildContext context) {
+  /*void showAlert(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -50,7 +50,7 @@ class Menu extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -537,7 +537,7 @@ class Menu extends StatelessWidget {
                         ),
                         child: InkWell(
                           onTap: () {
-                            showAlert(context);
+                            //showAlert(context);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(30),

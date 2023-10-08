@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 class ReviewListPage extends StatelessWidget {
@@ -103,6 +104,10 @@ class ReviewListPage extends StatelessWidget {
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                      if (streamSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Container(child: Text('로딩중...'));
+                      }
                       if (!streamSnapshot.hasData ||
                           streamSnapshot.data!.docs.isEmpty) {
                         return Container(
@@ -134,18 +139,53 @@ class ReviewListPage extends StatelessWidget {
                                     .format(dateTime);
                             return ListTile(
                               //contentPadding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-                              title: Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: Text(
-                                  documents[index]['name'],
-                                  style: TextStyle(
-                                    fontSize: 18,
+                              title: Row(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      documents[index]['name'],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  Container(
+                                    alignment: Alignment.topCenter,
+                                    margin: EdgeInsets.only(left: 10),
+                                    width: 100,
+                                    child: RatingBar.builder(
+                                      initialRating: double.parse(
+                                          documents[index]['grade'].toString()),
+                                      minRating: 1,
+                                      direction: Axis.horizontal,
+                                      ignoreGestures: true,
+                                      updateOnDrag: false,
+                                      allowHalfRating: false,
+                                      itemCount: 5,
+                                      itemSize: 15,
+                                      itemBuilder: (context, _) => Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (_) {},
+                                    ),
+                                  ),
+                                ],
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      documents[index]['menu'],
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
                                   SizedBox(
                                     height: 20,
                                   ),

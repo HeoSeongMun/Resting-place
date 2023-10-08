@@ -352,7 +352,7 @@ class _AreaSearchState extends State<AreaSearch> {
                 onTap: (int index) async {
                   switch (index) {
                     case 0: //검색
-                      final result = await Navigator.push(
+                      final result = await Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => AreaSearch()),
                       );
