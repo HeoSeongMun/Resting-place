@@ -185,133 +185,307 @@ class _Restaurant extends State<Restaurant> {
                                     snapshot.data!.averageGrade;
                                 int gradescount = snapshot.data!.gradesCount;
                               }
-                              return Container(
-                                margin: EdgeInsets.only(
-                                    left: 5, right: 5, bottom: 10),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFFffffff),
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(25.0),
-                                      topRight: Radius.circular(25.0),
-                                      bottomLeft: Radius.circular(25.0),
-                                      bottomRight: Radius.circular(25.0),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.7),
-                                        blurRadius: 5,
-                                        spreadRadius: 0,
-                                        offset: const Offset(0, 7),
-                                      ),
-                                    ]),
-                                child: ListTile(
-                                  leading: Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    child: Image.network(
-                                      documentSnapshot['storeimageUrl'],
-                                      height: 120,
-                                      fit: BoxFit.fitHeight,
-                                    ),
-                                  ),
-                                  title: Container(
-                                      margin:
-                                          EdgeInsets.only(top: 5, bottom: 5),
-                                      child:
-                                          Text(documentSnapshot['storeName'])),
-                                  subtitle: Row(
-                                    children: [
-                                      Container(
-                                        width: 170,
-                                        margin: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          '대표메뉴: ' +
-                                              documentSnapshot['signaturemenu'],
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
+                              final bool status = documentSnapshot['status'];
+                              return status == false
+                                  ? Container(
+                                      margin: EdgeInsets.only(
+                                          left: 5, right: 5, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(25.0),
+                                            topRight: Radius.circular(25.0),
+                                            bottomLeft: Radius.circular(25.0),
+                                            bottomRight: Radius.circular(25.0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.7),
+                                              blurRadius: 5,
+                                              spreadRadius: 0,
+                                              offset: const Offset(0, 7),
+                                            ),
+                                          ]),
+                                      child: Stack(
                                         children: [
-                                          Container(
-                                            margin: EdgeInsets.only(left: 3),
-                                            width: 70,
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              '평점 : ' +
-                                                  (snapshot.data!.averageGrade
-                                                          .isNaN
-                                                      ? '0'
-                                                      : snapshot
-                                                          .data!.averageGrade
-                                                          .toString()),
-                                              style: TextStyle(fontSize: 12),
+                                          ListTile(
+                                            leading: Container(
+                                              margin: EdgeInsets.only(left: 5),
+                                              child: Image.network(
+                                                documentSnapshot[
+                                                    'storeimageUrl'],
+                                                height: 120,
+                                                fit: BoxFit.fitHeight,
+                                              ),
+                                            ),
+                                            title: Container(
+                                                margin: EdgeInsets.only(
+                                                    top: 5, bottom: 5),
+                                                child: Text(documentSnapshot[
+                                                    'storeName'])),
+                                            subtitle: Row(
+                                              children: [
+                                                Container(
+                                                  width: 170,
+                                                  margin:
+                                                      EdgeInsets.only(top: 10),
+                                                  child: Text(
+                                                    '대표메뉴: ' +
+                                                        documentSnapshot[
+                                                            'signaturemenu'],
+                                                    style:
+                                                        TextStyle(fontSize: 10),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 3),
+                                                      width: 70,
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        '평점 : ' +
+                                                            (snapshot
+                                                                    .data!
+                                                                    .averageGrade
+                                                                    .isNaN
+                                                                ? '0'
+                                                                : snapshot.data!
+                                                                    .averageGrade
+                                                                    .toString()),
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 2),
+                                                          child:
+                                                              RatingBar.builder(
+                                                            initialRating: snapshot
+                                                                    .data!
+                                                                    .averageGrade
+                                                                    .isNaN
+                                                                ? 0
+                                                                : snapshot.data!
+                                                                    .averageGrade,
+                                                            minRating: 1,
+                                                            direction:
+                                                                Axis.horizontal,
+                                                            ignoreGestures:
+                                                                true,
+                                                            updateOnDrag: false,
+                                                            allowHalfRating:
+                                                                false,
+                                                            itemCount: 5,
+                                                            itemSize: 10,
+                                                            itemBuilder:
+                                                                (context, _) =>
+                                                                    Icon(
+                                                              Icons.star,
+                                                              color:
+                                                                  Colors.amber,
+                                                            ),
+                                                            onRatingUpdate:
+                                                                (_) {},
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 5,
+                                                                  top: 2),
+                                                          child: Text(
+                                                            '(' +
+                                                                snapshot.data!
+                                                                    .gradesCount
+                                                                    .toString() +
+                                                                ')',
+                                                            style: TextStyle(
+                                                                fontSize: 8),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ),
                                           Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: [
                                               Container(
-                                                margin: EdgeInsets.only(top: 2),
-                                                child: RatingBar.builder(
-                                                  initialRating: snapshot.data!
-                                                          .averageGrade.isNaN
-                                                      ? 0
-                                                      : snapshot
-                                                          .data!.averageGrade,
-                                                  minRating: 1,
-                                                  direction: Axis.horizontal,
-                                                  ignoreGestures: true,
-                                                  updateOnDrag: false,
-                                                  allowHalfRating: false,
-                                                  itemCount: 5,
-                                                  itemSize: 10,
-                                                  itemBuilder: (context, _) =>
-                                                      Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  onRatingUpdate: (_) {},
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                    left: 5, top: 2),
+                                                margin: EdgeInsets.all(10),
                                                 child: Text(
-                                                  '(' +
-                                                      snapshot.data!.gradesCount
-                                                          .toString() +
-                                                      ')',
-                                                  style: TextStyle(fontSize: 8),
+                                                  '영업준비중',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.red[900]),
                                                 ),
                                               )
                                             ],
-                                          ),
+                                          )
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                  onTap: () async {
-                                    final result =
-                                        await Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => Menu(
-                                            widget.areaName,
-                                            documentSnapshot['storeName'],
-                                            documentSnapshot['storeimageUrl']
-                                                .toString(),
-                                            snapshot.data!.averageGrade,
-                                            snapshot.data!.gradesCount),
+                                    )
+                                  : Container(
+                                      margin: EdgeInsets.only(
+                                          left: 5, right: 5, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFffffff),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(25.0),
+                                            topRight: Radius.circular(25.0),
+                                            bottomLeft: Radius.circular(25.0),
+                                            bottomRight: Radius.circular(25.0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.7),
+                                              blurRadius: 5,
+                                              spreadRadius: 0,
+                                              offset: const Offset(0, 7),
+                                            ),
+                                          ]),
+                                      child: ListTile(
+                                        leading: Container(
+                                          margin: EdgeInsets.only(left: 5),
+                                          child: Image.network(
+                                            documentSnapshot['storeimageUrl'],
+                                            height: 120,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                        ),
+                                        title: Container(
+                                            margin: EdgeInsets.only(
+                                                top: 5, bottom: 5),
+                                            child: Text(
+                                                documentSnapshot['storeName'])),
+                                        subtitle: Row(
+                                          children: [
+                                            Container(
+                                              width: 170,
+                                              margin: EdgeInsets.only(top: 10),
+                                              child: Text(
+                                                '대표메뉴: ' +
+                                                    documentSnapshot[
+                                                        'signaturemenu'],
+                                                style: TextStyle(fontSize: 10),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(left: 3),
+                                                  width: 70,
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    '평점 : ' +
+                                                        (snapshot
+                                                                .data!
+                                                                .averageGrade
+                                                                .isNaN
+                                                            ? '0'
+                                                            : snapshot.data!
+                                                                .averageGrade
+                                                                .toString()),
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 2),
+                                                      child: RatingBar.builder(
+                                                        initialRating: snapshot
+                                                                .data!
+                                                                .averageGrade
+                                                                .isNaN
+                                                            ? 0
+                                                            : snapshot.data!
+                                                                .averageGrade,
+                                                        minRating: 1,
+                                                        direction:
+                                                            Axis.horizontal,
+                                                        ignoreGestures: true,
+                                                        updateOnDrag: false,
+                                                        allowHalfRating: false,
+                                                        itemCount: 5,
+                                                        itemSize: 10,
+                                                        itemBuilder:
+                                                            (context, _) =>
+                                                                Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                        ),
+                                                        onRatingUpdate: (_) {},
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 5, top: 2),
+                                                      child: Text(
+                                                        '(' +
+                                                            snapshot.data!
+                                                                .gradesCount
+                                                                .toString() +
+                                                            ')',
+                                                        style: TextStyle(
+                                                            fontSize: 8),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        onTap: () async {
+                                          if (documentSnapshot['status'] ==
+                                              true) {
+                                            final result =
+                                                await Navigator.of(context)
+                                                    .push(
+                                              MaterialPageRoute(
+                                                builder: (context) => Menu(
+                                                    widget.areaName,
+                                                    documentSnapshot[
+                                                        'storeName'],
+                                                    documentSnapshot[
+                                                            'storeimageUrl']
+                                                        .toString(),
+                                                    snapshot.data!.averageGrade,
+                                                    snapshot.data!.gradesCount),
+                                              ),
+                                            );
+                                            if (result != null) {
+                                              setState(() {
+                                                CartCount();
+                                              });
+                                            }
+                                          }
+                                        },
                                       ),
                                     );
-                                    if (result != null) {
-                                      setState(() {
-                                        CartCount();
-                                      });
-                                    }
-                                  },
-                                ),
-                              );
                             },
                           );
                         },
