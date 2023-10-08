@@ -22,7 +22,7 @@ class _Orderdelivery extends State<Orderdelivery> {
   List<dynamic> setOrder0 = [];
   List<dynamic> setOrder1 = [];
   List<dynamic> setOrder2 = [];
-  bool _isExpanded = false; // 컨테이너 확장 여부
+  final bool _isExpanded = false; // 컨테이너 확장 여부
 
   @override
   void initState() {
@@ -35,19 +35,19 @@ class _Orderdelivery extends State<Orderdelivery> {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 110,
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 35,
                 ),
                 decoration: BoxDecoration(
-                    color: Color(0xFFD2DAFF),
-                    borderRadius: BorderRadius.only(
+                    color: const Color(0xFFD2DAFF),
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30.0),
                       bottomRight: Radius.circular(30.0),
                     ),
@@ -61,7 +61,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                     ]),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(left: 5, right: 5),
+                  margin: const EdgeInsets.only(left: 5, right: 5),
                   alignment: Alignment.center,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,21 +80,21 @@ class _Orderdelivery extends State<Orderdelivery> {
                         ),
                       ),
                       Container(
-                        child: Text(
+                        child: const Text(
                           "배송현황",
                           style: TextStyle(
                             fontSize: 18,
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 60,
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               getOrderContainer(setOrder0),
@@ -130,18 +130,18 @@ class _Orderdelivery extends State<Orderdelivery> {
         DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
-        String area_name = data['area_name'];
-        order0.add(area_name);
-        String menu_name = data['name'];
-        order0.add(menu_name);
-        String order_time = formatTimestamp(data['ordertime']);
-        order0.add(order_time);
+        String areaName = data['area_name'];
+        order0.add(areaName);
+        String menuName = data['name'];
+        order0.add(menuName);
+        String orderTime = formatTimestamp(data['ordertime']);
+        order0.add(orderTime);
         String price = (int.parse(data['price']) * data['count']).toString();
         order0.add(price);
         String status = data['status'];
         order0.add(status);
-        String store_name = data['storeName'];
-        order0.add(store_name);
+        String storeName = data['storeName'];
+        order0.add(storeName);
         double indicatorValue = getProgressIndicator(data['status']);
         order0.add(indicatorValue);
         int count = data['count'];
@@ -224,14 +224,14 @@ class _Orderdelivery extends State<Orderdelivery> {
 //리니어인디케이터 및 주문건 상태 표시하는 컨테이너
   Widget getOrderContainer(List order) {
     if (order.isEmpty) {
-      return SizedBox();
+      return const SizedBox();
     } else {
       return Container(
         width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
         decoration: BoxDecoration(
-            color: Color(0xFFD2DAFF),
-            borderRadius: BorderRadius.only(
+            color: const Color(0xFFD2DAFF),
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30.0),
               topRight: Radius.circular(30.0),
               bottomLeft: Radius.circular(30.0),
@@ -250,7 +250,7 @@ class _Orderdelivery extends State<Orderdelivery> {
             Container(
               child: Column(
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
                     alignment: Alignment.center,
                     child: Center(
@@ -259,7 +259,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: order[1],
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                     fontSize: 17)),
@@ -268,41 +268,41 @@ class _Orderdelivery extends State<Orderdelivery> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 1.5,
                     color: Colors.grey,
                   ),
-                  SizedBox(height: 5),
-                  Container(
+                  const SizedBox(height: 5),
+                  SizedBox(
                     height: 50,
                     child: Center(
                       child: Text(
                         order[4], //주문 상태 표시
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width - 150,
                       height: 15,
                       child: LinearProgressIndicator(
                         value: order[6],
-                        valueColor: AlwaysStoppedAnimation<Color>(
+                        valueColor: const AlwaysStoppedAnimation<Color>(
                           Color(0xffFFB79E),
                         ),
                         backgroundColor: Colors.white,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Align(
@@ -315,12 +315,12 @@ class _Orderdelivery extends State<Orderdelivery> {
                           });
                         },
                         child: order[8]
-                            ? Text(
+                            ? const Text(
                                 '▽ 주문정보 닫기 ▽',
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.black54),
                               )
-                            : Text(
+                            : const Text(
                                 '▽ 주문정보 열기 ▽',
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.black54),
@@ -329,7 +329,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                     ),
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     height: order[8] ? null : 0,
                     child: Column(
                       children: [
@@ -338,7 +338,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                           height: 1.5,
                           color: Colors.grey,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
@@ -346,7 +346,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                             const SizedBox(width: 10),
                             Container(
                               width: MediaQuery.of(context).size.width - 200,
-                              margin: EdgeInsets.only(bottom: 15),
+                              margin: const EdgeInsets.only(bottom: 15),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -356,7 +356,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                                           200,
                                       child: RichText(
                                         text: TextSpan(children: <TextSpan>[
-                                          TextSpan(
+                                          const TextSpan(
                                             text: '주문 일자 :  ',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -364,7 +364,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                                           ),
                                           TextSpan(
                                               text: order[2],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black)),
                                         ]),
@@ -383,6 +383,73 @@ class _Orderdelivery extends State<Orderdelivery> {
                                                   color: Colors.black)),
                                           TextSpan(
                                               text: order[0],
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                        ]),
+                                      )),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                      alignment: Alignment.centerLeft,
+                                      width: MediaQuery.of(context).size.width -
+                                          200,
+                                      child: RichText(
+                                        text: TextSpan(children: <TextSpan>[
+                                          const TextSpan(
+                                              text: '점포 명 :  ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          TextSpan(
+                                              text: order[5],
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                        ]),
+                                      )),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                      alignment: Alignment.centerLeft,
+                                      width: MediaQuery.of(context).size.width -
+                                          200,
+                                      child: RichText(
+                                        text: TextSpan(children: <TextSpan>[
+                                          const TextSpan(
+                                              text: '메뉴 이름 :  ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          TextSpan(
+                                              text: order[1],
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          TextSpan(
+                                              text: '   ${order[7]}개',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                        ]),
+                                      )),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                      alignment: Alignment.centerLeft,
+                                      width: MediaQuery.of(context).size.width -
+                                          200,
+                                      child: RichText(
+                                        text: TextSpan(children: <TextSpan>[
+                                          const TextSpan(
+                                              text: '주문 금액 :  ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          TextSpan(
+                                              text: order[3] + ' ',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          const TextSpan(
+                                              text: '원',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black)),
@@ -395,83 +462,14 @@ class _Orderdelivery extends State<Orderdelivery> {
                                           200,
                                       child: RichText(
                                         text: TextSpan(children: <TextSpan>[
-                                          TextSpan(
-                                              text: '점포 명 :  ',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                          TextSpan(
-                                              text: order[5],
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                        ]),
-                                      )),
-                                  SizedBox(height: 10),
-                                  Container(
-                                      alignment: Alignment.centerLeft,
-                                      width: MediaQuery.of(context).size.width -
-                                          200,
-                                      child: RichText(
-                                        text: TextSpan(children: <TextSpan>[
-                                          TextSpan(
-                                              text: '메뉴 이름 :  ',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                          TextSpan(
-                                              text: order[1],
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                          TextSpan(
-                                              text: '   ' +
-                                                  order[7].toString() +
-                                                  '개',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                        ]),
-                                      )),
-                                  SizedBox(height: 10),
-                                  Container(
-                                      alignment: Alignment.centerLeft,
-                                      width: MediaQuery.of(context).size.width -
-                                          200,
-                                      child: RichText(
-                                        text: TextSpan(children: <TextSpan>[
-                                          TextSpan(
-                                              text: '주문 금액 :  ',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                          TextSpan(
-                                              text: order[3] + ' ',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                          TextSpan(
-                                              text: '원',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black)),
-                                        ]),
-                                      )),
-                                  SizedBox(height: 10),
-                                  Container(
-                                      alignment: Alignment.centerLeft,
-                                      width: MediaQuery.of(context).size.width -
-                                          200,
-                                      child: RichText(
-                                        text: TextSpan(children: <TextSpan>[
-                                          TextSpan(
+                                          const TextSpan(
                                               text: '주문 번호 :  ',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black)),
                                           TextSpan(
                                               text: order[9] + ' ',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black)),
                                         ]),
@@ -479,15 +477,15 @@ class _Orderdelivery extends State<Orderdelivery> {
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 30,
                             ),
                             Container(
-                                margin: EdgeInsets.only(bottom: 15),
+                                margin: const EdgeInsets.only(bottom: 15),
                                 child: Column(
                                   children: [
                                     Container(
-                                      child: Center(
+                                      child: const Center(
                                         child: Text(
                                           '조리완료\n예상시간',
                                           style: TextStyle(
@@ -496,9 +494,9 @@ class _Orderdelivery extends State<Orderdelivery> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
                                     Container(
-                                      child: Center(
+                                      child: const Center(
                                         child: Text(
                                           '오후 11시 30분',
                                           style: TextStyle(
@@ -509,7 +507,7 @@ class _Orderdelivery extends State<Orderdelivery> {
                                     )
                                   ],
                                 )),
-                            SizedBox(width: 20)
+                            const SizedBox(width: 20)
                           ],
                         ),
                       ],

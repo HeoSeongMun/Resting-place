@@ -37,6 +37,7 @@ class _AreaSearchState extends State<AreaSearch> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
     CartCount();
@@ -71,17 +72,17 @@ class _AreaSearchState extends State<AreaSearch> {
       child: MaterialApp(
         theme: ThemeData(fontFamily: 'jalnan'),
         home: Scaffold(
-          backgroundColor: Color(0xFFEEF1FF),
+          backgroundColor: const Color(0xFFEEF1FF),
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: Color(0xFFD2DAFF),
-                      borderRadius: BorderRadius.only(
+                      color: const Color(0xFFD2DAFF),
+                      borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(30.0),
                         bottomRight: Radius.circular(30.0),
                       ),
@@ -95,7 +96,7 @@ class _AreaSearchState extends State<AreaSearch> {
                       ]),
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 35,
                       ),
                       Row(
@@ -118,13 +119,13 @@ class _AreaSearchState extends State<AreaSearch> {
                                     searchText = text;
                                   });
                                 },
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 15,
                                 ),
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white70,
-                                  prefixIcon: Icon(
+                                  prefixIcon: const Icon(
                                     Icons.search,
                                   ),
                                   suffixIcon: focusNode.hasFocus
@@ -135,7 +136,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                               searchText = "";
                                             });
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.cancel,
                                             size: 20,
                                           ),
@@ -147,7 +148,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                               searchText = "";
                                             });
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.cancel,
                                             size: 20,
                                           ),
@@ -155,17 +156,17 @@ class _AreaSearchState extends State<AreaSearch> {
                                   hintText: '검색',
                                   labelStyle:
                                       TextStyle(color: Colors.grey[400]),
-                                  focusedBorder: OutlineInputBorder(
+                                  focusedBorder: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFC5DFF8)),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(30))),
-                                  enabledBorder: OutlineInputBorder(
+                                  enabledBorder: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFC5DFF8)),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(30))),
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFC5DFF8)),
                                       borderRadius: BorderRadius.all(
@@ -183,11 +184,12 @@ class _AreaSearchState extends State<AreaSearch> {
                   height: 20,
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  margin:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                   height: MediaQuery.of(context).size.height - 220,
                   decoration: BoxDecoration(
-                      color: Color(0xFFC5DFF8),
-                      borderRadius: BorderRadius.only(
+                      color: const Color(0xFFC5DFF8),
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30.0),
                         topRight: Radius.circular(30.0),
                         bottomLeft: Radius.circular(30.0),
@@ -208,8 +210,8 @@ class _AreaSearchState extends State<AreaSearch> {
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.only(left: 10, top: 20),
-                              child: Text(
+                              margin: const EdgeInsets.only(left: 10, top: 20),
+                              child: const Text(
                                 "검색된 휴게소",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
@@ -234,11 +236,11 @@ class _AreaSearchState extends State<AreaSearch> {
                                   String data1 = uniqueData[index]; // imageUrl
                                   if (searchText.isEmpty) {
                                     return Container(
-                                      margin: EdgeInsets.only(
+                                      margin: const EdgeInsets.only(
                                           left: 5, right: 5, bottom: 10),
                                       decoration: BoxDecoration(
-                                          color: Color(0xFFffffff),
-                                          borderRadius: BorderRadius.only(
+                                          color: const Color(0xFFffffff),
+                                          borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(25.0),
                                             topRight: Radius.circular(25.0),
                                             bottomLeft: Radius.circular(25.0),
@@ -264,7 +266,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                         ),
                                         subtitle: Text(
                                           documentSnapshot['direction'],
-                                          style: TextStyle(fontSize: 10),
+                                          style: const TextStyle(fontSize: 10),
                                         ),
                                         onTap: () async {
                                           final result =
@@ -337,10 +339,10 @@ class _AreaSearchState extends State<AreaSearch> {
               ],
             ),
           ),
-          bottomNavigationBar: Container(
+          bottomNavigationBar: SizedBox(
             height: 70,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(25.0),
                 topRight: Radius.circular(25.0),
               ),
@@ -354,7 +356,8 @@ class _AreaSearchState extends State<AreaSearch> {
                     case 0: //검색
                       final result = await Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => AreaSearch()),
+                        MaterialPageRoute(
+                            builder: (context) => const AreaSearch()),
                       );
                       if (result != null) {
                         setState(() {
@@ -366,7 +369,7 @@ class _AreaSearchState extends State<AreaSearch> {
                     case 1: //장바구니
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Cart()),
+                        MaterialPageRoute(builder: (context) => const Cart()),
                       );
                       if (result != null) {
                         setState(() {
@@ -378,7 +381,7 @@ class _AreaSearchState extends State<AreaSearch> {
                     case 2: //홈
                       final result = await Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => const Home()),
                         (route) => false,
                       );
                       if (result != null) {
@@ -391,7 +394,8 @@ class _AreaSearchState extends State<AreaSearch> {
                     case 3: //주문내역
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => OrderedList()),
+                        MaterialPageRoute(
+                            builder: (context) => const OrderedList()),
                       );
                       if (result != null) {
                         setState(() {
@@ -419,7 +423,7 @@ class _AreaSearchState extends State<AreaSearch> {
                   BottomNavigationBarItem(
                     icon: Stack(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -430,10 +434,10 @@ class _AreaSearchState extends State<AreaSearch> {
                         Positioned(
                           top: 0,
                           right: 3,
-                          child: Container(
+                          child: SizedBox(
                             width: 15,
                             height: 15,
-                            child: Text(
+                            child: const Text(
                               '',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -447,7 +451,7 @@ class _AreaSearchState extends State<AreaSearch> {
                   BottomNavigationBarItem(
                     icon: Stack(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -462,13 +466,13 @@ class _AreaSearchState extends State<AreaSearch> {
                             child: Container(
                               width: 15,
                               height: 15,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
                               child: Text(
                                 cartcount.toString(),
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -480,7 +484,7 @@ class _AreaSearchState extends State<AreaSearch> {
                   BottomNavigationBarItem(
                     icon: Stack(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -491,10 +495,10 @@ class _AreaSearchState extends State<AreaSearch> {
                         Positioned(
                           top: 0,
                           right: 3,
-                          child: Container(
+                          child: SizedBox(
                             width: 15,
                             height: 15,
-                            child: Text(
+                            child: const Text(
                               '',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -508,7 +512,7 @@ class _AreaSearchState extends State<AreaSearch> {
                   BottomNavigationBarItem(
                     icon: Stack(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -523,13 +527,13 @@ class _AreaSearchState extends State<AreaSearch> {
                             child: Container(
                               width: 15,
                               height: 15,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
                               child: Text(
                                 ordercount.toString(),
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -541,7 +545,7 @@ class _AreaSearchState extends State<AreaSearch> {
                   BottomNavigationBarItem(
                     icon: Stack(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -552,10 +556,10 @@ class _AreaSearchState extends State<AreaSearch> {
                         Positioned(
                           top: 0,
                           right: 3,
-                          child: Container(
+                          child: SizedBox(
                             width: 15,
                             height: 15,
-                            child: Text(
+                            child: const Text(
                               '',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,

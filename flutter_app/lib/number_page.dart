@@ -22,7 +22,7 @@ class _NumberPageState extends State<NumberPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-                "도착 예상 시간을 정해주세요! ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, "0")} ${timeFormat}",
+                "도착 예상 시간을 정해주세요! ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, "0")} $timeFormat",
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             const SizedBox(
@@ -50,7 +50,7 @@ class _NumberPageState extends State<NumberPage> {
                     },
                     textStyle: TextStyle(color: Colors.grey[400], fontSize: 20),
                     selectedTextStyle:
-                        TextStyle(color: Colors.black, fontSize: 30),
+                        const TextStyle(color: Colors.black, fontSize: 30),
                     decoration: const BoxDecoration(
                       border: Border(
                           top: BorderSide(
@@ -74,7 +74,7 @@ class _NumberPageState extends State<NumberPage> {
                     },
                     textStyle: TextStyle(color: Colors.grey[400], fontSize: 20),
                     selectedTextStyle:
-                        TextStyle(color: Colors.black, fontSize: 30),
+                        const TextStyle(color: Colors.black, fontSize: 30),
                     decoration: const BoxDecoration(
                       border: Border(
                           top: BorderSide(

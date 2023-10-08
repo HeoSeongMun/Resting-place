@@ -42,7 +42,7 @@ class _PayComplete extends State<PayComplete> {
               Container(
                 //color: Colors.red,
                 alignment: Alignment.topCenter,
-                margin: EdgeInsets.only(top: 50),
+                margin: const EdgeInsets.only(top: 50),
                 width: 150,
                 height: 150,
                 child: Image.asset(
@@ -54,11 +54,11 @@ class _PayComplete extends State<PayComplete> {
               Container(
                 //color: Colors.red,
                 alignment: Alignment.topCenter,
-                margin: EdgeInsets.only(top: 15),
+                margin: const EdgeInsets.only(top: 15),
                 width: 350,
                 child: Text(
-                  '총' + widget.saveMileage.toString() + '원이 마일리지로',
-                  style: TextStyle(
+                  '총${widget.saveMileage}원이 마일리지로',
+                  style: const TextStyle(
                     fontSize: 20.0, // 글자 크기
                     color: Colors.black, // 색상
                     letterSpacing: 3.0,
@@ -68,7 +68,7 @@ class _PayComplete extends State<PayComplete> {
               Container(
                 alignment: Alignment.topCenter,
                 //color: Colors.red,
-                child: Text(
+                child: const Text(
                   "적립되었습니다!",
                   style: TextStyle(
                     fontSize: 20.0, // 글자 크기
@@ -79,31 +79,31 @@ class _PayComplete extends State<PayComplete> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20),
                 color: Colors.black,
                 height: 5,
                 width: 340,
               ),
               Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 25),
+                  margin: const EdgeInsets.only(top: 25),
                   //color: Colors.red,
                   width: 340,
-                  child: Text("결제정보",
+                  child: const Text("결제정보",
                       style: TextStyle(
                         fontSize: 17.0,
                         fontWeight: FontWeight.normal,
                         color: Colors.black,
                       ))),
               Container(
-                margin: EdgeInsets.only(top: 25),
+                margin: const EdgeInsets.only(top: 25),
                 color: Colors.black26,
                 height: 2,
                 width: 340,
               ),
               Container(
                 width: 340,
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   left: 15,
                   right: 15,
                   top: 20,
@@ -114,7 +114,7 @@ class _PayComplete extends State<PayComplete> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
-                      children: [
+                      children: const [
                         Text(
                           "주문금액",
                           style: TextStyle(
@@ -130,8 +130,8 @@ class _PayComplete extends State<PayComplete> {
                     Column(
                       children: [
                         Text(
-                          widget.total + '원',
-                          style: TextStyle(
+                          '${widget.total}원',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -144,8 +144,8 @@ class _PayComplete extends State<PayComplete> {
               Container(
                 height: 45,
                 width: 340,
-                margin: EdgeInsets.only(top: 20),
-                color: Color(0xffD2DAFF),
+                margin: const EdgeInsets.only(top: 20),
+                color: const Color(0xffD2DAFF),
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,8 +166,8 @@ class _PayComplete extends State<PayComplete> {
                         alignment: Alignment.topLeft,
                         margin: const EdgeInsets.only(top: 15, right: 15),
                         child: Text(
-                          widget.discount.toString() + '원',
-                          style: TextStyle(
+                          '${widget.discount}원',
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
@@ -179,8 +179,8 @@ class _PayComplete extends State<PayComplete> {
               Container(
                 height: 150,
                 width: 340,
-                margin: EdgeInsets.only(top: 10),
-                color: Color(0xffD2DAFF),
+                margin: const EdgeInsets.only(top: 10),
+                color: const Color(0xffD2DAFF),
                 child: StreamBuilder(
                   stream: ordercollection
                       .where('userUid', isEqualTo: _userID!.uid)
@@ -191,7 +191,7 @@ class _PayComplete extends State<PayComplete> {
                     if (streamSnapshot.connectionState ==
                         ConnectionState.waiting) {
                       // 로딩 상태 처리
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }
                     if (streamSnapshot.hasError) {
                       // 에러 처리
@@ -216,27 +216,27 @@ class _PayComplete extends State<PayComplete> {
                             return timeA.compareTo(timeB);
                           });
                           return Container(
-                            margin: EdgeInsets.all(10),
+                            margin: const EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width: 180,
                                       child: Text(
                                         sortedDocs[index]['storeName']
                                             .toString(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 80,
                                     ),
-                                    Text(
+                                    const Text(
                                       '주문번호',
                                       style: TextStyle(
                                         fontSize: 15,
@@ -245,20 +245,20 @@ class _PayComplete extends State<PayComplete> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                         width: 180,
                                         child: Text(sortedDocs[index]['name']
                                             .toString())),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 105,
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(top: 5),
+                                      margin: const EdgeInsets.only(top: 5),
                                       child: Text(sortedDocs[index]
                                               ['ordernumber']
                                           .toString()),
@@ -271,16 +271,16 @@ class _PayComplete extends State<PayComplete> {
                         },
                       );
                     }
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
               Container(
                 alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20),
                 //color: Colors.red,
                 width: 340,
-                child: Text(
+                child: const Text(
                   "결제 금액",
                   style: TextStyle(
                     fontSize: 14,
@@ -290,17 +290,17 @@ class _PayComplete extends State<PayComplete> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 15),
+                margin: const EdgeInsets.only(top: 15),
                 color: Colors.black26,
                 height: 2,
                 width: 340,
               ),
               Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top: 20),
+                  margin: const EdgeInsets.only(top: 20),
                   //color: Colors.red,
                   width: 340,
-                  child: Text("최종 결제 금액",
+                  child: const Text("최종 결제 금액",
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
@@ -308,16 +308,16 @@ class _PayComplete extends State<PayComplete> {
                       ))),
               Container(
                   alignment: Alignment.topRight,
-                  margin: EdgeInsets.only(top: 30, bottom: 20),
+                  margin: const EdgeInsets.only(top: 30, bottom: 20),
                   //color: Colors.red,
                   width: 340,
-                  child: Text(widget.finalprice.toString() + '원',
-                      style: TextStyle(
+                  child: Text('${widget.finalprice}원',
+                      style: const TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ))),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Expanded(
@@ -325,7 +325,7 @@ class _PayComplete extends State<PayComplete> {
                   onTap: () async {
                     final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                     );
                     if (result != null) {
                       setState(() {
@@ -338,7 +338,7 @@ class _PayComplete extends State<PayComplete> {
                     alignment: Alignment.center,
                     width: MediaQuery.of(context).size.width,
                     height: double.infinity,
-                    color: Color(0xffFFB79E),
+                    color: const Color(0xffFFB79E),
                     child: const Text(
                       "확인",
                       style: TextStyle(

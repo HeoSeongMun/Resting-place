@@ -23,29 +23,29 @@ class UserInfoEditScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: Text('사용자 정보 수정'),
+          title: const Text('사용자 정보 수정'),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Row(
                 children: [
                   Container(
                     width: 60,
-                    margin: EdgeInsets.only(left: 15),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 15),
+                    child: const Text(
                       "이름",
                       style: TextStyle(
                         fontSize: 13,
@@ -56,7 +56,7 @@ class UserInfoEditScreen extends StatelessWidget {
                   Container(
                     width: 280,
                     height: 40,
-                    margin: EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(left: 10),
                     child: TextField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -64,32 +64,32 @@ class UserInfoEditScreen extends StatelessWidget {
                             color: Colors.grey[300],
                             fontStyle: FontStyle.italic,
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                           )),
                     ),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 children: [
                   Container(
                     width: 60,
-                    margin: EdgeInsets.only(left: 15),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 15),
+                    child: const Text(
                       "이메일",
                       style: TextStyle(
                         fontSize: 13,
@@ -100,23 +100,23 @@ class UserInfoEditScreen extends StatelessWidget {
                   Container(
                     width: 280,
                     height: 40,
-                    margin: EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(left: 10),
                     child: TextField(
                       controller: emailController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.grey[350],
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(13)),
                           borderSide:
                               BorderSide(width: 1, color: Colors.black12),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(13)),
                           borderSide:
                               BorderSide(width: 1, color: Colors.black12),
                         ),
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(13)),
                         ),
                       ),
@@ -125,15 +125,15 @@ class UserInfoEditScreen extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 children: [
                   Container(
                     width: 60,
-                    margin: EdgeInsets.only(left: 15),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 15),
+                    child: const Text(
                       "비밀번호",
                       style: TextStyle(
                         fontSize: 13,
@@ -144,11 +144,11 @@ class UserInfoEditScreen extends StatelessWidget {
                   Container(
                     width: 280,
                     height: 40,
-                    margin: EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(left: 10),
                     child: TextField(
                       controller: pwController1,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
@@ -166,18 +166,18 @@ class UserInfoEditScreen extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 70,
                   ),
                   Container(
                     width: 280,
                     height: 40,
-                    margin: EdgeInsets.only(left: 15),
+                    margin: const EdgeInsets.only(left: 15),
                     child: TextField(
                       controller: pwController2,
                       obscureText: true,
@@ -187,32 +187,32 @@ class UserInfoEditScreen extends StatelessWidget {
                           hintStyle: TextStyle(
                               color: Colors.grey[400],
                               fontStyle: FontStyle.italic),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                           )),
                     ),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
                 children: [
                   Container(
                     width: 60,
-                    margin: EdgeInsets.only(left: 15),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 15),
+                    child: const Text(
                       "휴대전화",
                       style: TextStyle(
                         fontSize: 13,
@@ -223,24 +223,24 @@ class UserInfoEditScreen extends StatelessWidget {
                   Container(
                     width: 55,
                     height: 40,
-                    margin: EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(left: 10),
                     child: TextField(
                       decoration: InputDecoration(
                           isDense: true,
                           hintText: "010",
                           hintStyle:
                               TextStyle(color: Colors.grey[400], fontSize: 15),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                           )),
                     ),
@@ -248,24 +248,24 @@ class UserInfoEditScreen extends StatelessWidget {
                   Container(
                     width: 70,
                     height: 40,
-                    margin: EdgeInsets.only(left: 5),
+                    margin: const EdgeInsets.only(left: 5),
                     child: TextField(
                       decoration: InputDecoration(
                           isDense: true,
                           hintText: "0000",
                           hintStyle:
                               TextStyle(color: Colors.grey[400], fontSize: 15),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                           )),
                     ),
@@ -273,46 +273,46 @@ class UserInfoEditScreen extends StatelessWidget {
                   Container(
                     width: 70,
                     height: 40,
-                    margin: EdgeInsets.only(left: 5),
+                    margin: const EdgeInsets.only(left: 5),
                     child: TextField(
                       decoration: InputDecoration(
                           isDense: true,
                           hintText: "0000",
                           hintStyle:
                               TextStyle(color: Colors.grey[400], fontSize: 15),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                           )),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 5),
+                    margin: const EdgeInsets.only(left: 5),
                     child: ElevatedButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
+                          foregroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),
                           ),
-                          minimumSize: Size(60, 40),
-                          primary: Colors.black,
-                          backgroundColor: Color(0xFFB1B2FF),
+                          minimumSize: const Size(60, 40),
+                          backgroundColor: const Color(0xFFB1B2FF),
                           shadowColor: Colors.black,
                           elevation: 3,
-                          side: BorderSide(
+                          side: const BorderSide(
                             color: Color.fromARGB(255, 153, 154, 221),
                             width: 2,
                           )),
-                      child: Text(
+                      child: const Text(
                         "인증요청",
                         style: TextStyle(
                           fontSize: 10,
@@ -323,23 +323,23 @@ class UserInfoEditScreen extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 85,
                   ),
                   Container(
                     alignment: Alignment.center,
                     height: 40,
-                    padding: EdgeInsets.only(left: 2, right: 2),
+                    padding: const EdgeInsets.only(left: 2, right: 2),
                     decoration: BoxDecoration(
-                      color: Color(0xFFB1B2FF),
+                      color: const Color(0xFFB1B2FF),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
+                    child: const Text(
                       "인증번호 입력",
                       style: TextStyle(
                         fontSize: 10,
@@ -350,46 +350,46 @@ class UserInfoEditScreen extends StatelessWidget {
                   Container(
                     width: 210,
                     height: 40,
-                    margin: EdgeInsets.only(left: 2),
+                    margin: const EdgeInsets.only(left: 2),
                     child: TextField(
                       decoration: InputDecoration(
                           isDense: true,
                           hintStyle:
                               TextStyle(color: Colors.grey[400], fontSize: 15),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                             borderSide:
                                 BorderSide(width: 2, color: Colors.black12),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                           )),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               ElevatedButton(
                 onPressed: () async {
-                  User? _user = _authentication.currentUser;
-                  if (_user != null) {
+                  User? user = _authentication.currentUser;
+                  if (user != null) {
                     if (nameController.text != "") {
                       if (pwController1.text != "" &&
                           pwController2.text != "" &&
                           pwController1.text == pwController2.text) {
-                        _user.updatePassword(pwController2.text);
+                        user.updatePassword(pwController2.text);
                         Query query =
-                            product.where('userUid', isEqualTo: _user.uid);
+                            product.where('userUid', isEqualTo: user.uid);
                         QuerySnapshot querySnapshot = await query.get();
-                        final docs_id = querySnapshot.docs[0].id;
-                        product.doc('${docs_id}').update({
+                        final docsId = querySnapshot.docs[0].id;
+                        product.doc(docsId).update({
                           'name': nameController.text,
                           'password': pwController2.text,
                         });
@@ -397,7 +397,7 @@ class UserInfoEditScreen extends StatelessWidget {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text(
+                                title: const Text(
                                   '변경되었습니다.',
                                   style: TextStyle(
                                       fontSize: 20,
@@ -410,7 +410,7 @@ class UserInfoEditScreen extends StatelessWidget {
                                         //onWillpop에 false 전달되어 앱이 종료되지 않는다.
                                         Navigator.pop(context, false);
                                       },
-                                      child: Text('확인')),
+                                      child: const Text('확인')),
                                 ],
                               );
                             });
@@ -426,20 +426,20 @@ class UserInfoEditScreen extends StatelessWidget {
                   }
                 },
                 style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  minimumSize: Size(300, 40),
-                  primary: Colors.black,
-                  backgroundColor: Color(0xFFEEF1FF),
+                  minimumSize: const Size(300, 40),
+                  backgroundColor: const Color(0xFFEEF1FF),
                   shadowColor: Colors.black,
                   elevation: 3,
-                  side: BorderSide(
+                  side: const BorderSide(
                     color: Colors.black38,
                     width: 2,
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "저장",
                   style: TextStyle(
                     fontSize: 20,

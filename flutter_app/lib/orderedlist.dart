@@ -8,7 +8,8 @@ import 'package:flutter_app/write_review.dart';
 import 'package:intl/intl.dart';
 
 class OrderedList extends StatefulWidget {
-  OrderedList({super.key});
+  const OrderedList({super.key});
+  @override
   _OrderedList createState() => _OrderedList();
 }
 
@@ -30,6 +31,7 @@ class _OrderedList extends State<OrderedList> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
   }
@@ -48,16 +50,16 @@ class _OrderedList extends State<OrderedList> {
       child: MaterialApp(
         theme: ThemeData(fontFamily: 'jalnan'),
         home: Scaffold(
-            backgroundColor: Color(0xFFEEF1FF),
+            backgroundColor: const Color(0xFFEEF1FF),
             body: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                    padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                        color: Color(0xFFD2DAFF),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xFFD2DAFF),
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(30.0),
                           bottomRight: Radius.circular(30.0),
                         ),
@@ -71,7 +73,7 @@ class _OrderedList extends State<OrderedList> {
                         ]),
                     child: Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 35,
                         ),
                         Row(
@@ -94,13 +96,13 @@ class _OrderedList extends State<OrderedList> {
                                       searchText = text;
                                     });
                                   },
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 15,
                                   ),
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white70,
-                                    prefixIcon: Icon(
+                                    prefixIcon: const Icon(
                                       Icons.search,
                                     ),
                                     suffixIcon: focusNode.hasFocus
@@ -111,7 +113,7 @@ class _OrderedList extends State<OrderedList> {
                                                 searchText = "";
                                               });
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.cancel,
                                               size: 20,
                                             ),
@@ -123,7 +125,7 @@ class _OrderedList extends State<OrderedList> {
                                                 searchText = "";
                                               });
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.cancel,
                                               size: 20,
                                             ),
@@ -131,17 +133,17 @@ class _OrderedList extends State<OrderedList> {
                                     hintText: '검색',
                                     labelStyle:
                                         TextStyle(color: Colors.grey[400]),
-                                    focusedBorder: OutlineInputBorder(
+                                    focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFD2DAFF)),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(30))),
-                                    enabledBorder: OutlineInputBorder(
+                                    enabledBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFD2DAFF)),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(30))),
-                                    border: OutlineInputBorder(
+                                    border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFD2DAFF)),
                                         borderRadius: BorderRadius.all(
@@ -155,14 +157,15 @@ class _OrderedList extends State<OrderedList> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    margin:
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     decoration: BoxDecoration(
-                        color: Color(0xffFFB79E),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xffFFB79E),
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30.0),
                           topRight: Radius.circular(30.0),
                           bottomLeft: Radius.circular(30.0),
@@ -183,8 +186,9 @@ class _OrderedList extends State<OrderedList> {
                           child: Column(
                             children: [
                               Container(
-                                margin: EdgeInsets.only(left: 10, top: 20),
-                                child: Text(
+                                margin:
+                                    const EdgeInsets.only(left: 10, top: 20),
+                                child: const Text(
                                   "진행중",
                                   style: TextStyle(
                                       fontSize: 18,
@@ -195,7 +199,7 @@ class _OrderedList extends State<OrderedList> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 5, right: 5),
+                          margin: const EdgeInsets.only(left: 5, right: 5),
                           child: StreamBuilder(
                             stream: product
                                 .where('userUid', isEqualTo: _userID!.uid)
@@ -216,7 +220,7 @@ class _OrderedList extends State<OrderedList> {
                                 return ListView.builder(
                                   shrinkWrap: true, // 리스트뷰 크기를 자동으로 조정
                                   physics:
-                                      NeverScrollableScrollPhysics(), // 스크롤 방지
+                                      const NeverScrollableScrollPhysics(), // 스크롤 방지
                                   itemCount: streamSnapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
                                     final List<DocumentSnapshot> sortedDocs =
@@ -250,28 +254,29 @@ class _OrderedList extends State<OrderedList> {
                                               .doc(documentID)
                                               .update({'status': '완료'});
                                         },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color(0xff92ABEB),
+                                        ),
                                         child: Text(
                                           '수령 완료',
                                           style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.black),
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Color(0xff92ABEB),
-                                        ),
                                       );
                                     } else {
-                                      actionButton = SizedBox(
+                                      actionButton = const SizedBox(
                                         height: 50,
                                       ); // 상태가 다른 경우 버튼을 숨김
                                     }
                                     if (searchText.isEmpty) {
                                       return Container(
-                                        margin: EdgeInsets.only(
+                                        margin: const EdgeInsets.only(
                                             left: 5, right: 5, bottom: 10),
                                         decoration: BoxDecoration(
-                                            color: Color(0xFFffffff),
-                                            borderRadius: BorderRadius.only(
+                                            color: const Color(0xFFffffff),
+                                            borderRadius:
+                                                const BorderRadius.only(
                                               topLeft: Radius.circular(25.0),
                                               topRight: Radius.circular(25.0),
                                               bottomLeft: Radius.circular(25.0),
@@ -303,22 +308,24 @@ class _OrderedList extends State<OrderedList> {
                                                             .start,
                                                     children: <Widget>[
                                                       Container(
-                                                        margin: EdgeInsets.only(
+                                                        margin: const EdgeInsets
+                                                                .only(
                                                             left: 10, top: 10),
                                                         child: Text(
                                                           sortedDocs[index]
                                                               ['area_name'],
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 15,
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: 15,
                                                       ),
                                                       Container(
-                                                        margin: EdgeInsets.only(
-                                                            left: 12),
+                                                        margin: const EdgeInsets
+                                                            .only(left: 12),
                                                         child: Column(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -333,11 +340,12 @@ class _OrderedList extends State<OrderedList> {
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Row(
@@ -350,28 +358,25 @@ class _OrderedList extends State<OrderedList> {
                                                                       TextAlign
                                                                           .left,
                                                                   style:
-                                                                      TextStyle(
+                                                                      const TextStyle(
                                                                     fontSize:
                                                                         12,
                                                                   ),
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   width: 5,
                                                                 ),
                                                                 Container(
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          top:
-                                                                              2),
+                                                                  margin: const EdgeInsets
+                                                                          .only(
+                                                                      top: 2),
                                                                   child: Text(
-                                                                    sortedDocs[index]['count']
-                                                                            .toString() +
-                                                                        '개',
+                                                                    '${sortedDocs[index]['count']}개',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .left,
                                                                     style:
-                                                                        TextStyle(
+                                                                        const TextStyle(
                                                                       fontSize:
                                                                           12,
                                                                     ),
@@ -379,17 +384,16 @@ class _OrderedList extends State<OrderedList> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Text(
-                                                              listlPrice
-                                                                      .toString() +
-                                                                  '원',
+                                                              '$listlPrice원',
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
@@ -399,10 +403,10 @@ class _OrderedList extends State<OrderedList> {
                                                     ],
                                                   ),
                                                 ),
-                                                SizedBox(width: 10),
+                                                const SizedBox(width: 10),
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 1, bottom: 75),
                                                   width: 65,
                                                   height: 30,
@@ -414,19 +418,19 @@ class _OrderedList extends State<OrderedList> {
                                                       color: Colors.black)),*/
                                                   child: Text(
                                                     sortedDocs[index]['status'],
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 13,
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: 80,
                                                   child: Column(
                                                     children: <Widget>[
-                                                      SizedBox(height: 5),
+                                                      const SizedBox(height: 5),
                                                       ElevatedButton(
                                                         onPressed: () {
                                                           Navigator.push(
@@ -455,6 +459,11 @@ class _OrderedList extends State<OrderedList> {
                                                                         'ordertime'])),
                                                           );
                                                         },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Color(0xffAAC4FF),
+                                                        ),
                                                         child: Text(
                                                           '주문 현황',
                                                           style: TextStyle(
@@ -462,13 +471,9 @@ class _OrderedList extends State<OrderedList> {
                                                               color:
                                                                   Colors.black),
                                                         ),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Color(0xffAAC4FF),
-                                                        ),
                                                       ),
-                                                      SizedBox(height: 30),
+                                                      const SizedBox(
+                                                          height: 30),
                                                       actionButton,
                                                     ],
                                                   ),
@@ -481,28 +486,28 @@ class _OrderedList extends State<OrderedList> {
                                                       .spaceBetween,
                                               children: [
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 10, top: 15),
                                                   child: Text(
                                                     '주문번호 : ' +
                                                         sortedDocs[index]
                                                             ['ordernumber'],
-                                                    style:
-                                                        TextStyle(fontSize: 13),
+                                                    style: const TextStyle(
+                                                        fontSize: 13),
                                                   ),
                                                 ),
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
-                                                    style:
-                                                        TextStyle(fontSize: 8),
+                                                    style: const TextStyle(
+                                                        fontSize: 8),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                           ],
@@ -516,11 +521,12 @@ class _OrderedList extends State<OrderedList> {
                                             .toString()
                                             .contains(searchText)) {
                                       return Container(
-                                        margin: EdgeInsets.only(
+                                        margin: const EdgeInsets.only(
                                             left: 5, right: 5, bottom: 10),
                                         decoration: BoxDecoration(
-                                            color: Color(0xFFffffff),
-                                            borderRadius: BorderRadius.only(
+                                            color: const Color(0xFFffffff),
+                                            borderRadius:
+                                                const BorderRadius.only(
                                               topLeft: Radius.circular(25.0),
                                               topRight: Radius.circular(25.0),
                                               bottomLeft: Radius.circular(25.0),
@@ -552,22 +558,24 @@ class _OrderedList extends State<OrderedList> {
                                                             .start,
                                                     children: <Widget>[
                                                       Container(
-                                                        margin: EdgeInsets.only(
+                                                        margin: const EdgeInsets
+                                                                .only(
                                                             left: 10, top: 10),
                                                         child: Text(
                                                           sortedDocs[index]
                                                               ['area_name'],
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 15,
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: 15,
                                                       ),
                                                       Container(
-                                                        margin: EdgeInsets.only(
-                                                            left: 12),
+                                                        margin: const EdgeInsets
+                                                            .only(left: 12),
                                                         child: Column(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -582,11 +590,12 @@ class _OrderedList extends State<OrderedList> {
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Row(
@@ -599,28 +608,25 @@ class _OrderedList extends State<OrderedList> {
                                                                       TextAlign
                                                                           .left,
                                                                   style:
-                                                                      TextStyle(
+                                                                      const TextStyle(
                                                                     fontSize:
                                                                         12,
                                                                   ),
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   width: 5,
                                                                 ),
                                                                 Container(
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          top:
-                                                                              2),
+                                                                  margin: const EdgeInsets
+                                                                          .only(
+                                                                      top: 2),
                                                                   child: Text(
-                                                                    sortedDocs[index]['count']
-                                                                            .toString() +
-                                                                        '개',
+                                                                    '${sortedDocs[index]['count']}개',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .left,
                                                                     style:
-                                                                        TextStyle(
+                                                                        const TextStyle(
                                                                       fontSize:
                                                                           12,
                                                                     ),
@@ -628,17 +634,16 @@ class _OrderedList extends State<OrderedList> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Text(
-                                                              listlPrice
-                                                                      .toString() +
-                                                                  '원',
+                                                              '$listlPrice원',
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
@@ -648,10 +653,10 @@ class _OrderedList extends State<OrderedList> {
                                                     ],
                                                   ),
                                                 ),
-                                                SizedBox(width: 10),
+                                                const SizedBox(width: 10),
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 1, bottom: 75),
                                                   width: 65,
                                                   height: 30,
@@ -663,19 +668,19 @@ class _OrderedList extends State<OrderedList> {
                                                       color: Colors.black)),*/
                                                   child: Text(
                                                     sortedDocs[index]['status'],
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 13,
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: 80,
                                                   child: Column(
                                                     children: <Widget>[
-                                                      SizedBox(height: 5),
+                                                      const SizedBox(height: 5),
                                                       ElevatedButton(
                                                         onPressed: () {
                                                           Navigator.push(
@@ -704,6 +709,11 @@ class _OrderedList extends State<OrderedList> {
                                                                         'ordertime'])),
                                                           );
                                                         },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Color(0xffAAC4FF),
+                                                        ),
                                                         child: Text(
                                                           '주문 현황',
                                                           style: TextStyle(
@@ -711,13 +721,9 @@ class _OrderedList extends State<OrderedList> {
                                                               color:
                                                                   Colors.black),
                                                         ),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Color(0xffAAC4FF),
-                                                        ),
                                                       ),
-                                                      SizedBox(height: 30),
+                                                      const SizedBox(
+                                                          height: 30),
                                                       actionButton,
                                                     ],
                                                   ),
@@ -730,28 +736,28 @@ class _OrderedList extends State<OrderedList> {
                                                       .spaceBetween,
                                               children: [
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 10, top: 15),
                                                   child: Text(
                                                     '주문번호 : ' +
                                                         sortedDocs[index]
                                                             ['ordernumber'],
-                                                    style:
-                                                        TextStyle(fontSize: 13),
+                                                    style: const TextStyle(
+                                                        fontSize: 13),
                                                   ),
                                                 ),
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
-                                                    style:
-                                                        TextStyle(fontSize: 8),
+                                                    style: const TextStyle(
+                                                        fontSize: 8),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                           ],
@@ -772,13 +778,14 @@ class _OrderedList extends State<OrderedList> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   //////////////////////////////////////////////////////////////////
                   Container(
-                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    margin:
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     decoration: BoxDecoration(
-                        color: Color(0xFFC5DFF8),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xFFC5DFF8),
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30.0),
                           topRight: Radius.circular(30.0),
                           bottomLeft: Radius.circular(30.0),
@@ -799,8 +806,9 @@ class _OrderedList extends State<OrderedList> {
                           child: Column(
                             children: [
                               Container(
-                                margin: EdgeInsets.only(left: 10, top: 20),
-                                child: Text(
+                                margin:
+                                    const EdgeInsets.only(left: 10, top: 20),
+                                child: const Text(
                                   "지난주문",
                                   style: TextStyle(
                                       fontSize: 18,
@@ -811,7 +819,7 @@ class _OrderedList extends State<OrderedList> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 5, right: 5),
+                          margin: const EdgeInsets.only(left: 5, right: 5),
                           child: StreamBuilder(
                             stream: FirebaseFirestore.instance
                                 .collection('complete')
@@ -828,7 +836,7 @@ class _OrderedList extends State<OrderedList> {
                                 return ListView.builder(
                                   shrinkWrap: true, // 리스트뷰 크기를 자동으로 조정
                                   physics:
-                                      NeverScrollableScrollPhysics(), // 스크롤 방지
+                                      const NeverScrollableScrollPhysics(), // 스크롤 방지
                                   itemCount: streamSnapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
                                     final List<DocumentSnapshot> sortedDocs =
@@ -861,15 +869,15 @@ class _OrderedList extends State<OrderedList> {
                                               .doc(documentID)
                                               .update({'status': '완료'});
                                         },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color(0xff92ABEB),
+                                        ),
                                         child: Text(
                                           '수령 완료',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10,
                                           ),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Color(0xff92ABEB),
                                         ),
                                       );
                                     } else if (sortedDocs[index]['status'] ==
@@ -892,27 +900,28 @@ class _OrderedList extends State<OrderedList> {
                                             ),
                                           );
                                         },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color(0xff92ABEB),
+                                        ),
                                         child: Text(
                                           '리뷰 쓰기',
                                           style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.black),
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Color(0xff92ABEB),
-                                        ),
                                       );
                                     } else {
-                                      actionButton = SizedBox(
+                                      actionButton = const SizedBox(
                                           height: 50); // 상태가 다른 경우 버튼을 숨김
                                     }
                                     if (searchText.isEmpty) {
                                       return Container(
-                                        margin: EdgeInsets.only(
+                                        margin: const EdgeInsets.only(
                                             left: 5, right: 5, bottom: 10),
                                         decoration: BoxDecoration(
-                                            color: Color(0xFFffffff),
-                                            borderRadius: BorderRadius.only(
+                                            color: const Color(0xFFffffff),
+                                            borderRadius:
+                                                const BorderRadius.only(
                                               topLeft: Radius.circular(25.0),
                                               topRight: Radius.circular(25.0),
                                               bottomLeft: Radius.circular(25.0),
@@ -944,22 +953,24 @@ class _OrderedList extends State<OrderedList> {
                                                             .start,
                                                     children: <Widget>[
                                                       Container(
-                                                        margin: EdgeInsets.only(
+                                                        margin: const EdgeInsets
+                                                                .only(
                                                             left: 10, top: 10),
                                                         child: Text(
                                                           sortedDocs[index]
                                                               ['area_name'],
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 15,
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: 15,
                                                       ),
                                                       Container(
-                                                        margin: EdgeInsets.only(
-                                                            left: 12),
+                                                        margin: const EdgeInsets
+                                                            .only(left: 12),
                                                         child: Column(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -974,11 +985,12 @@ class _OrderedList extends State<OrderedList> {
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Row(
@@ -991,28 +1003,25 @@ class _OrderedList extends State<OrderedList> {
                                                                       TextAlign
                                                                           .left,
                                                                   style:
-                                                                      TextStyle(
+                                                                      const TextStyle(
                                                                     fontSize:
                                                                         12,
                                                                   ),
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   width: 5,
                                                                 ),
                                                                 Container(
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          top:
-                                                                              2),
+                                                                  margin: const EdgeInsets
+                                                                          .only(
+                                                                      top: 2),
                                                                   child: Text(
-                                                                    sortedDocs[index]['count']
-                                                                            .toString() +
-                                                                        '개',
+                                                                    '${sortedDocs[index]['count']}개',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .left,
                                                                     style:
-                                                                        TextStyle(
+                                                                        const TextStyle(
                                                                       fontSize:
                                                                           12,
                                                                     ),
@@ -1020,17 +1029,16 @@ class _OrderedList extends State<OrderedList> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Text(
-                                                              listlPrice
-                                                                      .toString() +
-                                                                  '원',
+                                                              '$listlPrice원',
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
@@ -1040,10 +1048,10 @@ class _OrderedList extends State<OrderedList> {
                                                     ],
                                                   ),
                                                 ),
-                                                SizedBox(width: 10),
+                                                const SizedBox(width: 10),
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 1, bottom: 75),
                                                   width: 65,
                                                   height: 30,
@@ -1055,21 +1063,26 @@ class _OrderedList extends State<OrderedList> {
                                                       color: Colors.black)),*/
                                                   child: Text(
                                                     sortedDocs[index]['status'],
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 13,
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: 80,
                                                   child: Column(
                                                     children: <Widget>[
-                                                      SizedBox(height: 5),
+                                                      const SizedBox(height: 5),
                                                       ElevatedButton(
                                                         onPressed: null,
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Color(0xffAAC4FF),
+                                                        ),
                                                         child: Text(
                                                           '주문 현황',
                                                           style: TextStyle(
@@ -1077,13 +1090,9 @@ class _OrderedList extends State<OrderedList> {
                                                               color:
                                                                   Colors.black),
                                                         ),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Color(0xffAAC4FF),
-                                                        ),
                                                       ),
-                                                      SizedBox(height: 30),
+                                                      const SizedBox(
+                                                          height: 30),
                                                       actionButton,
                                                     ],
                                                   ),
@@ -1096,28 +1105,28 @@ class _OrderedList extends State<OrderedList> {
                                                       .spaceBetween,
                                               children: [
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 10, top: 15),
                                                   child: Text(
                                                     '주문번호 : ' +
                                                         sortedDocs[index]
                                                             ['ordernumber'],
-                                                    style:
-                                                        TextStyle(fontSize: 13),
+                                                    style: const TextStyle(
+                                                        fontSize: 13),
                                                   ),
                                                 ),
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
-                                                    style:
-                                                        TextStyle(fontSize: 8),
+                                                    style: const TextStyle(
+                                                        fontSize: 8),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                           ],
@@ -1131,11 +1140,12 @@ class _OrderedList extends State<OrderedList> {
                                             .toString()
                                             .contains(searchText)) {
                                       return Container(
-                                        margin: EdgeInsets.only(
+                                        margin: const EdgeInsets.only(
                                             left: 5, right: 5, bottom: 10),
                                         decoration: BoxDecoration(
-                                            color: Color(0xFFffffff),
-                                            borderRadius: BorderRadius.only(
+                                            color: const Color(0xFFffffff),
+                                            borderRadius:
+                                                const BorderRadius.only(
                                               topLeft: Radius.circular(25.0),
                                               topRight: Radius.circular(25.0),
                                               bottomLeft: Radius.circular(25.0),
@@ -1167,22 +1177,24 @@ class _OrderedList extends State<OrderedList> {
                                                             .start,
                                                     children: <Widget>[
                                                       Container(
-                                                        margin: EdgeInsets.only(
+                                                        margin: const EdgeInsets
+                                                                .only(
                                                             left: 10, top: 10),
                                                         child: Text(
                                                           sortedDocs[index]
                                                               ['area_name'],
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 15,
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: 15,
                                                       ),
                                                       Container(
-                                                        margin: EdgeInsets.only(
-                                                            left: 12),
+                                                        margin: const EdgeInsets
+                                                            .only(left: 12),
                                                         child: Column(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -1197,11 +1209,12 @@ class _OrderedList extends State<OrderedList> {
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Row(
@@ -1214,28 +1227,25 @@ class _OrderedList extends State<OrderedList> {
                                                                       TextAlign
                                                                           .left,
                                                                   style:
-                                                                      TextStyle(
+                                                                      const TextStyle(
                                                                     fontSize:
                                                                         12,
                                                                   ),
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   width: 5,
                                                                 ),
                                                                 Container(
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          top:
-                                                                              2),
+                                                                  margin: const EdgeInsets
+                                                                          .only(
+                                                                      top: 2),
                                                                   child: Text(
-                                                                    sortedDocs[index]['count']
-                                                                            .toString() +
-                                                                        '개',
+                                                                    '${sortedDocs[index]['count']}개',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .left,
                                                                     style:
-                                                                        TextStyle(
+                                                                        const TextStyle(
                                                                       fontSize:
                                                                           12,
                                                                     ),
@@ -1243,17 +1253,16 @@ class _OrderedList extends State<OrderedList> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               height: 15,
                                                             ),
                                                             Text(
-                                                              listlPrice
-                                                                      .toString() +
-                                                                  '원',
+                                                              '$listlPrice원',
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 13,
                                                               ),
                                                             ),
@@ -1263,10 +1272,10 @@ class _OrderedList extends State<OrderedList> {
                                                     ],
                                                   ),
                                                 ),
-                                                SizedBox(width: 10),
+                                                const SizedBox(width: 10),
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 1, bottom: 75),
                                                   width: 65,
                                                   height: 30,
@@ -1278,21 +1287,26 @@ class _OrderedList extends State<OrderedList> {
                                                       color: Colors.black)),*/
                                                   child: Text(
                                                     sortedDocs[index]['status'],
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 13,
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: 80,
                                                   child: Column(
                                                     children: <Widget>[
-                                                      SizedBox(height: 5),
+                                                      const SizedBox(height: 5),
                                                       ElevatedButton(
                                                         onPressed: null,
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Color(0xffAAC4FF),
+                                                        ),
                                                         child: Text(
                                                           '주문 현황',
                                                           style: TextStyle(
@@ -1300,13 +1314,9 @@ class _OrderedList extends State<OrderedList> {
                                                               color:
                                                                   Colors.black),
                                                         ),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Color(0xffAAC4FF),
-                                                        ),
                                                       ),
-                                                      SizedBox(height: 30),
+                                                      const SizedBox(
+                                                          height: 30),
                                                       actionButton,
                                                     ],
                                                   ),
@@ -1319,28 +1329,28 @@ class _OrderedList extends State<OrderedList> {
                                                       .spaceBetween,
                                               children: [
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 10, top: 15),
                                                   child: Text(
                                                     '주문번호 : ' +
                                                         sortedDocs[index]
                                                             ['ordernumber'],
-                                                    style:
-                                                        TextStyle(fontSize: 13),
+                                                    style: const TextStyle(
+                                                        fontSize: 13),
                                                   ),
                                                 ),
                                                 Container(
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       right: 15, top: 15),
                                                   child: Text(
                                                     formattime,
-                                                    style:
-                                                        TextStyle(fontSize: 8),
+                                                    style: const TextStyle(
+                                                        fontSize: 8),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                           ],

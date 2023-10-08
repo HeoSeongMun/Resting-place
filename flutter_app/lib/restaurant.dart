@@ -32,6 +32,7 @@ class _Restaurant extends State<Restaurant> {
   late int gradescount = 0;
   late double averagegrade = 0;
 
+  @override
   void initState() {
     super.initState();
     CartCount();
@@ -58,14 +59,14 @@ class _Restaurant extends State<Restaurant> {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: Column(
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  color: Color(0xFFD2DAFF),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFD2DAFF),
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30.0),
                     bottomRight: Radius.circular(30.0),
                   ),
@@ -79,7 +80,7 @@ class _Restaurant extends State<Restaurant> {
                   ]),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Row(
@@ -98,7 +99,8 @@ class _Restaurant extends State<Restaurant> {
                     ],
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 40, left: 40, bottom: 20),
+                    margin:
+                        const EdgeInsets.only(right: 40, left: 40, bottom: 20),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
@@ -118,20 +120,20 @@ class _Restaurant extends State<Restaurant> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
               height: MediaQuery.of(context).size.height - 385,
               decoration: BoxDecoration(
-                  color: Color(0xFFC5DFF8),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFC5DFF8),
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
@@ -145,9 +147,9 @@ class _Restaurant extends State<Restaurant> {
                       offset: const Offset(0, 7),
                     ),
                   ]),
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               child: Container(
-                margin: EdgeInsets.only(left: 5, right: 5),
+                margin: const EdgeInsets.only(left: 5, right: 5),
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('testlogin')
@@ -177,7 +179,7 @@ class _Restaurant extends State<Restaurant> {
                                 AsyncSnapshot<AverageInfo> snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return SizedBox();
+                                return const SizedBox();
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else {
@@ -188,11 +190,11 @@ class _Restaurant extends State<Restaurant> {
                               final bool status = documentSnapshot['status'];
                               return status == false
                                   ? Container(
-                                      margin: EdgeInsets.only(
+                                      margin: const EdgeInsets.only(
                                           left: 5, right: 5, bottom: 10),
                                       decoration: BoxDecoration(
                                           color: Colors.grey,
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(25.0),
                                             topRight: Radius.circular(25.0),
                                             bottomLeft: Radius.circular(25.0),
@@ -211,7 +213,8 @@ class _Restaurant extends State<Restaurant> {
                                         children: [
                                           ListTile(
                                             leading: Container(
-                                              margin: EdgeInsets.only(left: 5),
+                                              margin: const EdgeInsets.only(
+                                                  left: 5),
                                               child: Image.network(
                                                 documentSnapshot[
                                                     'storeimageUrl'],
@@ -220,7 +223,7 @@ class _Restaurant extends State<Restaurant> {
                                               ),
                                             ),
                                             title: Container(
-                                                margin: EdgeInsets.only(
+                                                margin: const EdgeInsets.only(
                                                     top: 5, bottom: 5),
                                                 child: Text(documentSnapshot[
                                                     'storeName'])),
@@ -228,38 +231,31 @@ class _Restaurant extends State<Restaurant> {
                                               children: [
                                                 Container(
                                                   width: 170,
-                                                  margin:
-                                                      EdgeInsets.only(top: 10),
+                                                  margin: const EdgeInsets.only(
+                                                      top: 10),
                                                   child: Text(
                                                     '대표메뉴: ' +
                                                         documentSnapshot[
                                                             'signaturemenu'],
-                                                    style:
-                                                        TextStyle(fontSize: 10),
+                                                    style: const TextStyle(
+                                                        fontSize: 10),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Column(
                                                   children: [
                                                     Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 3),
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              left: 3),
                                                       width: 70,
                                                       alignment:
                                                           Alignment.centerLeft,
                                                       child: Text(
-                                                        '평점 : ' +
-                                                            (snapshot
-                                                                    .data!
-                                                                    .averageGrade
-                                                                    .isNaN
-                                                                ? '0'
-                                                                : snapshot.data!
-                                                                    .averageGrade
-                                                                    .toString()),
-                                                        style: TextStyle(
+                                                        '평점 : ${snapshot.data!.averageGrade.isNaN ? '0' : snapshot.data!.averageGrade.toString()}',
+                                                        style: const TextStyle(
                                                             fontSize: 12),
                                                       ),
                                                     ),
@@ -267,8 +263,8 @@ class _Restaurant extends State<Restaurant> {
                                                       children: [
                                                         Container(
                                                           margin:
-                                                              EdgeInsets.only(
-                                                                  top: 2),
+                                                              const EdgeInsets
+                                                                  .only(top: 2),
                                                           child:
                                                               RatingBar.builder(
                                                             initialRating: snapshot
@@ -290,7 +286,7 @@ class _Restaurant extends State<Restaurant> {
                                                             itemSize: 10,
                                                             itemBuilder:
                                                                 (context, _) =>
-                                                                    Icon(
+                                                                    const Icon(
                                                               Icons.star,
                                                               color:
                                                                   Colors.amber,
@@ -301,17 +297,16 @@ class _Restaurant extends State<Restaurant> {
                                                         ),
                                                         Container(
                                                           margin:
-                                                              EdgeInsets.only(
+                                                              const EdgeInsets
+                                                                      .only(
                                                                   left: 5,
                                                                   top: 2),
                                                           child: Text(
-                                                            '(' +
-                                                                snapshot.data!
-                                                                    .gradesCount
-                                                                    .toString() +
-                                                                ')',
-                                                            style: TextStyle(
-                                                                fontSize: 8),
+                                                            '(${snapshot.data!.gradesCount})',
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        8),
                                                           ),
                                                         )
                                                       ],
@@ -326,7 +321,8 @@ class _Restaurant extends State<Restaurant> {
                                                 MainAxisAlignment.end,
                                             children: [
                                               Container(
-                                                margin: EdgeInsets.all(10),
+                                                margin:
+                                                    const EdgeInsets.all(10),
                                                 child: Text(
                                                   '영업준비중',
                                                   style: TextStyle(
@@ -340,11 +336,11 @@ class _Restaurant extends State<Restaurant> {
                                       ),
                                     )
                                   : Container(
-                                      margin: EdgeInsets.only(
+                                      margin: const EdgeInsets.only(
                                           left: 5, right: 5, bottom: 10),
                                       decoration: BoxDecoration(
-                                          color: Color(0xFFffffff),
-                                          borderRadius: BorderRadius.only(
+                                          color: const Color(0xFFffffff),
+                                          borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(25.0),
                                             topRight: Radius.circular(25.0),
                                             bottomLeft: Radius.circular(25.0),
@@ -361,7 +357,8 @@ class _Restaurant extends State<Restaurant> {
                                           ]),
                                       child: ListTile(
                                         leading: Container(
-                                          margin: EdgeInsets.only(left: 5),
+                                          margin:
+                                              const EdgeInsets.only(left: 5),
                                           child: Image.network(
                                             documentSnapshot['storeimageUrl'],
                                             height: 120,
@@ -369,7 +366,7 @@ class _Restaurant extends State<Restaurant> {
                                           ),
                                         ),
                                         title: Container(
-                                            margin: EdgeInsets.only(
+                                            margin: const EdgeInsets.only(
                                                 top: 5, bottom: 5),
                                             child: Text(
                                                 documentSnapshot['storeName'])),
@@ -377,44 +374,39 @@ class _Restaurant extends State<Restaurant> {
                                           children: [
                                             Container(
                                               width: 170,
-                                              margin: EdgeInsets.only(top: 10),
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
                                               child: Text(
                                                 '대표메뉴: ' +
                                                     documentSnapshot[
                                                         'signaturemenu'],
-                                                style: TextStyle(fontSize: 10),
+                                                style: const TextStyle(
+                                                    fontSize: 10),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             Column(
                                               children: [
                                                 Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 3),
+                                                  margin: const EdgeInsets.only(
+                                                      left: 3),
                                                   width: 70,
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    '평점 : ' +
-                                                        (snapshot
-                                                                .data!
-                                                                .averageGrade
-                                                                .isNaN
-                                                            ? '0'
-                                                            : snapshot.data!
-                                                                .averageGrade
-                                                                .toString()),
-                                                    style:
-                                                        TextStyle(fontSize: 12),
+                                                    '평점 : ${snapshot.data!.averageGrade.isNaN ? '0' : snapshot.data!.averageGrade.toString()}',
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
                                                   ),
                                                 ),
                                                 Row(
                                                   children: [
                                                     Container(
-                                                      margin: EdgeInsets.only(
-                                                          top: 2),
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 2),
                                                       child: RatingBar.builder(
                                                         initialRating: snapshot
                                                                 .data!
@@ -433,7 +425,7 @@ class _Restaurant extends State<Restaurant> {
                                                         itemSize: 10,
                                                         itemBuilder:
                                                             (context, _) =>
-                                                                Icon(
+                                                                const Icon(
                                                           Icons.star,
                                                           color: Colors.amber,
                                                         ),
@@ -441,15 +433,12 @@ class _Restaurant extends State<Restaurant> {
                                                       ),
                                                     ),
                                                     Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 5, top: 2),
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              left: 5, top: 2),
                                                       child: Text(
-                                                        '(' +
-                                                            snapshot.data!
-                                                                .gradesCount
-                                                                .toString() +
-                                                            ')',
-                                                        style: TextStyle(
+                                                        '(${snapshot.data!.gradesCount})',
+                                                        style: const TextStyle(
                                                             fontSize: 8),
                                                       ),
                                                     )
@@ -498,10 +487,10 @@ class _Restaurant extends State<Restaurant> {
             ),
           ],
         ),
-        bottomNavigationBar: Container(
+        bottomNavigationBar: SizedBox(
           height: 70,
           child: ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25.0),
               topRight: Radius.circular(25.0),
             ),
@@ -515,7 +504,8 @@ class _Restaurant extends State<Restaurant> {
                   case 0: //검색
                     final result = await Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => AreaSearch()),
+                      MaterialPageRoute(
+                          builder: (context) => const AreaSearch()),
                       (route) => false,
                     );
                     if (result != null) {
@@ -538,7 +528,7 @@ class _Restaurant extends State<Restaurant> {
                   case 2: //홈
                     final result = await Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                       (route) => false,
                     );
                     if (result != null) {
@@ -575,7 +565,7 @@ class _Restaurant extends State<Restaurant> {
               items: [
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
+                    children: const [
                       Padding(
                         padding: EdgeInsets.only(
                           right: 10,
@@ -587,7 +577,7 @@ class _Restaurant extends State<Restaurant> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
                           child: Text(
@@ -604,7 +594,7 @@ class _Restaurant extends State<Restaurant> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -619,13 +609,13 @@ class _Restaurant extends State<Restaurant> {
                           child: Container(
                             width: 15,
                             height: 15,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               cartcount.toString(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -636,7 +626,7 @@ class _Restaurant extends State<Restaurant> {
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
+                    children: const [
                       Padding(
                         padding: EdgeInsets.only(
                           right: 10,
@@ -648,7 +638,7 @@ class _Restaurant extends State<Restaurant> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
                           child: Text(
@@ -665,7 +655,7 @@ class _Restaurant extends State<Restaurant> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -680,13 +670,13 @@ class _Restaurant extends State<Restaurant> {
                           child: Container(
                             width: 15,
                             height: 15,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               ordercount.toString(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -697,7 +687,7 @@ class _Restaurant extends State<Restaurant> {
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
+                    children: const [
                       Padding(
                         padding: EdgeInsets.only(
                           right: 10,
@@ -709,7 +699,7 @@ class _Restaurant extends State<Restaurant> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
                           child: Text(

@@ -5,7 +5,7 @@ import 'package:flutter_app/login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Signup extends StatefulWidget {
-  Signup({super.key});
+  const Signup({super.key});
 
   @override
   _SignupState createState() => _SignupState();
@@ -22,6 +22,7 @@ final TextEditingController pwController = TextEditingController();
 final TextEditingController emailController = TextEditingController();
 
 class _SignupState extends State<Signup> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -39,12 +40,12 @@ class _SignupState extends State<Signup> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Container(
                       height: 70,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFFAAC4FF),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(15),
@@ -55,7 +56,7 @@ class _SignupState extends State<Signup> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           IconButton(
-                            icon: Icon(Icons.arrow_back),
+                            icon: const Icon(Icons.arrow_back),
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -64,10 +65,10 @@ class _SignupState extends State<Signup> {
                               );
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 110,
                           ),
-                          Text(
+                          const Text(
                             "회원가입",
                             style: TextStyle(
                               fontSize: 18,
@@ -76,15 +77,15 @@ class _SignupState extends State<Signup> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     Row(
                       children: [
                         Container(
                           width: 60,
-                          margin: EdgeInsets.only(left: 15),
-                          child: Text(
+                          margin: const EdgeInsets.only(left: 15),
+                          child: const Text(
                             "이름",
                             style: TextStyle(
                               fontSize: 13,
@@ -94,11 +95,11 @@ class _SignupState extends State<Signup> {
                         Container(
                           width: 280,
                           height: 40,
-                          margin: EdgeInsets.only(left: 10),
+                          margin: const EdgeInsets.only(left: 10),
                           child: TextField(
                             controller: idController,
                             textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
@@ -119,15 +120,15 @@ class _SignupState extends State<Signup> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
                       children: [
                         Container(
                           width: 60,
-                          margin: EdgeInsets.only(left: 15),
-                          child: Text(
+                          margin: const EdgeInsets.only(left: 15),
+                          child: const Text(
                             "이메일",
                             style: TextStyle(
                               fontSize: 13,
@@ -137,7 +138,7 @@ class _SignupState extends State<Signup> {
                         Container(
                           width: 280,
                           height: 40,
-                          margin: EdgeInsets.only(left: 10),
+                          margin: const EdgeInsets.only(left: 10),
                           child: TextField(
                             controller: emailController,
                             textInputAction: TextInputAction.next,
@@ -146,19 +147,19 @@ class _SignupState extends State<Signup> {
                               hintStyle: TextStyle(
                                   color: Colors.grey[300],
                                   fontStyle: FontStyle.italic),
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(13)),
                                 borderSide:
                                     BorderSide(width: 2, color: Colors.black12),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(13)),
                                 borderSide:
                                     BorderSide(width: 2, color: Colors.black12),
                               ),
-                              border: OutlineInputBorder(
+                              border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(13)),
                               ),
@@ -168,15 +169,15 @@ class _SignupState extends State<Signup> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
                       children: [
                         Container(
                           width: 60,
-                          margin: EdgeInsets.only(left: 15),
-                          child: Text(
+                          margin: const EdgeInsets.only(left: 15),
+                          child: const Text(
                             "비밀번호",
                             style: TextStyle(
                               fontSize: 13,
@@ -186,12 +187,12 @@ class _SignupState extends State<Signup> {
                         Container(
                           width: 280,
                           height: 40,
-                          margin: EdgeInsets.only(left: 10),
+                          margin: const EdgeInsets.only(left: 10),
                           child: TextField(
                             obscureText: true,
                             controller: pwController,
                             textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
@@ -212,18 +213,18 @@ class _SignupState extends State<Signup> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Row(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 70,
                         ),
                         Container(
                           width: 280,
                           height: 40,
-                          margin: EdgeInsets.only(left: 15),
+                          margin: const EdgeInsets.only(left: 15),
                           child: TextField(
                             obscureText: true,
                             textInputAction: TextInputAction.next,
@@ -233,19 +234,19 @@ class _SignupState extends State<Signup> {
                                 hintStyle: TextStyle(
                                     color: Colors.grey[300],
                                     fontStyle: FontStyle.italic),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                 )),
@@ -253,15 +254,15 @@ class _SignupState extends State<Signup> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Row(
                       children: [
                         Container(
                           width: 60,
-                          margin: EdgeInsets.only(left: 15),
-                          child: Text(
+                          margin: const EdgeInsets.only(left: 15),
+                          child: const Text(
                             "휴대전화",
                             style: TextStyle(
                               fontSize: 13,
@@ -272,7 +273,7 @@ class _SignupState extends State<Signup> {
                         Container(
                           width: 55,
                           height: 40,
-                          margin: EdgeInsets.only(left: 10),
+                          margin: const EdgeInsets.only(left: 10),
                           child: TextField(
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
@@ -280,19 +281,19 @@ class _SignupState extends State<Signup> {
                                 hintText: "010",
                                 hintStyle: TextStyle(
                                     color: Colors.grey[400], fontSize: 13),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                 )),
@@ -301,7 +302,7 @@ class _SignupState extends State<Signup> {
                         Container(
                           width: 65,
                           height: 40,
-                          margin: EdgeInsets.only(left: 5),
+                          margin: const EdgeInsets.only(left: 5),
                           child: TextField(
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
@@ -309,19 +310,19 @@ class _SignupState extends State<Signup> {
                                 hintText: "0000",
                                 hintStyle: TextStyle(
                                     color: Colors.grey[400], fontSize: 13),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                 )),
@@ -330,7 +331,7 @@ class _SignupState extends State<Signup> {
                         Container(
                           width: 65,
                           height: 40,
-                          margin: EdgeInsets.only(left: 5),
+                          margin: const EdgeInsets.only(left: 5),
                           child: TextField(
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
@@ -338,42 +339,42 @@ class _SignupState extends State<Signup> {
                                 hintText: "0000",
                                 hintStyle: TextStyle(
                                     color: Colors.grey[400], fontSize: 13),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                 )),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 5),
+                          margin: const EdgeInsets.only(left: 5),
                           child: ElevatedButton(
                             onPressed: () {},
                             style: TextButton.styleFrom(
+                                foregroundColor: Colors.black,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(13),
                                 ),
-                                minimumSize: Size(60, 40),
-                                primary: Colors.black,
-                                backgroundColor: Color(0xFFB1B2FF),
+                                minimumSize: const Size(60, 40),
+                                backgroundColor: const Color(0xFFB1B2FF),
                                 shadowColor: Colors.black,
                                 elevation: 3,
-                                side: BorderSide(
+                                side: const BorderSide(
                                   color: Color.fromARGB(255, 153, 154, 221),
                                   width: 2,
                                 )),
-                            child: Text(
+                            child: const Text(
                               "인증요청",
                               style: TextStyle(
                                 fontSize: 10,
@@ -384,23 +385,23 @@ class _SignupState extends State<Signup> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Row(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 85,
                         ),
                         Container(
                           alignment: Alignment.center,
                           height: 40,
-                          padding: EdgeInsets.only(left: 2, right: 2),
+                          padding: const EdgeInsets.only(left: 2, right: 2),
                           decoration: BoxDecoration(
-                            color: Color(0xFFB1B2FF),
+                            color: const Color(0xFFB1B2FF),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text(
+                          child: const Text(
                             "인증번호 입력",
                             style: TextStyle(
                               fontSize: 10,
@@ -410,26 +411,26 @@ class _SignupState extends State<Signup> {
                         Container(
                           width: 210,
                           height: 40,
-                          margin: EdgeInsets.only(left: 2),
+                          margin: const EdgeInsets.only(left: 2),
                           child: TextField(
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
                                 isDense: true,
                                 hintStyle: TextStyle(
                                     color: Colors.grey[400], fontSize: 15),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.black12),
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(13)),
                                 )),
@@ -437,7 +438,7 @@ class _SignupState extends State<Signup> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 100,
                     ),
                     Builder(
@@ -472,7 +473,7 @@ class _SignupState extends State<Signup> {
                             } catch (e) {
                               print(e);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text('이메일과 비밀번호를 확인해주세요'),
                                   backgroundColor: Colors.blue,
                                 ),
@@ -480,20 +481,20 @@ class _SignupState extends State<Signup> {
                             }
                           },
                           style: TextButton.styleFrom(
+                            foregroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            minimumSize: Size(300, 40),
-                            primary: Colors.black,
-                            backgroundColor: Color(0xFFEEF1FF),
+                            minimumSize: const Size(300, 40),
+                            backgroundColor: const Color(0xFFEEF1FF),
                             shadowColor: Colors.black,
                             elevation: 3,
-                            side: BorderSide(
+                            side: const BorderSide(
                               color: Colors.black38,
                               width: 2,
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             "가입하기",
                             style: TextStyle(
                               fontSize: 18,

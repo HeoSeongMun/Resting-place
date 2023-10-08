@@ -31,6 +31,7 @@ class _UserPage extends State<UserPage> {
   CollectionReference product =
       FirebaseFirestore.instance.collection('userinfo');
 
+  @override
   void initState() {
     super.initState();
     CartCount();
@@ -42,11 +43,11 @@ class _UserPage extends State<UserPage> {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: Center(
           child: Column(
             children: <Widget>[
-              SizedBox(height: 170),
+              const SizedBox(height: 170),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -54,7 +55,7 @@ class _UserPage extends State<UserPage> {
                     clipBehavior: Clip.none,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 2),
+                        margin: const EdgeInsets.only(left: 2),
                         width: 350,
                         height: 150,
                         decoration: BoxDecoration(
@@ -68,7 +69,7 @@ class _UserPage extends State<UserPage> {
                         top: -50,
                         left: 80,
                         right: 80,
-                        child: Container(
+                        child: SizedBox(
                           width: 50,
                           height: 80,
                           child: Image.asset(
@@ -77,7 +78,7 @@ class _UserPage extends State<UserPage> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 10, right: 10),
+                        margin: const EdgeInsets.only(left: 10, right: 10),
                         child: Row(
                           children: [
                             Container(
@@ -137,8 +138,8 @@ class _UserPage extends State<UserPage> {
                                           ],
                                         ),
                                         Text(
-                                          '이름 : ' + name,
-                                          style: TextStyle(
+                                          '이름 : $name',
+                                          style: const TextStyle(
                                             fontSize: 18,
                                           ),
                                         ),
@@ -146,8 +147,8 @@ class _UserPage extends State<UserPage> {
                                           height: 10,
                                         ),
                                         Text(
-                                          '이메일 : ' + email,
-                                          style: TextStyle(
+                                          '이메일 : $email',
+                                          style: const TextStyle(
                                             fontSize: 18,
                                           ),
                                         ),
@@ -155,8 +156,8 @@ class _UserPage extends State<UserPage> {
                                           height: 10,
                                         ),
                                         Text(
-                                          '마일리지 : ' + mileage,
-                                          style: TextStyle(
+                                          '마일리지 : $mileage',
+                                          style: const TextStyle(
                                             fontSize: 18,
                                           ),
                                         ),
@@ -173,13 +174,13 @@ class _UserPage extends State<UserPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Container(
                 width: 360,
                 height: 2,
                 color: Colors.black,
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -187,13 +188,14 @@ class _UserPage extends State<UserPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Delivery()),
+                        MaterialPageRoute(
+                            builder: (context) => const Delivery()),
                       );
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFFC5DFF8),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xFFC5DFF8),
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(25.0),
                           topRight: Radius.circular(25.0),
                           bottomLeft: Radius.circular(25.0),
@@ -212,11 +214,11 @@ class _UserPage extends State<UserPage> {
                       height: 110,
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Text('배송조회'),
-                          SizedBox(
+                          const Text('주문현황'),
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
@@ -246,8 +248,8 @@ class _UserPage extends State<UserPage> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFFC5DFF8),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xFFC5DFF8),
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(25.0),
                           topRight: Radius.circular(25.0),
                           bottomLeft: Radius.circular(25.0),
@@ -266,11 +268,11 @@ class _UserPage extends State<UserPage> {
                       height: 110,
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Text('주문내역'),
-                          SizedBox(
+                          const Text('주문내역'),
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
@@ -290,13 +292,14 @@ class _UserPage extends State<UserPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ReviewManagementScreen()),
+                            builder: (context) =>
+                                const ReviewManagementScreen()),
                       );
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFFC5DFF8),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xFFC5DFF8),
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(25.0),
                           topRight: Radius.circular(25.0),
                           bottomLeft: Radius.circular(25.0),
@@ -315,11 +318,11 @@ class _UserPage extends State<UserPage> {
                       height: 110,
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Text('리뷰관리'),
-                          SizedBox(
+                          const Text('리뷰관리'),
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
@@ -336,7 +339,7 @@ class _UserPage extends State<UserPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 200),
+              const SizedBox(height: 200),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
@@ -345,9 +348,9 @@ class _UserPage extends State<UserPage> {
                       (route) => false);
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xffAAC4FF),
+                  backgroundColor: Color(0xffAAC4FF),
                 ),
-                child: Text(
+                child: const Text(
                   '로그아웃',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black),
@@ -356,10 +359,10 @@ class _UserPage extends State<UserPage> {
             ],
           ),
         ),
-        bottomNavigationBar: Container(
+        bottomNavigationBar: SizedBox(
           height: 70,
           child: ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25.0),
               topRight: Radius.circular(25.0),
             ),
@@ -373,7 +376,8 @@ class _UserPage extends State<UserPage> {
                   case 0: //검색
                     final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AreaSearch()),
+                      MaterialPageRoute(
+                          builder: (context) => const AreaSearch()),
                     );
                     if (result != null) {
                       setState(() {
@@ -397,7 +401,7 @@ class _UserPage extends State<UserPage> {
                   case 2: //홈
                     final result = await Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                       (route) => false,
                     );
                     if (result != null) {
@@ -437,7 +441,7 @@ class _UserPage extends State<UserPage> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -448,10 +452,10 @@ class _UserPage extends State<UserPage> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: Text(
+                          child: const Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -465,7 +469,7 @@ class _UserPage extends State<UserPage> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -480,13 +484,13 @@ class _UserPage extends State<UserPage> {
                           child: Container(
                             width: 15,
                             height: 15,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               cartcount.toString(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -498,7 +502,7 @@ class _UserPage extends State<UserPage> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -509,10 +513,10 @@ class _UserPage extends State<UserPage> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: Text(
+                          child: const Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -526,7 +530,7 @@ class _UserPage extends State<UserPage> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -541,13 +545,13 @@ class _UserPage extends State<UserPage> {
                           child: Container(
                             width: 15,
                             height: 15,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               ordercount.toString(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -559,7 +563,7 @@ class _UserPage extends State<UserPage> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -570,10 +574,10 @@ class _UserPage extends State<UserPage> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: Text(
+                          child: const Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,

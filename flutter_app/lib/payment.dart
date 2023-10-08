@@ -8,6 +8,7 @@ class Payment extends StatefulWidget {
   const Payment({required this.total, super.key});
 
   final String total;
+  @override
   State<Payment> createState() => _Payment();
 }
 
@@ -92,24 +93,24 @@ class _Payment extends State<Payment> {
               content: TextField(
                 keyboardType: TextInputType.number,
                 controller: mileageController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: '사용할 마일리지 금액를 입력하세요.',
                 ),
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('확인'),
+                  child: const Text('확인'),
                   onPressed: () {
                     if (int.parse(mileageController.text) > mileage) {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('금액 한도 초과'),
-                            content: Text('입력된 금액이 보유 마일리지 금액을 초과합니다.'),
+                            title: const Text('금액 한도 초과'),
+                            content: const Text('입력된 금액이 보유 마일리지 금액을 초과합니다.'),
                             actions: <Widget>[
                               TextButton(
-                                child: Text('확인'),
+                                child: const Text('확인'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -124,11 +125,11 @@ class _Payment extends State<Payment> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('금액 초과'),
-                            content: Text('입력된 금액이 결제 금액을 초과합니다.'),
+                            title: const Text('금액 초과'),
+                            content: const Text('입력된 금액이 결제 금액을 초과합니다.'),
                             actions: <Widget>[
                               TextButton(
-                                child: Text('확인'),
+                                child: const Text('확인'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -147,7 +148,7 @@ class _Payment extends State<Payment> {
                   },
                 ),
                 TextButton(
-                  child: Text('취소'),
+                  child: const Text('취소'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -257,7 +258,7 @@ class _Payment extends State<Payment> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "총 할인금액",
                     style: TextStyle(
                       fontSize: 13,
@@ -267,7 +268,7 @@ class _Payment extends State<Payment> {
                   ),
                   Text(
                     '$discount원',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Colors.red,
@@ -301,7 +302,7 @@ class _Payment extends State<Payment> {
                     ),
                     Text(
                       '$mileage원',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         color: Colors.black,
                       ),
@@ -353,7 +354,7 @@ class _Payment extends State<Payment> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "도착 예상 시간 : ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, "0")} ${timeFormat}",
+                      "도착 예상 시간 : ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, "0")} $timeFormat",
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 13),
                     ),
@@ -377,7 +378,7 @@ class _Payment extends State<Payment> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 backgroundColor: Colors.white,
-                                title: Text(
+                                title: const Text(
                                   '도착 예상 시간을 정해주세요.',
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 18),
@@ -385,7 +386,7 @@ class _Payment extends State<Payment> {
                                 content: StatefulBuilder(builder:
                                     (BuildContext context,
                                         StateSetter setState) {
-                                  return Container(
+                                  return SizedBox(
                                     height: 150,
                                     child: Row(
                                       mainAxisAlignment:
@@ -407,7 +408,7 @@ class _Payment extends State<Payment> {
                                           textStyle: TextStyle(
                                               color: Colors.grey[400],
                                               fontSize: 20),
-                                          selectedTextStyle: TextStyle(
+                                          selectedTextStyle: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 30),
                                           decoration: const BoxDecoration(
@@ -434,7 +435,7 @@ class _Payment extends State<Payment> {
                                           textStyle: TextStyle(
                                               color: Colors.grey[400],
                                               fontSize: 20),
-                                          selectedTextStyle: TextStyle(
+                                          selectedTextStyle: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 30),
                                           decoration: const BoxDecoration(
@@ -445,11 +446,12 @@ class _Payment extends State<Payment> {
                                                   bottom: BorderSide(
                                                       color: Colors.white))),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 25,
                                         ),
                                         Container(
-                                          margin: EdgeInsets.only(top: 25),
+                                          margin:
+                                              const EdgeInsets.only(top: 25),
                                           child: Column(
                                             children: [
                                               GestureDetector(
@@ -529,7 +531,7 @@ class _Payment extends State<Payment> {
                                     onPressed: () {
                                       Navigator.pop(context, false);
                                     },
-                                    child: Text('취소'),
+                                    child: const Text('취소'),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -540,7 +542,7 @@ class _Payment extends State<Payment> {
                                       });
                                       Navigator.pop(context, false);
                                     },
-                                    child: Text('확인'),
+                                    child: const Text('확인'),
                                   )
                                 ],
                               );
@@ -708,7 +710,7 @@ class _Payment extends State<Payment> {
                         await document.reference.delete();
                       }
 
-                      Future.delayed(Duration(seconds: 1), () {
+                      Future.delayed(const Duration(seconds: 1), () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -722,7 +724,7 @@ class _Payment extends State<Payment> {
                       alignment: Alignment.center,
                       width: 292.3,
                       height: double.infinity,
-                      color: Color(0xffFFB79E),
+                      color: const Color(0xffFFB79E),
                       child: const Text(
                         "결제",
                         style: TextStyle(

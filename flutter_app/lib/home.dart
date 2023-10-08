@@ -43,24 +43,24 @@ class _Home extends State<Home> {
   List<String> locationData = [];
 
   Future<void> imageData() async {
-    Set<String> imageurlList = Set<String>();
+    Set<String> imageurlList = <String>{};
     QuerySnapshot snapshot = await ordercollection
         .where('userUid', isEqualTo: user!.uid)
         .limit(5)
         .get();
-    snapshot.docs.forEach((doc) {
+    for (var doc in snapshot.docs) {
       imageurlList.add(doc['area_name']);
-    });
+    }
 
     List<String> imageurlList2 = [];
     List<String> locationList = [];
     if (imageurlList.isNotEmpty) {
       QuerySnapshot snapshot1 =
           await areacollection.where('location', whereIn: imageurlList).get();
-      snapshot1.docs.forEach((doc) {
+      for (var doc in snapshot1.docs) {
         imageurlList2.add(doc['imageUrl']);
         locationList.add(doc['location']);
-      });
+      }
     }
 
     setState(() {
@@ -74,9 +74,9 @@ class _Home extends State<Home> {
   Future<List<String>> getItems() async {
     QuerySnapshot querySnapshot = await menucollection.get();
     List<String> items = [];
-    querySnapshot.docs.forEach((doc) {
+    for (var doc in querySnapshot.docs) {
       items.add(doc['name']);
-    });
+    }
     return items;
   }
 
@@ -90,7 +90,7 @@ class _Home extends State<Home> {
       int currentSpin = 0;
 
       void performSpin() {
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           setState(() {
             slotindex = random.nextInt(items.length);
             currentSpin++;
@@ -109,6 +109,7 @@ class _Home extends State<Home> {
   }
 
   late bool isLoading = true;
+  @override
   void initState() {
     imageData();
     CartCount();
@@ -134,7 +135,7 @@ class _Home extends State<Home> {
       child: MaterialApp(
         theme: ThemeData(fontFamily: 'jalnan'),
         home: Scaffold(
-          backgroundColor: Color(0xFFEEF1FF), //Color(0xFF92B4EC)
+          backgroundColor: const Color(0xFFEEF1FF), //Color(0xFF92B4EC)
           body: isLoading
               ? Center(
                   child: Container(
@@ -142,30 +143,30 @@ class _Home extends State<Home> {
                         top: MediaQuery.of(context).size.height / 2.5),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: 150,
                           height: 150,
                           child: Image.asset(
                               'assets/images/ingappicon3.gif'), // 로딩 인디케이터
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text('...로딩중...')
+                        const Text('...로딩중...')
                       ],
                     ),
                   ),
                 )
               : Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
+                      margin: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                          color: Color(0xFFC5DFF8),
-                          borderRadius: BorderRadius.only(
+                          color: const Color(0xFFC5DFF8),
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(30.0),
                             topRight: Radius.circular(30.0),
                             bottomLeft: Radius.circular(30.0),
@@ -185,8 +186,9 @@ class _Home extends State<Home> {
                             alignment: Alignment.topLeft,
                             child: Column(children: [
                               Container(
-                                margin: EdgeInsets.only(left: 20, top: 15),
-                                child: Text(
+                                margin:
+                                    const EdgeInsets.only(left: 20, top: 15),
+                                child: const Text(
                                   "최근 주문 휴게소",
                                   style: TextStyle(
                                     fontSize: 20,
@@ -196,7 +198,7 @@ class _Home extends State<Home> {
                               ),
                             ]),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           CarouselSlider(
@@ -221,8 +223,8 @@ class _Home extends State<Home> {
                                 builder: (BuildContext context) {
                                   return Container(
                                     width: MediaQuery.of(context).size.width,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 5.0),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 5.0),
                                     child: Column(
                                       children: [
                                         ClipRRect(
@@ -251,13 +253,13 @@ class _Home extends State<Home> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         Container(
                                           child: Text(
                                             text,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.normal),
                                           ),
@@ -272,7 +274,7 @@ class _Home extends State<Home> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Align(
@@ -297,15 +299,16 @@ class _Home extends State<Home> {
                         }).toList(),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                      margin: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 10),
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
-                          color: Color(0xFFC5DFF8),
-                          borderRadius: BorderRadius.only(
+                          color: const Color(0xFFC5DFF8),
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(30.0),
                             topRight: Radius.circular(30.0),
                             bottomLeft: Radius.circular(30.0),
@@ -326,8 +329,9 @@ class _Home extends State<Home> {
                             child: Column(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(left: 20, top: 15),
-                                  child: Text(
+                                  margin:
+                                      const EdgeInsets.only(left: 20, top: 15),
+                                  child: const Text(
                                     "오늘 뭐먹지??",
                                     style: TextStyle(
                                       fontSize: 18,
@@ -339,7 +343,7 @@ class _Home extends State<Home> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
+                            margin: const EdgeInsets.only(top: 10, bottom: 10),
                             child: FutureBuilder<List<String>>(
                               future: getItems(),
                               builder: (context, snapshot) {
@@ -357,26 +361,27 @@ class _Home extends State<Home> {
                                         width: 180,
                                         child: isSpinning
                                             ? AnimatedContainer(
-                                                duration:
-                                                    Duration(milliseconds: 100),
+                                                duration: const Duration(
+                                                    milliseconds: 100),
                                                 child: Text(
                                                   items[random
                                                       .nextInt(items.length)],
-                                                  style: TextStyle(fontSize: 8),
+                                                  style: const TextStyle(
+                                                      fontSize: 8),
                                                 ),
                                               )
                                             : Text(
                                                 items[slotindex],
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 18.0,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                       ),
                                       Container(
-                                        margin:
-                                            EdgeInsets.only(top: 2, left: 10),
-                                        child: Text(
+                                        margin: const EdgeInsets.only(
+                                            top: 2, left: 10),
+                                        child: const Text(
                                           "어떨까요??",
                                           style: TextStyle(
                                             fontSize: 18,
@@ -385,7 +390,7 @@ class _Home extends State<Home> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(
+                                        margin: const EdgeInsets.only(
                                             left: 10, right: 10),
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
@@ -393,15 +398,14 @@ class _Home extends State<Home> {
                                               borderRadius:
                                                   BorderRadius.circular(20),
                                             ),
-                                            primary: Colors.black,
+                                            backgroundColor: Colors.black,
                                             alignment: Alignment.center,
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                                 left: 10,
                                                 right: 10,
                                                 top: 15,
                                                 bottom: 15),
-                                            backgroundColor: Color(0xFFFFD577),
-                                            side: BorderSide(
+                                            side: const BorderSide(
                                               color: Colors.black,
                                               width: 2,
                                             ),
@@ -409,8 +413,8 @@ class _Home extends State<Home> {
                                           onPressed: () {
                                             spinSlotMachine(items);
                                           },
-                                          child: Text(
-                                            "다음\n" + "추천",
+                                          child: const Text(
+                                            "다음\n" "추천",
                                             textAlign: TextAlign.center,
                                             maxLines: 3,
                                             style: TextStyle(
@@ -432,7 +436,7 @@ class _Home extends State<Home> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
@@ -440,8 +444,8 @@ class _Home extends State<Home> {
                       color: Colors.white,
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        margin: EdgeInsets.only(left: 15),
-                        child: Text(
+                        margin: const EdgeInsets.only(left: 15),
+                        child: const Text(
                           "이벤트 / 광고",
                           style: TextStyle(
                             fontSize: 15,
@@ -450,7 +454,7 @@ class _Home extends State<Home> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Container(
@@ -463,7 +467,7 @@ class _Home extends State<Home> {
                         fit: BoxFit.fill,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
@@ -478,10 +482,10 @@ class _Home extends State<Home> {
                     ),
                   ],
                 ),
-          bottomNavigationBar: Container(
+          bottomNavigationBar: SizedBox(
             height: 70,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(25.0),
                 topRight: Radius.circular(25.0),
               ),
@@ -495,7 +499,8 @@ class _Home extends State<Home> {
                     case 0: //검색
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AreaSearch()),
+                        MaterialPageRoute(
+                            builder: (context) => const AreaSearch()),
                       );
                       if (result != null) {
                         setState(() {
@@ -519,7 +524,7 @@ class _Home extends State<Home> {
                     case 2: //홈
                       final result = await Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => const Home()),
                         (route) => false,
                       );
                       if (result != null) {
@@ -532,7 +537,8 @@ class _Home extends State<Home> {
                     case 3: //주문내역
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => OrderedList()),
+                        MaterialPageRoute(
+                            builder: (context) => const OrderedList()),
                       );
                       if (result != null) {
                         setState(() {
@@ -558,7 +564,7 @@ class _Home extends State<Home> {
                 items: [
                   BottomNavigationBarItem(
                     icon: Stack(
-                      children: [
+                      children: const [
                         Padding(
                           padding: EdgeInsets.only(
                             right: 10,
@@ -570,7 +576,7 @@ class _Home extends State<Home> {
                         Positioned(
                           top: 0,
                           right: 3,
-                          child: Container(
+                          child: SizedBox(
                             width: 15,
                             height: 15,
                             child: Text(
@@ -587,7 +593,7 @@ class _Home extends State<Home> {
                   BottomNavigationBarItem(
                     icon: Stack(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -602,13 +608,13 @@ class _Home extends State<Home> {
                             child: Container(
                               width: 15,
                               height: 15,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
                               child: Text(
                                 cartcount.toString(),
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -619,7 +625,7 @@ class _Home extends State<Home> {
                   ),
                   BottomNavigationBarItem(
                     icon: Stack(
-                      children: [
+                      children: const [
                         Padding(
                           padding: EdgeInsets.only(
                             right: 10,
@@ -631,7 +637,7 @@ class _Home extends State<Home> {
                         Positioned(
                           top: 0,
                           right: 3,
-                          child: Container(
+                          child: SizedBox(
                             width: 15,
                             height: 15,
                             child: Text(
@@ -648,7 +654,7 @@ class _Home extends State<Home> {
                   BottomNavigationBarItem(
                     icon: Stack(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -663,13 +669,13 @@ class _Home extends State<Home> {
                             child: Container(
                               width: 15,
                               height: 15,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
                               child: Text(
                                 ordercount.toString(),
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -680,7 +686,7 @@ class _Home extends State<Home> {
                   ),
                   BottomNavigationBarItem(
                     icon: Stack(
-                      children: [
+                      children: const [
                         Padding(
                           padding: EdgeInsets.only(
                             right: 10,
@@ -692,7 +698,7 @@ class _Home extends State<Home> {
                         Positioned(
                           top: 0,
                           right: 3,
-                          child: Container(
+                          child: SizedBox(
                             width: 15,
                             height: 15,
                             child: Text(
@@ -745,8 +751,8 @@ class _Home extends State<Home> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Color(0xff161619),
-            title: Text(
+            backgroundColor: const Color(0xff161619),
+            title: const Text(
               '앱을 종료하시겠습니까??',
               style: TextStyle(color: Colors.white),
             ),
@@ -756,13 +762,13 @@ class _Home extends State<Home> {
                     //onWillpop에 false 전달되어 앱이 종료되지 않는다.
                     Navigator.pop(context, false);
                   },
-                  child: Text('아니오')),
+                  child: const Text('아니오')),
               TextButton(
                   onPressed: () {
                     //onWillpop에 true가 전달되어 앱이 종료 된다.
                     SystemNavigator.pop(); // 앱 종료
                   },
-                  child: Text('예')),
+                  child: const Text('예')),
             ],
           );
         });

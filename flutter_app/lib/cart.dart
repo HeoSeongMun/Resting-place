@@ -5,7 +5,7 @@ import 'package:flutter_app/payment.dart';
 import 'package:flutter_app/signup.dart';
 
 class Cart extends StatefulWidget {
-  Cart({super.key});
+  const Cart({super.key});
 
   @override
   State<Cart> createState() => _Cart();
@@ -63,6 +63,7 @@ class _Cart extends State<Cart> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
     CartCount();
@@ -73,16 +74,16 @@ class _Cart extends State<Cart> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: Column(
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
               height: 110,
-              padding: EdgeInsets.only(top: 35, right: 15, left: 5),
+              padding: const EdgeInsets.only(top: 35, right: 15, left: 5),
               decoration: BoxDecoration(
-                  color: Color(0xFFD2DAFF),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFD2DAFF),
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30.0),
                     bottomRight: Radius.circular(30.0),
                   ),
@@ -112,7 +113,7 @@ class _Cart extends State<Cart> {
                   ),
                   Center(
                     child: Container(
-                      margin: EdgeInsets.only(left: 15),
+                      margin: const EdgeInsets.only(left: 15),
                       alignment: Alignment.center,
                       width: 220,
                       child: const Text(
@@ -124,7 +125,7 @@ class _Cart extends State<Cart> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 70,
                     height: 30,
                     child: ElevatedButton(
@@ -176,15 +177,15 @@ class _Cart extends State<Cart> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               height: MediaQuery.of(context).size.height - 315,
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               decoration: BoxDecoration(
-                  color: Color(0xFFC5DFF8),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFC5DFF8),
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
@@ -199,7 +200,7 @@ class _Cart extends State<Cart> {
                     ),
                   ]),
               child: Container(
-                margin: EdgeInsets.only(left: 5, right: 5),
+                margin: const EdgeInsets.only(left: 5, right: 5),
                 child: StreamBuilder(
                   stream: product
                       .where('userUid', isEqualTo: user!.uid)
@@ -219,11 +220,11 @@ class _Cart extends State<Cart> {
 
                           int listlPrice = itemPrice * itemcount;
                           return Container(
-                            margin:
-                                EdgeInsets.only(left: 5, right: 5, bottom: 15),
+                            margin: const EdgeInsets.only(
+                                left: 5, right: 5, bottom: 15),
                             decoration: BoxDecoration(
-                                color: Color(0xFFffffff),
-                                borderRadius: BorderRadius.only(
+                                color: const Color(0xFFffffff),
+                                borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(25.0),
                                   topRight: Radius.circular(25.0),
                                   bottomLeft: Radius.circular(25.0),
@@ -243,10 +244,10 @@ class _Cart extends State<Cart> {
                               children: [
                                 Container(
                                   alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       left: 10, top: 10, bottom: 10),
                                   width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Color(0xFFFFB79E),
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(25.0),
@@ -262,22 +263,24 @@ class _Cart extends State<Cart> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Container(
-                                            margin: EdgeInsets.only(left: 10),
+                                            margin:
+                                                const EdgeInsets.only(left: 10),
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               documentSnapshot['storeName'],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
-                                          SizedBox(height: 10),
+                                          const SizedBox(height: 10),
                                           Container(
                                             alignment: Alignment.centerLeft,
-                                            margin: EdgeInsets.only(left: 10),
+                                            margin:
+                                                const EdgeInsets.only(left: 10),
                                             child: Text(
                                               documentSnapshot['location'],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -285,7 +288,8 @@ class _Cart extends State<Cart> {
                                         ],
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(right: 20),
+                                        margin:
+                                            const EdgeInsets.only(right: 20),
                                         width: 45,
                                         child: ElevatedButton(
                                           style: TextButton.styleFrom(
@@ -326,8 +330,8 @@ class _Cart extends State<Cart> {
                                 Row(
                                   children: [
                                     Container(
-                                      margin:
-                                          EdgeInsets.only(left: 20, top: 10),
+                                      margin: const EdgeInsets.only(
+                                          left: 20, top: 10),
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(20.0),
@@ -341,11 +345,11 @@ class _Cart extends State<Cart> {
                                     ),
                                     Container(
                                       width: 150,
-                                      margin:
-                                          EdgeInsets.only(left: 20, top: 10),
+                                      margin: const EdgeInsets.only(
+                                          left: 20, top: 10),
                                       child: Text(
                                         documentSnapshot['name'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -353,9 +357,9 @@ class _Cart extends State<Cart> {
                                     Container(
                                       width: 90,
                                       height: 45,
-                                      margin:
-                                          EdgeInsets.only(top: 10, left: 10),
-                                      decoration: BoxDecoration(
+                                      margin: const EdgeInsets.only(
+                                          top: 10, left: 10),
+                                      decoration: const BoxDecoration(
                                         color: Color(0xffFFB79E),
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(25.0),
@@ -372,10 +376,11 @@ class _Cart extends State<Cart> {
                                             alignment: Alignment.center,
                                             width: 30,
                                             height: 30,
-                                            margin: EdgeInsets.only(bottom: 7),
+                                            margin: const EdgeInsets.only(
+                                                bottom: 7),
                                             child: IconButton(
-                                              icon:
-                                                  Icon(Icons.remove, size: 20),
+                                              icon: const Icon(Icons.remove,
+                                                  size: 20),
                                               onPressed: () async {
                                                 //감소
                                                 // 현재 아이템의 수량 가져오기
@@ -399,7 +404,7 @@ class _Cart extends State<Cart> {
                                             child: Text(
                                               documentSnapshot['count']
                                                   .toString(), // 해당 제품의 수량 표시
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -409,9 +414,11 @@ class _Cart extends State<Cart> {
                                             alignment: Alignment.center,
                                             width: 30,
                                             height: 30,
-                                            margin: EdgeInsets.only(bottom: 7),
+                                            margin: const EdgeInsets.only(
+                                                bottom: 7),
                                             child: IconButton(
-                                              icon: Icon(Icons.add, size: 20),
+                                              icon: const Icon(Icons.add,
+                                                  size: 20),
                                               onPressed: () async {
                                                 // 증가
                                                 // 현재 아이템의 수량 가져오기
@@ -430,17 +437,17 @@ class _Cart extends State<Cart> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Align(
                                   alignment: Alignment.bottomRight,
                                   child: Container(
-                                    margin:
-                                        EdgeInsets.only(right: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        right: 20, bottom: 5),
                                     child: Text(
-                                      listlPrice.toString() + '원',
-                                      style: TextStyle(
+                                      '$listlPrice원',
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -457,7 +464,7 @@ class _Cart extends State<Cart> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
@@ -487,7 +494,7 @@ class _Cart extends State<Cart> {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               // 데이터 가져오는 중 로딩 상태
-                              return CircularProgressIndicator();
+                              return const CircularProgressIndicator();
                             }
                             if (snapshot.hasError) {
                               // 오류 발생 시 오류 메시지 출력
@@ -496,7 +503,7 @@ class _Cart extends State<Cart> {
                             if (!snapshot.hasData ||
                                 snapshot.data!.docs.isEmpty) {
                               // 데이터가 없을 경우 처리
-                              return Text(
+                              return const Text(
                                 '0원',
                                 style: TextStyle(
                                   fontSize: 30,
@@ -508,7 +515,7 @@ class _Cart extends State<Cart> {
                             total = calculateTotal(snapshot.data!);
                             return Text(
                               '$total원',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -533,7 +540,7 @@ class _Cart extends State<Cart> {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
+                              children: const [
                                 Text(
                                   '상품이 없습니다.!',
                                   style: TextStyle(
@@ -556,7 +563,7 @@ class _Cart extends State<Cart> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     "닫기",
                                     style: TextStyle(
                                         fontSize: 15,
@@ -580,7 +587,7 @@ class _Cart extends State<Cart> {
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
                   height: double.infinity,
-                  color: Color(0xffFFB79E),
+                  color: const Color(0xffFFB79E),
                   child: const Text(
                     "주문하기",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

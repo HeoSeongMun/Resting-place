@@ -16,19 +16,19 @@ class ReviewListPage extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 110,
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 35,
                 ),
                 decoration: BoxDecoration(
-                    color: Color(0xFFD2DAFF),
-                    borderRadius: BorderRadius.only(
+                    color: const Color(0xFFD2DAFF),
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30.0),
                       bottomRight: Radius.circular(30.0),
                     ),
@@ -42,7 +42,7 @@ class ReviewListPage extends StatelessWidget {
                     ]),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(left: 5, right: 5),
+                  margin: const EdgeInsets.only(left: 5, right: 5),
                   alignment: Alignment.center,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,28 +61,28 @@ class ReviewListPage extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        child: Text(
+                        child: const Text(
                           "리뷰",
                           style: TextStyle(
                             fontSize: 18,
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 60,
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
-                margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xFFC5DFF8),
-                    borderRadius: BorderRadius.only(
+                    color: const Color(0xFFC5DFF8),
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30.0),
                       topRight: Radius.circular(30.0),
                       bottomLeft: Radius.circular(30.0),
@@ -97,7 +97,7 @@ class ReviewListPage extends StatelessWidget {
                       ),
                     ]),
                 child: Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
+                  margin: const EdgeInsets.only(left: 5, right: 5),
                   child: StreamBuilder(
                     stream: product1
                         .where("store_name", isEqualTo: storeName)
@@ -106,12 +106,12 @@ class ReviewListPage extends StatelessWidget {
                         AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                       if (streamSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return Container(child: Text('로딩중...'));
+                        return Container(child: const Text('로딩중...'));
                       }
                       if (!streamSnapshot.hasData ||
                           streamSnapshot.data!.docs.isEmpty) {
                         return Container(
-                            child: Text('리뷰가 없습니다')); // 데이터가 없는 경우 처리
+                            child: const Text('리뷰가 없습니다')); // 데이터가 없는 경우 처리
                       }
                       if (streamSnapshot.hasData) {
                         documents = streamSnapshot.data!.docs;
@@ -121,9 +121,9 @@ class ReviewListPage extends StatelessWidget {
                           return timeB.compareTo(timeA); // 정렬
                         });
                         return ListView.separated(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          separatorBuilder: (context, index) => Divider(
+                          separatorBuilder: (context, index) => const Divider(
                             color: Colors.grey,
                             thickness: 3,
                           ),
@@ -144,14 +144,14 @@ class ReviewListPage extends StatelessWidget {
                                   Container(
                                     child: Text(
                                       documents[index]['name'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                       ),
                                     ),
                                   ),
                                   Container(
                                     alignment: Alignment.topCenter,
-                                    margin: EdgeInsets.only(left: 10),
+                                    margin: const EdgeInsets.only(left: 10),
                                     width: 100,
                                     child: RatingBar.builder(
                                       initialRating: double.parse(
@@ -163,7 +163,7 @@ class ReviewListPage extends StatelessWidget {
                                       allowHalfRating: false,
                                       itemCount: 5,
                                       itemSize: 15,
-                                      itemBuilder: (context, _) => Icon(
+                                      itemBuilder: (context, _) => const Icon(
                                         Icons.star,
                                         color: Colors.amber,
                                       ),
@@ -175,29 +175,30 @@ class ReviewListPage extends StatelessWidget {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Container(
                                     child: Text(
                                       documents[index]['menu'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 10,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: MediaQuery.of(context).size.width,
                                     child: RichText(
                                       overflow: TextOverflow.clip,
                                       maxLines: 10,
-                                      strutStyle: StrutStyle(fontSize: 13),
+                                      strutStyle:
+                                          const StrutStyle(fontSize: 13),
                                       text: TextSpan(
                                         text: documents[index]['text'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'jalnan',
                                           color: Colors.black,
                                           fontSize: 13,
@@ -205,7 +206,7 @@ class ReviewListPage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Row(

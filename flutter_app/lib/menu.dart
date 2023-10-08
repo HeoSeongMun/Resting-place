@@ -42,6 +42,7 @@ class _Menu extends State<Menu> {
     return querySnapshot.docs.isNotEmpty;
   }
 
+  @override
   void initState() {
     super.initState();
     CartCount();
@@ -53,15 +54,15 @@ class _Menu extends State<Menu> {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: 5),
+              padding: const EdgeInsets.only(bottom: 5),
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  color: Color(0xFFD2DAFF),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFD2DAFF),
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30.0),
                     bottomRight: Radius.circular(30.0),
                   ),
@@ -75,13 +76,13 @@ class _Menu extends State<Menu> {
                   ]),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         width: 30,
                         height: 30,
                         child: IconButton(
@@ -95,7 +96,7 @@ class _Menu extends State<Menu> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Row(
@@ -178,7 +179,7 @@ class _Menu extends State<Menu> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 12,
                           ),
                           Container(
@@ -197,24 +198,20 @@ class _Menu extends State<Menu> {
                                 Column(
                                   children: [
                                     Container(
-                                      margin:
-                                          EdgeInsets.only(left: 55, right: 10),
+                                      margin: const EdgeInsets.only(
+                                          left: 55, right: 10),
                                       width: 80,
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        '평점 : ' +
-                                            (widget.averagegrade.isNaN
-                                                ? '0'
-                                                : widget.averagegrade
-                                                    .toString()),
-                                        style: TextStyle(fontSize: 12),
+                                        '평점 : ${widget.averagegrade.isNaN ? '0' : widget.averagegrade.toString()}',
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ),
                                     Row(
                                       children: [
                                         Container(
-                                          margin:
-                                              EdgeInsets.only(left: 40, top: 2),
+                                          margin: const EdgeInsets.only(
+                                              left: 40, top: 2),
                                           child: RatingBar.builder(
                                             initialRating:
                                                 widget.averagegrade.isNaN
@@ -227,7 +224,8 @@ class _Menu extends State<Menu> {
                                             allowHalfRating: false,
                                             itemCount: 5,
                                             itemSize: 15,
-                                            itemBuilder: (context, _) => Icon(
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
                                               Icons.star,
                                               color: Colors.amber,
                                             ),
@@ -235,13 +233,12 @@ class _Menu extends State<Menu> {
                                           ),
                                         ),
                                         Container(
-                                          margin: EdgeInsets.only(
+                                          margin: const EdgeInsets.only(
                                               right: 10, top: 4),
                                           child: Text(
-                                            '( ' +
-                                                widget.gradescount.toString() +
-                                                ' )',
-                                            style: TextStyle(fontSize: 10),
+                                            '( ${widget.gradescount} )',
+                                            style:
+                                                const TextStyle(fontSize: 10),
                                           ),
                                         ),
                                       ],
@@ -251,7 +248,7 @@ class _Menu extends State<Menu> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                         ],
@@ -261,15 +258,15 @@ class _Menu extends State<Menu> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
               height: MediaQuery.of(context).size.height - 250,
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               decoration: BoxDecoration(
-                  color: Color(0xFFC5DFF8),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFC5DFF8),
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
@@ -299,11 +296,11 @@ class _Menu extends State<Menu> {
                               streamSnapshot.data!.docs[index];
                           return Container(
                             height: 70,
-                            margin:
-                                EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                            margin: const EdgeInsets.only(
+                                left: 5, right: 5, bottom: 10),
                             decoration: BoxDecoration(
-                                color: Color(0xFFffffff),
-                                borderRadius: BorderRadius.only(
+                                color: const Color(0xFFffffff),
+                                borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(25.0),
                                   topRight: Radius.circular(25.0),
                                   bottomLeft: Radius.circular(25.0),
@@ -359,10 +356,10 @@ class _Menu extends State<Menu> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          content: Text("이미 장바구니에 있어요!!"),
+                                          content: const Text("이미 장바구니에 있어요!!"),
                                           actions: [
                                             TextButton(
-                                              child: Text("확인"),
+                                              child: const Text("확인"),
                                               onPressed: () {
                                                 Navigator.of(context)
                                                     .pop(); // 다이얼로그 닫기
@@ -385,10 +382,10 @@ class _Menu extends State<Menu> {
             ),
           ],
         ),
-        bottomNavigationBar: Container(
+        bottomNavigationBar: SizedBox(
           height: 70,
           child: ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25.0),
               topRight: Radius.circular(25.0),
             ),
@@ -402,7 +399,8 @@ class _Menu extends State<Menu> {
                   case 0: //검색
                     final result = await Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => AreaSearch()),
+                      MaterialPageRoute(
+                          builder: (context) => const AreaSearch()),
                       (route) => false,
                     );
                     if (result != null) {
@@ -427,7 +425,7 @@ class _Menu extends State<Menu> {
                   case 2: //홈
                     final result = await Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                       (route) => false,
                     );
                     if (result != null) {
@@ -440,7 +438,8 @@ class _Menu extends State<Menu> {
                   case 3: //주문내역
                     final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => OrderedList()),
+                      MaterialPageRoute(
+                          builder: (context) => const OrderedList()),
                     );
                     if (result != null) {
                       setState(() {
@@ -468,7 +467,7 @@ class _Menu extends State<Menu> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -479,10 +478,10 @@ class _Menu extends State<Menu> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: Text(
+                          child: const Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -496,7 +495,7 @@ class _Menu extends State<Menu> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -511,13 +510,13 @@ class _Menu extends State<Menu> {
                           child: Container(
                             width: 15,
                             height: 15,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               cartcount.toString(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -529,7 +528,7 @@ class _Menu extends State<Menu> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -540,10 +539,10 @@ class _Menu extends State<Menu> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: Text(
+                          child: const Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -557,7 +556,7 @@ class _Menu extends State<Menu> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -572,13 +571,13 @@ class _Menu extends State<Menu> {
                           child: Container(
                             width: 15,
                             height: 15,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               ordercount.toString(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -590,7 +589,7 @@ class _Menu extends State<Menu> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -601,10 +600,10 @@ class _Menu extends State<Menu> {
                       Positioned(
                         top: 0,
                         right: 3,
-                        child: Container(
+                        child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: Text(
+                          child: const Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,

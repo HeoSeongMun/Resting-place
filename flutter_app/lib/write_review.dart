@@ -5,7 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class WriteReview extends StatefulWidget {
   WriteReview(this.areaName, this.storeName, this.menu, this.imageUrl,
-      this.ordertime, this.storeUid);
+      this.ordertime, this.storeUid,
+      {super.key});
 
   String storeName = '';
   String areaName = '';
@@ -33,7 +34,7 @@ class _WriteReviewState extends State<WriteReview> {
       FirebaseFirestore.instance.collection('order');
   CollectionReference completecollection =
       FirebaseFirestore.instance.collection('complete');
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   _WriteReviewState() {
     reviewController.addListener(() {
@@ -95,7 +96,7 @@ class _WriteReviewState extends State<WriteReview> {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: GestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
@@ -105,12 +106,12 @@ class _WriteReviewState extends State<WriteReview> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: 35,
                   ),
                   decoration: BoxDecoration(
-                      color: Color(0xFFD2DAFF),
-                      borderRadius: BorderRadius.only(
+                      color: const Color(0xFFD2DAFF),
+                      borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(30.0),
                         bottomRight: Radius.circular(30.0),
                       ),
@@ -129,7 +130,7 @@ class _WriteReviewState extends State<WriteReview> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 40,
                               height: 40,
                               child: IconButton(
@@ -144,48 +145,48 @@ class _WriteReviewState extends State<WriteReview> {
                           ],
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 40),
+                          margin: const EdgeInsets.only(left: 40),
                           child: Text(
                             widget.areaName,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 40),
+                          margin: const EdgeInsets.only(left: 40),
                           child: Text(
                             widget.storeName,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
                           ),
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         Container(
-                          margin: EdgeInsets.only(left: 40),
-                          child: Text(
+                          margin: const EdgeInsets.only(left: 40),
+                          child: const Text(
                             '음식 또는 매장에 대해 평가를 해주세요.',
                             style: TextStyle(
                               fontSize: 15,
                             ),
                           ),
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
-                Container(
+                const SizedBox(height: 40),
+                SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
                   height: 30,
-                  child: Text(
+                  child: const Text(
                     '서비스와 맛은 어땠었나요?',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
@@ -201,8 +202,8 @@ class _WriteReviewState extends State<WriteReview> {
                     direction: Axis.horizontal,
                     allowHalfRating: false,
                     itemCount: 5,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => Icon(
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
                       Icons.star,
                       color: Colors.amber,
                     ),
@@ -218,18 +219,18 @@ class _WriteReviewState extends State<WriteReview> {
                   height: 2,
                   color: Colors.black,
                 ),
-                SizedBox(height: 30),
-                Container(
+                const SizedBox(height: 30),
+                SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
                   height: 30,
-                  child: Text(
+                  child: const Text(
                     '좋은점과 부족한점을 적어주세요.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 20),
-                Container(
+                const SizedBox(height: 20),
+                SizedBox(
                   width: MediaQuery.of(context).size.width - 50,
                   child: TextField(
                     controller: reviewController,
@@ -239,23 +240,23 @@ class _WriteReviewState extends State<WriteReview> {
                         hintStyle: TextStyle(
                           color: Colors.grey[300],
                         ),
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide:
                               BorderSide(width: 2, color: Colors.black12),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide:
                               BorderSide(width: 2, color: Colors.black12),
                         ),
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         )),
                     keyboardType: TextInputType.multiline,
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 ButtonTheme(
                     minWidth: 300,
                     height: 100,
@@ -289,7 +290,7 @@ class _WriteReviewState extends State<WriteReview> {
                           );
                         }
                       },
-                      child: Text('완 료'),
+                      child: const Text('완 료'),
                     )),
               ],
             ),

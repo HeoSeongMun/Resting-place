@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/update_review.dart';
-import 'package:flutter_app/write_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 class ReviewManagementScreen extends StatefulWidget {
-  ReviewManagementScreen({super.key});
+  const ReviewManagementScreen({super.key});
+  @override
   _ReviewManagementScreen createState() => _ReviewManagementScreen();
 }
 
@@ -23,6 +23,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
   final user = FirebaseAuth.instance.currentUser;
   late bool isLoading = true; // 데이터가 로딩 중인지 여부를 나타내는 변수
 
+  @override
   void initState() {
     isLoading = true;
     Future.delayed(const Duration(seconds: 1), () {
@@ -38,7 +39,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'jalnan'),
       home: Scaffold(
-        backgroundColor: Color(0xFFEEF1FF),
+        backgroundColor: const Color(0xFFEEF1FF),
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -47,12 +48,12 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 110,
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       top: 35,
                     ),
                     decoration: BoxDecoration(
-                        color: Color(0xFFD2DAFF),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xFFD2DAFF),
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(30.0),
                           bottomRight: Radius.circular(30.0),
                         ),
@@ -66,7 +67,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                         ]),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(left: 5, right: 5),
+                      margin: const EdgeInsets.only(left: 5, right: 5),
                       alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,21 +86,21 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                             ),
                           ),
                           Container(
-                            child: Text(
+                            child: const Text(
                               "리뷰 관리",
                               style: TextStyle(
                                 fontSize: 18,
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 60,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   isLoading
@@ -108,25 +109,25 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                               top: MediaQuery.of(context).size.height / 3.7),
                           child: Column(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 150,
                                 height: 150,
                                 child: Image.asset(
                                     'assets/images/ingappicon3.gif'), // 로딩 인디케이터
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
-                              Text('...로딩중...')
+                              const Text('...로딩중...')
                             ],
                           ),
                         )
                       : Container(
-                          margin:
-                              EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                          margin: const EdgeInsets.only(
+                              left: 10, right: 10, bottom: 10),
                           decoration: BoxDecoration(
-                              color: Color(0xFFC5DFF8),
-                              borderRadius: BorderRadius.only(
+                              color: const Color(0xFFC5DFF8),
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(30.0),
                                 topRight: Radius.circular(30.0),
                                 bottomLeft: Radius.circular(30.0),
@@ -141,7 +142,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                 ),
                               ]),
                           child: Container(
-                            margin: EdgeInsets.only(left: 5, right: 5),
+                            margin: const EdgeInsets.only(left: 5, right: 5),
                             child: StreamBuilder(
                               stream: reviewcollection
                                   .where('userUid', isEqualTo: user!.uid)
@@ -149,12 +150,12 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                               builder: (BuildContext context, streamSnapshot) {
                                 if (streamSnapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return SizedBox();
+                                  return const SizedBox();
                                 }
                                 if (!streamSnapshot.hasData ||
                                     streamSnapshot.data!.docs.isEmpty) {
                                   return Container(
-                                      child: Text(
+                                      child: const Text(
                                           '작성한 리뷰가 없습니다!')); // 데이터가 없는 경우 처리
                                 }
                                 if (streamSnapshot.hasData) {
@@ -167,10 +168,11 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                     return timeB.compareTo(timeA);
                                   });
                                   return ListView.separated(
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     separatorBuilder: (context, index) =>
-                                        Divider(
+                                        const Divider(
                                       color: Colors.grey,
                                       thickness: 3,
                                     ),
@@ -183,12 +185,13 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                           DateFormat('yyyy-MM-dd')
                                               .format(dateTime);
                                       return ListTile(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 10.0), // 여기서 간격 조절
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 10.0), // 여기서 간격 조절
                                         leading: Image.network(
                                             sortedDocs[index]['imageUrl']),
                                         title: Container(
-                                          margin: EdgeInsets.only(
+                                          margin: const EdgeInsets.only(
                                               top: 10, bottom: 15),
                                           child: Text(
                                             sortedDocs[index]['area_name'],
@@ -199,27 +202,28 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5),
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 5),
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 sortedDocs[index]['store_name'],
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.black),
                                               ),
                                             ),
                                             Container(
-                                              margin: EdgeInsets.only(
+                                              margin: const EdgeInsets.only(
                                                   top: 5, bottom: 5),
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 sortedDocs[index]['menu'],
-                                                style: TextStyle(fontSize: 10),
+                                                style: const TextStyle(
+                                                    fontSize: 10),
                                               ),
                                             ),
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 20),
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 20),
                                               child: RatingBar.builder(
                                                 initialRating: double.parse(
                                                     sortedDocs[index]['grade']
@@ -232,7 +236,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                                 itemCount: 5,
                                                 itemSize: 15,
                                                 itemBuilder: (context, _) =>
-                                                    Icon(
+                                                    const Icon(
                                                   Icons.star,
                                                   color: Colors.amber,
                                                 ),
@@ -241,11 +245,11 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                             ),
                                             Container(
                                               alignment: Alignment.centerLeft,
-                                              margin:
-                                                  EdgeInsets.only(bottom: 50),
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 50),
                                               child: Text(
                                                 sortedDocs[index]['text'],
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.black),
                                               ),
                                             ),
@@ -253,7 +257,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                               alignment: Alignment.bottomRight,
                                               child: Text(
                                                 formattime,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 10,
                                                 ),
                                               ),
@@ -264,7 +268,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Container(
+                                              SizedBox(
                                                 width: 35,
                                                 height: 30,
                                                 child: IconButton(
@@ -301,7 +305,7 @@ class _ReviewManagementScreen extends State<ReviewManagementScreen> {
                                                   },
                                                 ),
                                               ),
-                                              Container(
+                                              SizedBox(
                                                 width: 30,
                                                 height: 30,
                                                 child: IconButton(
