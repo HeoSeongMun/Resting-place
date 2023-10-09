@@ -76,7 +76,7 @@ class _Delivery extends State<Delivery> {
                       ),
                       Container(
                         child: const Text(
-                          "배송현황",
+                          "주문현황",
                           style: TextStyle(
                             fontSize: 18,
                           ),

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/payment.dart';
-import 'package:flutter_app/signup.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -459,7 +458,7 @@ class _Cart extends State<Cart> {
                         },
                       );
                     }
-                    return Container();
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),

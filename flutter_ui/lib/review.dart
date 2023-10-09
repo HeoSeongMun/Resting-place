@@ -7,6 +7,7 @@ import 'package:flutter_ui/menu.dart';
 import 'package:flutter_ui/open_business.dart';
 import 'package:flutter_ui/sales.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class Review extends StatelessWidget {
   Review({super.key});
@@ -14,8 +15,68 @@ class Review extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser;
   CollectionReference reviewcollection =
       FirebaseFirestore.instance.collection('testreviewlist');
+
+  final ScrollController _scrollController = ScrollController();
+  late int gradescount = 0;
+  late double averagegrade = 0;
+  late int highgrade = 0;
+  late String highmenu = '';
+  late String lowmenu = '';
+  late int lowgrade = 0;
+  Future<void> averageData() async {
+    // 가장 평점 및 리뷰 갯수 가져오기
+    QuerySnapshot querySnapshot =
+        await reviewcollection.where("storeUid", isEqualTo: user!.uid).get();
+    int totalGrade = 0;
+    int numberOfGrades = querySnapshot.docs.length;
+    for (var doc in querySnapshot.docs) {
+      int grade = doc['grade'];
+      totalGrade += grade;
+    }
+    averagegrade = totalGrade / numberOfGrades;
+    gradescount = numberOfGrades;
+  }
+
+  Future<void> highratingData() async {
+    // 가장 높은  grade 값 문서 가져오기
+    QuerySnapshot querySnapshot =
+        await reviewcollection.where("storeUid", isEqualTo: user!.uid).get();
+    final List<DocumentSnapshot> sortedDocs = List.from(querySnapshot.docs);
+    sortedDocs.sort((a, b) {
+      num timeA = a['grade'];
+      num timeB = b['grade'];
+      return timeB.compareTo(timeA);
+    });
+    highgrade = sortedDocs[0]['grade'];
+    highmenu = sortedDocs[0]['menu'];
+  }
+
+  Future<void> lowratingData() async {
+    // 가장 낮은 grade 값 문서 가져오기
+    QuerySnapshot querySnapshot =
+        await reviewcollection.where("storeUid", isEqualTo: user!.uid).get();
+    final List<DocumentSnapshot> sortedDocs = List.from(querySnapshot.docs);
+    sortedDocs.sort((a, b) {
+      num timeA = a['grade'];
+      num timeB = b['grade'];
+      return timeA.compareTo(timeB);
+    });
+    lowgrade = sortedDocs[0]['grade'];
+    lowmenu = sortedDocs[0]['menu'];
+  }
+
   @override
   Widget build(BuildContext context) {
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels == 0) {
+          debugPrint('Scroll position at top');
+        } else {
+          debugPrint('Scroll position at bottom');
+          // Load more list items
+        }
+      }
+    });
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -376,7 +437,7 @@ class Review extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: Color(0xFFC5DFF8),
+                          color: const Color(0xFFC5DFF8),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: Padding(
@@ -386,9 +447,9 @@ class Review extends StatelessWidget {
                             children: [
                               Container(
                                 margin:
-                                    const EdgeInsets.only(left: 20, right: 20),
+                                    const EdgeInsets.only(left: 10, right: 10),
                                 height: 520,
-                                width: 700,
+                                width: 600,
                                 decoration: const BoxDecoration(
                                   color: Color(0xFFC5DFF8),
                                   borderRadius: BorderRadius.only(
@@ -407,6 +468,7 @@ class Review extends StatelessWidget {
                                           streamSnapshot) {
                                     if (streamSnapshot.hasData) {
                                       return ListView.builder(
+                                        controller: _scrollController,
                                         itemCount:
                                             streamSnapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
@@ -421,45 +483,87 @@ class Review extends StatelessWidget {
                                               DateFormat('yyyy-MM-dd - HH시mm분')
                                                   .format(dateTime);
                                           return Container(
-                                            margin: EdgeInsets.only(
-                                                left: 5, right: 5, bottom: 10),
+                                            margin: const EdgeInsets.only(
+                                                bottom: 10),
                                             child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: 10, top: 10),
-                                                    child: Text(
-                                                      documentSnapshot['name'],
-                                                      style: TextStyle(
-                                                          fontSize: 30,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .only(top: 5),
+                                                        child: Text(
+                                                          documentSnapshot[
+                                                              'name'],
+                                                          style: const TextStyle(
+                                                              fontSize: 30,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                                .only(
+                                                            left: 10, top: 5),
+                                                        child:
+                                                            RatingBar.builder(
+                                                          initialRating:
+                                                              documentSnapshot[
+                                                                          'grade']
+                                                                      .isNaN
+                                                                  ? 0
+                                                                  : documentSnapshot[
+                                                                      'grade'],
+                                                          minRating: 1,
+                                                          direction:
+                                                              Axis.horizontal,
+                                                          ignoreGestures: true,
+                                                          updateOnDrag: false,
+                                                          allowHalfRating:
+                                                              false,
+                                                          itemCount: 5,
+                                                          itemSize: 20,
+                                                          itemBuilder:
+                                                              (context, _) =>
+                                                                  const Icon(
+                                                            Icons.star,
+                                                            color: Color(
+                                                                0xFFFF8F00),
+                                                          ),
+                                                          onRatingUpdate:
+                                                              (_) {},
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                   Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: 10, top: 5),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 5),
                                                     child: Text(
                                                       '메뉴 :' +
                                                           documentSnapshot[
                                                               'menu'],
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 20,
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     ),
                                                   ),
                                                   Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: 10, top: 20),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 20),
                                                     child: Text(
                                                       documentSnapshot['text'],
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 25,
                                                           fontWeight:
                                                               FontWeight.bold),
+                                                      maxLines: 10,
                                                     ),
                                                   ),
                                                   Row(
@@ -467,11 +571,13 @@ class Review extends StatelessWidget {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       Container(
-                                                        margin: EdgeInsets.only(
-                                                            left: 10, top: 10),
+                                                        margin: const EdgeInsets
+                                                                .only(
+                                                            right: 10, top: 10),
                                                         child: Text(
                                                           formattime,
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 13,
                                                           ),
                                                         ),
@@ -479,8 +585,9 @@ class Review extends StatelessWidget {
                                                     ],
                                                   ),
                                                   Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 10),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 10),
                                                     height: 2,
                                                     color: Colors.black54,
                                                   ),
@@ -495,6 +602,195 @@ class Review extends StatelessWidget {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 100,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE3FFE2),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: FutureBuilder(
+                            future: averageData(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '현재 평점은?',
+                                    style: TextStyle(
+                                        fontFamily: "Jalnan", fontSize: 30),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '평점 : $averagegrade',
+                                    style: const TextStyle(
+                                        fontFamily: "Jalnan", fontSize: 25),
+                                  ),
+                                  Row(
+                                    children: [
+                                      RatingBar.builder(
+                                        initialRating: averagegrade.isNaN
+                                            ? 0
+                                            : averagegrade,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        ignoreGestures: true,
+                                        updateOnDrag: false,
+                                        allowHalfRating: false,
+                                        itemCount: 5,
+                                        itemSize: 30,
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Color(0xFFFF8F00),
+                                        ),
+                                        onRatingUpdate: (_) {},
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            right: 10, top: 4),
+                                        child: Text(
+                                          '( $gradescount )',
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "Jalnan"),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE3FFE2),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: FutureBuilder(
+                            future: highratingData(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '최고의 리뷰!',
+                                    style: TextStyle(
+                                        fontFamily: "Jalnan", fontSize: 30),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '메뉴 : $highmenu',
+                                    style: const TextStyle(
+                                        fontFamily: "Jalnan", fontSize: 25),
+                                  ),
+                                  RatingBar.builder(
+                                    initialRating: highgrade.isNaN
+                                        ? 0
+                                        : highgrade.toDouble(),
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    ignoreGestures: true,
+                                    updateOnDrag: false,
+                                    allowHalfRating: false,
+                                    itemCount: 5,
+                                    itemSize: 30,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Color(0xFFFF8F00),
+                                    ),
+                                    onRatingUpdate: (_) {},
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE3FFE2),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: FutureBuilder(
+                            future: lowratingData(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    '최악의 리뷰ㅠㅠ',
+                                    style: TextStyle(
+                                        fontFamily: "Jalnan", fontSize: 30),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '메뉴 : $lowmenu',
+                                    style: const TextStyle(
+                                        fontFamily: "Jalnan", fontSize: 25),
+                                  ),
+                                  RatingBar.builder(
+                                    initialRating: lowgrade.isNaN
+                                        ? 0
+                                        : lowgrade.toDouble(),
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    ignoreGestures: true,
+                                    updateOnDrag: false,
+                                    allowHalfRating: false,
+                                    itemCount: 5,
+                                    itemSize: 30,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Color(0xFFFF8F00),
+                                    ),
+                                    onRatingUpdate: (_) {},
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ),

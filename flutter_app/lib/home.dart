@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/restaurant.dart';
 import 'package:flutter_app/userinfo.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,6 +21,8 @@ class Home extends StatefulWidget {
 class _Home extends State<Home> {
   CollectionReference ordercollection =
       FirebaseFirestore.instance.collection('order');
+  CollectionReference completecollection =
+      FirebaseFirestore.instance.collection('complete');
   CollectionReference areacollection =
       FirebaseFirestore.instance.collection('area');
   CollectionReference menucollection =
@@ -52,14 +52,31 @@ class _Home extends State<Home> {
       imageurlList.add(doc['area_name']);
     }
 
-    List<String> imageurlList2 = [];
-    List<String> locationList = [];
+    Set<String> imageurlList2 = <String>{};
+    Set<String> locationList = <String>{};
     if (imageurlList.isNotEmpty) {
       QuerySnapshot snapshot1 =
           await areacollection.where('location', whereIn: imageurlList).get();
       for (var doc in snapshot1.docs) {
         imageurlList2.add(doc['imageUrl']);
         locationList.add(doc['location']);
+      }
+    } else if (imageurlList.isEmpty) {
+      QuerySnapshot snapshot = await completecollection
+          .where('userUid', isEqualTo: user!.uid)
+          .limit(5)
+          .get();
+      for (var doc in snapshot.docs) {
+        imageurlList.add(doc['area_name']);
+        if (imageurlList.isNotEmpty) {
+          QuerySnapshot snapshot1 = await areacollection
+              .where('location', whereIn: imageurlList)
+              .get();
+          for (var doc in snapshot1.docs) {
+            imageurlList2.add(doc['imageUrl']);
+            locationList.add(doc['location']);
+          }
+        }
       }
     }
 
@@ -114,6 +131,7 @@ class _Home extends State<Home> {
     imageData();
     CartCount();
     OrderCount();
+    getItems();
     isLoading = true;
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -163,6 +181,7 @@ class _Home extends State<Home> {
                       height: 50,
                     ),
                     Container(
+                      height: 300,
                       margin: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
                           color: const Color(0xFFC5DFF8),
@@ -254,9 +273,11 @@ class _Home extends State<Home> {
                                           ),
                                         ),
                                         const SizedBox(
-                                          height: 10,
+                                          height: 20,
                                         ),
                                         Container(
+                                          alignment: Alignment.center,
+                                          width: 350,
                                           child: Text(
                                             text,
                                             style: const TextStyle(
@@ -398,7 +419,8 @@ class _Home extends State<Home> {
                                               borderRadius:
                                                   BorderRadius.circular(20),
                                             ),
-                                            backgroundColor: Colors.black,
+                                            backgroundColor:
+                                                const Color(0xFFFFD577),
                                             alignment: Alignment.center,
                                             padding: const EdgeInsets.only(
                                                 left: 10,
@@ -512,7 +534,7 @@ class _Home extends State<Home> {
                     case 1: //장바구니
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Cart()),
+                        MaterialPageRoute(builder: (context) => const Cart()),
                       );
                       if (result != null) {
                         setState(() {

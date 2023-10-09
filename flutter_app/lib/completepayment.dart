@@ -144,8 +144,11 @@ class _PayComplete extends State<PayComplete> {
               Container(
                 height: 45,
                 width: 340,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFD2DAFF),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
                 margin: const EdgeInsets.only(top: 20),
-                color: const Color(0xffD2DAFF),
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,10 +180,13 @@ class _PayComplete extends State<PayComplete> {
                     ]),
               ),
               Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xFFD2DAFF),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
                 height: 150,
                 width: 340,
                 margin: const EdgeInsets.only(top: 10),
-                color: const Color(0xffD2DAFF),
                 child: StreamBuilder(
                   stream: ordercollection
                       .where('userUid', isEqualTo: _userID!.uid)
