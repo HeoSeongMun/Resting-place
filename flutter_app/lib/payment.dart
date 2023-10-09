@@ -38,7 +38,7 @@ class _Payment extends State<Payment> {
   CollectionReference order = FirebaseFirestore.instance.collection('order');
 
   final user = FirebaseAuth.instance.currentUser;
-
+  late bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -881,8 +881,7 @@ class _Payment extends State<Payment> {
                   for (QueryDocumentSnapshot document in documents) {
                     await document.reference.delete();
                   }
-
-                  Future.delayed(const Duration(seconds: 1), () {
+                  Future.delayed(const Duration(milliseconds: 100), () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
