@@ -99,6 +99,12 @@ class _Payment extends State<Payment> {
               ),
               actions: <Widget>[
                 TextButton(
+                  child: const Text('취소'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
                   child: const Text('확인'),
                   onPressed: () {
                     if (int.parse(mileageController.text) > mileage) {
@@ -145,12 +151,6 @@ class _Payment extends State<Payment> {
                       });
                       Navigator.of(context).pop();
                     }
-                  },
-                ),
-                TextButton(
-                  child: const Text('취소'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
                   },
                 ),
               ]);

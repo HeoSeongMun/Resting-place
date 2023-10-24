@@ -150,6 +150,12 @@ class _Orderdelivery extends State<Orderdelivery> {
         order0.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order0.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order0.add(formattime);
         setState(() {
           setOrder0 = order0.toList();
         });
@@ -171,6 +177,12 @@ class _Orderdelivery extends State<Orderdelivery> {
         order1.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order1.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order1.add(formattime);
         setState(() {
           setOrder1 = order1.toList();
         });
@@ -192,6 +204,12 @@ class _Orderdelivery extends State<Orderdelivery> {
         order2.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order2.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order2.add(formattime);
         setState(() {
           setOrder2 = order2.toList();
         });
@@ -496,10 +514,10 @@ class _Orderdelivery extends State<Orderdelivery> {
                                     ),
                                     const SizedBox(height: 20),
                                     Container(
-                                      child: const Center(
+                                      child: Center(
                                         child: Text(
-                                          '오후 11시 30분',
-                                          style: TextStyle(
+                                          order[10],
+                                          style: const TextStyle(
                                             fontSize: 15,
                                           ),
                                         ),

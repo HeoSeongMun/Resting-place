@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/signup.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -157,52 +156,56 @@ class Login extends StatelessWidget {
                           )),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          try {
-                            final newUser = await _authentication
-                                .signInWithEmailAndPassword(
-                              email: emailController.text,
-                              password: pwController.text,
-                            );
-                            if (newUser.user != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const Home();
-                                  },
-                                ),
-                              );
-                            }
-                          } catch (e) {
-                            print(e);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('이메일과 비밀번호를 확인해주세요'),
-                                backgroundColor: Colors.blue,
+                      Builder(
+                        builder: (BuildContext context) {
+                          return ElevatedButton(
+                            onPressed: () async {
+                              try {
+                                final newUser = await _authentication
+                                    .signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: pwController.text,
+                                );
+                                if (newUser.user != null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const Home();
+                                      },
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                print(e);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('이메일과 비밀번호를 확인해주세요'),
+                                    backgroundColor: Colors.blue,
+                                  ),
+                                );
+                              }
+                            },
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.black,
+                                backgroundColor: const Color(0xFFB1B2FF),
+                                padding: const EdgeInsets.only(
+                                    left: 30, right: 30, top: 8, bottom: 8),
+                                shadowColor: Colors.black,
+                                elevation: 7,
+                                side: const BorderSide(
+                                  color: Colors.black,
+                                  width: 1.5,
+                                )),
+                            child: const Text(
+                              "로그인",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                          }
+                            ),
+                          );
                         },
-                        style: TextButton.styleFrom(
-                            foregroundColor: Colors.black,
-                            backgroundColor: const Color(0xFFB1B2FF),
-                            padding: const EdgeInsets.only(
-                                left: 30, right: 30, top: 8, bottom: 8),
-                            shadowColor: Colors.black,
-                            elevation: 7,
-                            side: const BorderSide(
-                              color: Colors.black,
-                              width: 1.5,
-                            )),
-                        child: const Text(
-                          "로그인",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                       ),
                       Flexible(
                           child: Container(

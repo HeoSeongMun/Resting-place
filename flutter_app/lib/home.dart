@@ -748,10 +748,11 @@ class _Home extends State<Home> {
         await cartcollection.where('userUid', isEqualTo: user!.uid).get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      cartcount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        cartcount = count;
+      });
+    }
   }
 
   Future<void> OrderCount() async {
@@ -761,10 +762,11 @@ class _Home extends State<Home> {
         .get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      ordercount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        ordercount = count;
+      });
+    }
   }
 
   //앱 종료 함수

@@ -41,6 +41,7 @@ class _PayComplete extends State<PayComplete> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Colors.white,
         body: isLoading
             ? Center(
                 child: Container(
@@ -404,10 +405,11 @@ class _PayComplete extends State<PayComplete> {
         await cartcollection.where('userUid', isEqualTo: _userID!.uid).get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      cartcount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        cartcount = count;
+      });
+    }
   }
 
   Future<void> OrderCount() async {
@@ -417,9 +419,10 @@ class _PayComplete extends State<PayComplete> {
         .get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      ordercount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        ordercount = count;
+      });
+    }
   }
 }

@@ -203,7 +203,7 @@ class _Menu extends State<Menu> {
                                       width: 80,
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        '평점 : ${widget.averagegrade.isNaN ? '0' : widget.averagegrade.toString()}',
+                                        '평점 : ${widget.averagegrade.isNaN ? '0' : widget.averagegrade.toStringAsFixed(2)}',
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ),
@@ -212,16 +212,11 @@ class _Menu extends State<Menu> {
                                         Container(
                                           margin: const EdgeInsets.only(
                                               left: 40, top: 2),
-                                          child: RatingBar.builder(
-                                            initialRating:
-                                                widget.averagegrade.isNaN
-                                                    ? 0
-                                                    : widget.averagegrade,
-                                            minRating: 1,
+                                          child: RatingBarIndicator(
+                                            rating: widget.averagegrade.isNaN
+                                                ? 0
+                                                : widget.averagegrade,
                                             direction: Axis.horizontal,
-                                            ignoreGestures: true,
-                                            updateOnDrag: false,
-                                            allowHalfRating: false,
                                             itemCount: 5,
                                             itemSize: 15,
                                             itemBuilder: (context, _) =>
@@ -229,7 +224,6 @@ class _Menu extends State<Menu> {
                                               Icons.star,
                                               color: Colors.amber,
                                             ),
-                                            onRatingUpdate: (_) {},
                                           ),
                                         ),
                                         Container(
@@ -342,7 +336,7 @@ class _Menu extends State<Menu> {
                                     final result =
                                         await Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => Cart(),
+                                        builder: (context) => const Cart(),
                                       ),
                                     );
                                     if (result != null) {
@@ -413,7 +407,7 @@ class _Menu extends State<Menu> {
                   case 1: //장바구니
                     final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Cart()),
+                      MaterialPageRoute(builder: (context) => const Cart()),
                     );
                     if (result != null) {
                       setState(() {
@@ -466,8 +460,8 @@ class _Menu extends State<Menu> {
               items: [
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -481,7 +475,7 @@ class _Menu extends State<Menu> {
                         child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: const Text(
+                          child: Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -527,8 +521,8 @@ class _Menu extends State<Menu> {
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -542,7 +536,7 @@ class _Menu extends State<Menu> {
                         child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: const Text(
+                          child: Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -588,8 +582,8 @@ class _Menu extends State<Menu> {
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -603,7 +597,7 @@ class _Menu extends State<Menu> {
                         child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: const Text(
+                          child: Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -627,10 +621,11 @@ class _Menu extends State<Menu> {
         await product.where('userUid', isEqualTo: user!.uid).get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      cartcount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        cartcount = count;
+      });
+    }
   }
 
   Future<void> OrderCount() async {
@@ -640,9 +635,10 @@ class _Menu extends State<Menu> {
         .get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      ordercount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        ordercount = count;
+      });
+    }
   }
 }

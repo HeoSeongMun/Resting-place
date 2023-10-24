@@ -237,7 +237,8 @@ class _UserPage extends State<UserPage> {
                     onTap: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => OrderedList()),
+                        MaterialPageRoute(
+                            builder: (context) => const OrderedList()),
                       );
                       if (result != null) {
                         setState(() {
@@ -348,7 +349,7 @@ class _UserPage extends State<UserPage> {
                       (route) => false);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xffAAC4FF),
+                  backgroundColor: const Color(0xffAAC4FF),
                 ),
                 child: const Text(
                   '로그아웃',
@@ -389,7 +390,7 @@ class _UserPage extends State<UserPage> {
                   case 1: //장바구니
                     final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Cart()),
+                      MaterialPageRoute(builder: (context) => const Cart()),
                     );
                     if (result != null) {
                       setState(() {
@@ -414,7 +415,8 @@ class _UserPage extends State<UserPage> {
                   case 3: //주문내역
                     final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => OrderedList()),
+                      MaterialPageRoute(
+                          builder: (context) => const OrderedList()),
                     );
                     if (result != null) {
                       setState(() {
@@ -440,8 +442,8 @@ class _UserPage extends State<UserPage> {
               items: [
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -455,7 +457,7 @@ class _UserPage extends State<UserPage> {
                         child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: const Text(
+                          child: Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -501,8 +503,8 @@ class _UserPage extends State<UserPage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -516,7 +518,7 @@ class _UserPage extends State<UserPage> {
                         child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: const Text(
+                          child: Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -562,8 +564,8 @@ class _UserPage extends State<UserPage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.only(
                           right: 10,
                           left: 10,
@@ -577,7 +579,7 @@ class _UserPage extends State<UserPage> {
                         child: SizedBox(
                           width: 15,
                           height: 15,
-                          child: const Text(
+                          child: Text(
                             '',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
@@ -601,10 +603,11 @@ class _UserPage extends State<UserPage> {
         await cartcollection.where('userUid', isEqualTo: user!.uid).get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      cartcount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        cartcount = count;
+      });
+    }
   }
 
   Future<void> OrderCount() async {
@@ -614,9 +617,10 @@ class _UserPage extends State<UserPage> {
         .get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      ordercount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        ordercount = count;
+      });
+    }
   }
 }

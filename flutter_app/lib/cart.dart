@@ -42,10 +42,11 @@ class _Cart extends State<Cart> {
         await product.where('userUid', isEqualTo: user!.uid).get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      cartcount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        cartcount = count;
+      });
+    }
   }
 
   int ordercount = 0;
@@ -56,10 +57,11 @@ class _Cart extends State<Cart> {
         .get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      ordercount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        ordercount = count;
+      });
+    }
   }
 
   @override

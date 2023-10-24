@@ -88,6 +88,8 @@ class _OrderedList extends State<OrderedList> {
                               iconSize: 35,
                               color: const Color.fromARGB(255, 0, 0, 0),
                               onPressed: () {
+                                CartCount();
+                                OrderCount();
                                 Navigator.pop(context, ordercount);
                               },
                             ),
@@ -1540,10 +1542,11 @@ class _OrderedList extends State<OrderedList> {
         await cartcollection.where('userUid', isEqualTo: _userID!.uid).get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      cartcount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        cartcount = count;
+      });
+    }
   }
 
   Future<void> OrderCount() async {
@@ -1553,10 +1556,11 @@ class _OrderedList extends State<OrderedList> {
         .get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      ordercount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        ordercount = count;
+      });
+    }
   }
 
   Color setColor(String status) {

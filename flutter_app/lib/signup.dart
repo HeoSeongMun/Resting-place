@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/login.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -66,7 +65,7 @@ class _SignupState extends State<Signup> {
                             },
                           ),
                           const SizedBox(
-                            width: 110,
+                            width: 120,
                           ),
                           const Text(
                             "회원가입",

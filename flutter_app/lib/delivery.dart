@@ -146,6 +146,13 @@ class _Delivery extends State<Delivery> {
         order0.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order0.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order0.add(formattime);
+
         setState(() {
           setOrder0 = order0.toList();
         });
@@ -153,13 +160,18 @@ class _Delivery extends State<Delivery> {
         DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
-        order1.add(data['area_name']);
-        order1.add(data['name']);
-        order1.add(formatTimestamp(data['ordertime']));
+        String areaName = data['area_name'];
+        order1.add(areaName);
+        String menuName = data['name'];
+        order1.add(menuName);
+        String orderTime = formatTimestamp(data['ordertime']);
+        order1.add(orderTime);
         String price = (int.parse(data['price']) * data['count']).toString();
         order1.add(price);
-        order1.add(data['status']);
-        order1.add(data['storeName']);
+        String status = data['status'];
+        order1.add(status);
+        String storeName = data['storeName'];
+        order1.add(storeName);
         double indicatorValue = getProgressIndicator(data['status']);
         order1.add(indicatorValue);
         int count = data['count'];
@@ -168,6 +180,12 @@ class _Delivery extends State<Delivery> {
         order1.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order1.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order1.add(formattime);
         setState(() {
           setOrder1 = order1.toList();
         });
@@ -175,13 +193,18 @@ class _Delivery extends State<Delivery> {
         DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
-        order2.add(data['area_name']);
-        order2.add(data['name']);
-        order2.add(formatTimestamp(data['ordertime']));
+        String areaName = data['area_name'];
+        order2.add(areaName);
+        String menuName = data['name'];
+        order2.add(menuName);
+        String orderTime = formatTimestamp(data['ordertime']);
+        order2.add(orderTime);
         String price = (int.parse(data['price']) * data['count']).toString();
         order2.add(price);
-        order2.add(data['status']);
-        order2.add(data['storeName']);
+        String status = data['status'];
+        order2.add(status);
+        String storeName = data['storeName'];
+        order2.add(storeName);
         double indicatorValue = getProgressIndicator(data['status']);
         order2.add(indicatorValue);
         int count = data['count'];
@@ -190,6 +213,12 @@ class _Delivery extends State<Delivery> {
         order2.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order2.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order2.add(formattime);
         setState(() {
           setOrder2 = order2.toList();
         });
@@ -197,13 +226,18 @@ class _Delivery extends State<Delivery> {
         DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
-        order3.add(data['area_name']);
-        order3.add(data['name']);
-        order3.add(formatTimestamp(data['ordertime']));
+        String areaName = data['area_name'];
+        order3.add(areaName);
+        String menuName = data['name'];
+        order3.add(menuName);
+        String orderTime = formatTimestamp(data['ordertime']);
+        order3.add(orderTime);
         String price = (int.parse(data['price']) * data['count']).toString();
         order3.add(price);
-        order3.add(data['status']);
-        order3.add(data['storeName']);
+        String status = data['status'];
+        order3.add(status);
+        String storeName = data['storeName'];
+        order3.add(storeName);
         double indicatorValue = getProgressIndicator(data['status']);
         order3.add(indicatorValue);
         int count = data['count'];
@@ -212,6 +246,12 @@ class _Delivery extends State<Delivery> {
         order3.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order3.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order3.add(formattime);
         setState(() {
           setOrder3 = order3.toList();
         });
@@ -219,13 +259,18 @@ class _Delivery extends State<Delivery> {
         DocumentSnapshot documentSnapshot = querySnapshot.docs[i];
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
-        order4.add(data['area_name']);
-        order4.add(data['name']);
-        order4.add(formatTimestamp(data['ordertime']));
+        String areaName = data['area_name'];
+        order4.add(areaName);
+        String menuName = data['name'];
+        order4.add(menuName);
+        String orderTime = formatTimestamp(data['ordertime']);
+        order4.add(orderTime);
         String price = (int.parse(data['price']) * data['count']).toString();
         order4.add(price);
-        order4.add(data['status']);
-        order4.add(data['storeName']);
+        String status = data['status'];
+        order4.add(status);
+        String storeName = data['storeName'];
+        order4.add(storeName);
         double indicatorValue = getProgressIndicator(data['status']);
         order4.add(indicatorValue);
         int count = data['count'];
@@ -234,6 +279,12 @@ class _Delivery extends State<Delivery> {
         order4.add(isExpanded);
         String ordernumber = data['ordernumber'];
         order4.add(ordernumber);
+        final DateTime dateTime = data['Cookingtime'].toDate();
+        String formattime = DateFormat('aa HH시mm분')
+            .format(dateTime)
+            .replaceAll("AM", "오전")
+            .replaceAll("PM", "오후");
+        order4.add(formattime);
         setState(() {
           setOrder4 = order4.toList();
         });
@@ -538,10 +589,10 @@ class _Delivery extends State<Delivery> {
                                     ),
                                     const SizedBox(height: 20),
                                     Container(
-                                      child: const Center(
+                                      child: Center(
                                         child: Text(
-                                          '오후 11시 30분',
-                                          style: TextStyle(
+                                          order[10],
+                                          style: const TextStyle(
                                             fontSize: 15,
                                           ),
                                         ),

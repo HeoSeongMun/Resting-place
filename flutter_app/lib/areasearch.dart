@@ -289,12 +289,30 @@ class _AreaSearchState extends State<AreaSearch> {
                                     );
                                   }
                                   if (data.toString().contains(searchText)) {
-                                    return Card(
+                                    return Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 5, right: 5, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFFffffff),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(25.0),
+                                            topRight: Radius.circular(25.0),
+                                            bottomLeft: Radius.circular(25.0),
+                                            bottomRight: Radius.circular(25.0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.7),
+                                              blurRadius: 5,
+                                              spreadRadius: 0,
+                                              offset: const Offset(0, 7),
+                                            ),
+                                          ]),
                                       child: ListTile(
                                         leading: Image.network(
                                           documentSnapshot['imageUrl'],
                                           width: 100,
-                                          height: 100,
                                           fit: BoxFit.fill,
                                         ),
                                         title: Text(
@@ -302,6 +320,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                         ),
                                         subtitle: Text(
                                           documentSnapshot['direction'],
+                                          style: const TextStyle(fontSize: 10),
                                         ),
                                         onTap: () async {
                                           final result =
@@ -319,7 +338,6 @@ class _AreaSearchState extends State<AreaSearch> {
                                               OrderCount();
                                             });
                                           }
-                                          filter.dispose();
                                         },
                                       ),
                                     );
@@ -422,8 +440,8 @@ class _AreaSearchState extends State<AreaSearch> {
                 items: [
                   BottomNavigationBarItem(
                     icon: Stack(
-                      children: [
-                        const Padding(
+                      children: const [
+                        Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -437,7 +455,7 @@ class _AreaSearchState extends State<AreaSearch> {
                           child: SizedBox(
                             width: 15,
                             height: 15,
-                            child: const Text(
+                            child: Text(
                               '',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -483,8 +501,8 @@ class _AreaSearchState extends State<AreaSearch> {
                   ),
                   BottomNavigationBarItem(
                     icon: Stack(
-                      children: [
-                        const Padding(
+                      children: const [
+                        Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -498,7 +516,7 @@ class _AreaSearchState extends State<AreaSearch> {
                           child: SizedBox(
                             width: 15,
                             height: 15,
-                            child: const Text(
+                            child: Text(
                               '',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -544,8 +562,8 @@ class _AreaSearchState extends State<AreaSearch> {
                   ),
                   BottomNavigationBarItem(
                     icon: Stack(
-                      children: [
-                        const Padding(
+                      children: const [
+                        Padding(
                           padding: EdgeInsets.only(
                             right: 10,
                             left: 10,
@@ -559,7 +577,7 @@ class _AreaSearchState extends State<AreaSearch> {
                           child: SizedBox(
                             width: 15,
                             height: 15,
-                            child: const Text(
+                            child: Text(
                               '',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -584,10 +602,11 @@ class _AreaSearchState extends State<AreaSearch> {
         await cartcollection.where('userUid', isEqualTo: user!.uid).get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      cartcount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        cartcount = count;
+      });
+    }
   }
 
   Future<void> OrderCount() async {
@@ -597,9 +616,10 @@ class _AreaSearchState extends State<AreaSearch> {
         .get();
 
     int count = snapshot.docs.length;
-
-    setState(() {
-      ordercount = count;
-    });
+    if (count != 0) {
+      setState(() {
+        ordercount = count;
+      });
+    }
   }
 }
