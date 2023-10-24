@@ -164,8 +164,18 @@ class _Restaurant extends State<Restaurant> {
                           child: CircularProgressIndicator(),
                         );
                       }
-                      if (!streamSnapshot.hasData || streamSnapshot.hasError) {
-                        return Container();
+                      if (!streamSnapshot.hasData ||
+                          streamSnapshot.data!.docs.isEmpty) {
+                        return Center(
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 30),
+                            child: const Text('등록된 음식점이 없습니다'),
+                          ),
+                        ); // 데이터가 없는 경우 처리
+                      }
+                      if (streamSnapshot.hasError) {
+                        debugPrint('에러');
+                        Container();
                       }
                       if (streamSnapshot.hasData) {
                         return ListView.builder(
@@ -174,9 +184,7 @@ class _Restaurant extends State<Restaurant> {
                           itemBuilder: (context, index) {
                             final DocumentSnapshot documentSnapshot =
                                 streamSnapshot.data!.docs[index];
-                            if (documentSnapshot['storeimageUrl'] == '' ||
-                                documentSnapshot['storeName'] == '' ||
-                                documentSnapshot['signaturemenu'] == '') {
+                            if (documentSnapshot['storeName'] == '') {
                               return Container();
                             }
                             return FutureBuilder(
@@ -229,12 +237,18 @@ class _Restaurant extends State<Restaurant> {
                                               leading: Container(
                                                 margin: const EdgeInsets.only(
                                                     left: 5),
-                                                child: Image.network(
-                                                  documentSnapshot[
-                                                      'storeimageUrl'],
-                                                  height: 120,
-                                                  fit: BoxFit.fitHeight,
-                                                ),
+                                                child: documentSnapshot[
+                                                            'storeimageUrl']
+                                                        .toString()
+                                                        .isEmpty
+                                                    ? Image.asset(
+                                                        'assets/images/cross.png')
+                                                    : Image.network(
+                                                        documentSnapshot[
+                                                            'storeimageUrl'],
+                                                        height: 120,
+                                                        fit: BoxFit.fitHeight,
+                                                      ),
                                               ),
                                               title: Container(
                                                   margin: const EdgeInsets.only(
@@ -248,13 +262,24 @@ class _Restaurant extends State<Restaurant> {
                                                     margin:
                                                         const EdgeInsets.only(
                                                             top: 10),
-                                                    child: Text(
-                                                      '대표메뉴: ' +
-                                                          documentSnapshot[
-                                                              'signaturemenu'],
-                                                      style: const TextStyle(
-                                                          fontSize: 10),
-                                                    ),
+                                                    child: documentSnapshot[
+                                                                'signaturemenu']
+                                                            .toString()
+                                                            .isEmpty
+                                                        ? const Text(
+                                                            '대표메뉴: ' '',
+                                                            style: TextStyle(
+                                                                fontSize: 10),
+                                                          )
+                                                        : Text(
+                                                            '대표메뉴: ' +
+                                                                documentSnapshot[
+                                                                    'signaturemenu'],
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        10),
+                                                          ),
                                                   ),
                                                   const SizedBox(
                                                     width: 10,
@@ -371,11 +396,18 @@ class _Restaurant extends State<Restaurant> {
                                           leading: Container(
                                             margin:
                                                 const EdgeInsets.only(left: 5),
-                                            child: Image.network(
-                                              documentSnapshot['storeimageUrl'],
-                                              height: 120,
-                                              fit: BoxFit.fitHeight,
-                                            ),
+                                            child: documentSnapshot[
+                                                        'storeimageUrl']
+                                                    .toString()
+                                                    .isEmpty
+                                                ? Image.asset(
+                                                    'assets/images/cross.png')
+                                                : Image.network(
+                                                    documentSnapshot[
+                                                        'storeimageUrl'],
+                                                    height: 120,
+                                                    fit: BoxFit.fitHeight,
+                                                  ),
                                           ),
                                           title: Container(
                                               margin: const EdgeInsets.only(
@@ -388,13 +420,22 @@ class _Restaurant extends State<Restaurant> {
                                                 width: 170,
                                                 margin: const EdgeInsets.only(
                                                     top: 10),
-                                                child: Text(
-                                                  '대표메뉴: ' +
-                                                      documentSnapshot[
-                                                          'signaturemenu'],
-                                                  style: const TextStyle(
-                                                      fontSize: 10),
-                                                ),
+                                                child: documentSnapshot[
+                                                            'signaturemenu']
+                                                        .toString()
+                                                        .isEmpty
+                                                    ? const Text(
+                                                        '대표메뉴: ' '',
+                                                        style: TextStyle(
+                                                            fontSize: 10),
+                                                      )
+                                                    : Text(
+                                                        '대표메뉴: ' +
+                                                            documentSnapshot[
+                                                                'signaturemenu'],
+                                                        style: const TextStyle(
+                                                            fontSize: 10),
+                                                      ),
                                               ),
                                               const SizedBox(
                                                 width: 10,
@@ -491,7 +532,9 @@ class _Restaurant extends State<Restaurant> {
                           },
                         );
                       }
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     },
                   ),
                 ),

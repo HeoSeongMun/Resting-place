@@ -217,7 +217,7 @@ class _UserPage extends State<UserPage> {
                           const SizedBox(
                             height: 5,
                           ),
-                          const Text('주문현황'),
+                          const Text('주문상태'),
                           const SizedBox(
                             height: 10,
                           ),

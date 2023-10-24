@@ -498,7 +498,7 @@ class _OrderedList extends State<OrderedList> {
                                                                   ),
                                                                   child:
                                                                       const Text(
-                                                                    '주문 현황',
+                                                                    '주문 상태',
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             10,
@@ -776,7 +776,7 @@ class _OrderedList extends State<OrderedList> {
                                                                   ),
                                                                   child:
                                                                       const Text(
-                                                                    '주문 현황',
+                                                                    '주문 상태',
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             10,
@@ -1189,7 +1189,7 @@ class _OrderedList extends State<OrderedList> {
                                                                   ),
                                                                   child:
                                                                       const Text(
-                                                                    '주문 현황',
+                                                                    '주문 상태',
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             10,
@@ -1454,7 +1454,7 @@ class _OrderedList extends State<OrderedList> {
                                                                   ),
                                                                   child:
                                                                       const Text(
-                                                                    '주문 현황',
+                                                                    '주문 상태',
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             10,
