@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/menu.dart';
 import 'package:flutter_ui/review.dart';
 import 'package:flutter_ui/sales.dart';
@@ -13,8 +12,6 @@ class OpenBusiness extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser;
 
   CollectionReference product = FirebaseFirestore.instance.collection('order');
-  CollectionReference process =
-      FirebaseFirestore.instance.collection('process');
   CollectionReference complete =
       FirebaseFirestore.instance.collection('complete');
   CollectionReference sales = FirebaseFirestore.instance.collection('sales');
@@ -34,98 +31,87 @@ class OpenBusiness extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: InkWell(
-                    onTap: () {
-                      // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MainPage(),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 80,
-                              width: 1000,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Center(
-                                        child: Text(
-                                          docs[index]['storeName'],
+                  padding: const EdgeInsets.all(27),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 80,
+                            width: 1000,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Center(
+                                      child: Text(
+                                        docs[index]['storeName'],
+                                        style: const TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 63),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 60,
+                            width: 400,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          docs[index]['restAreaName'],
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 70),
+                                              fontSize: 22),
                                         ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                        Text(
+                                          '${'(' + docs[index]['direction']})',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 22),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              width: 400,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          Text(
-                                            docs[index]['restAreaName'],
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                          Text(
-                                            '${'(' + docs[index]['direction']})',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -143,7 +129,7 @@ class OpenBusiness extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 30.0),
+                        padding: const EdgeInsets.symmetric(vertical: 27),
                         child: Column(
                           children: [
                             Container(
@@ -152,7 +138,7 @@ class OpenBusiness extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(25),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(30),
+                                padding: const EdgeInsets.all(27),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -162,21 +148,21 @@ class OpenBusiness extends StatelessWidget {
                                           '현재 주문상태는?',
                                           style: TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 20),
+                                              fontSize: 18),
                                         ),
                                         Text(
                                           '주문관리',
                                           style: TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 40),
+                                              fontSize: 36),
                                         ),
                                       ],
                                     ),
                                     CachedNetworkImage(
                                       imageUrl:
                                           'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fpreparing.gif?alt=media&token=568425c7-e9fb-4ac0-a124-337af0f95baf', // GIF 이미지의 URL을 여기에 입력
-                                      width: 100, // 이미지의 가로 크기
-                                      height: 100, // 이미지의 세로 크기
+                                      width: 90, // 이미지의 가로 크기
+                                      height: 90, // 이미지의 세로 크기
                                       placeholder: (context, url) =>
                                           const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                       errorWidget: (context, url, error) =>
@@ -234,7 +220,7 @@ class OpenBusiness extends StatelessWidget {
                                           '주문관리',
                                           style: TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 30),
+                                              fontSize: 27),
                                         ),
                                       ],
                                     ),
@@ -277,7 +263,7 @@ class OpenBusiness extends StatelessWidget {
                                       const Text(
                                         '메뉴관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
+                                            fontFamily: "Jalnan", fontSize: 27),
                                       ),
                                     ],
                                   ),
@@ -320,7 +306,7 @@ class OpenBusiness extends StatelessWidget {
                                       const Text(
                                         '리뷰관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
+                                            fontFamily: "Jalnan", fontSize: 27),
                                       ),
                                     ],
                                   ),
@@ -363,7 +349,7 @@ class OpenBusiness extends StatelessWidget {
                                       const Text(
                                         '매출관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
+                                            fontFamily: "Jalnan", fontSize: 27),
                                       ),
                                     ],
                                   ),
@@ -400,7 +386,7 @@ class OpenBusiness extends StatelessWidget {
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(30),
+                                              padding: const EdgeInsets.all(18),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -412,7 +398,7 @@ class OpenBusiness extends StatelessWidget {
                                                         style: TextStyle(
                                                             fontFamily:
                                                                 "Jalnan",
-                                                            fontSize: 35),
+                                                            fontSize: 27),
                                                       ),
                                                     ],
                                                   ),
@@ -431,7 +417,7 @@ class OpenBusiness extends StatelessWidget {
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(30),
+                                              padding: const EdgeInsets.all(18),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -443,7 +429,7 @@ class OpenBusiness extends StatelessWidget {
                                                         style: TextStyle(
                                                             fontFamily:
                                                                 "Jalnan",
-                                                            fontSize: 35),
+                                                            fontSize: 27),
                                                       ),
                                                     ],
                                                   ),
@@ -521,7 +507,7 @@ class OpenBusiness extends StatelessWidget {
                                               },
                                               child: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(30),
+                                                    const EdgeInsets.all(18),
                                                 child: Row(
                                                   children: [
                                                     Column(
@@ -531,7 +517,7 @@ class OpenBusiness extends StatelessWidget {
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   "Jalnan",
-                                                              fontSize: 35,
+                                                              fontSize: 27,
                                                               color:
                                                                   Colors.white),
                                                         ),
@@ -602,7 +588,7 @@ class OpenBusiness extends StatelessWidget {
                                               },
                                               child: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(30),
+                                                    const EdgeInsets.all(18),
                                                 child: Row(
                                                   children: [
                                                     Column(
@@ -612,7 +598,7 @@ class OpenBusiness extends StatelessWidget {
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   "Jalnan",
-                                                              fontSize: 35),
+                                                              fontSize: 27),
                                                         ),
                                                       ],
                                                     ),
@@ -642,7 +628,7 @@ class OpenBusiness extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(27),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -651,20 +637,20 @@ class OpenBusiness extends StatelessWidget {
                                     Text(
                                       '주문받으세요~',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 13),
+                                          fontFamily: "Jalnan", fontSize: 18),
                                     ),
                                     Text(
                                       '접수하기',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 40),
+                                          fontFamily: "Jalnan", fontSize: 36),
                                     ),
                                   ],
                                 ),
                                 CachedNetworkImage(
                                   imageUrl:
                                       'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fnotifications.gif?alt=media&token=f86ba419-59fd-436f-a36b-91be0fde1e2c', // GIF 이미지의 URL을 여기에 입력
-                                  width: 100, // 이미지의 가로 크기
-                                  height: 100, // 이미지의 세로 크기
+                                  width: 90, // 이미지의 가로 크기
+                                  height: 90, // 이미지의 세로 크기
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                   errorWidget: (context, url, error) =>
@@ -676,321 +662,375 @@ class OpenBusiness extends StatelessWidget {
                           ),
                         ),
                         Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD2DAFF),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
                           margin: const EdgeInsets.only(left: 50, right: 50),
-                          height: 520,
+                          height: 500,
                           width: 305, //MediaQuery.of(context).size.width - 250,
-                          color: const Color(0xFFD2DAFF),
                           child: Container(
                             child: StreamBuilder(
                               stream: product
                                   .where("storeUid", isEqualTo: user!.uid)
+                                  .where("status", isEqualTo: "주문중")
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                                 if (streamSnapshot.hasData) {
-                                  return ListView.builder(
-                                    itemCount: streamSnapshot.data!.docs.length,
-                                    itemBuilder: (context, index) {
-                                      final DocumentSnapshot documentSnapshot =
-                                          streamSnapshot.data!.docs[index];
-
-                                      Timestamp timestamp =
-                                          documentSnapshot['ordertime'];
-                                      DateTime dateTime = timestamp.toDate();
-                                      num totalprice =
-                                          int.parse(documentSnapshot['price']) *
-                                              documentSnapshot['count'];
-                                      return InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            barrierDismissible: true,
-                                            builder: ((context) {
-                                              return AlertDialog(
-                                                title: const Text('승인'),
-                                                content:
-                                                    const Text('승인하시겠습니까?'),
-                                                actions: [
-                                                  ElevatedButton(
-                                                    child: const Text('확인'),
-                                                    onPressed: () async {
-                                                      await sales.add({
-                                                        'price': totalprice,
-                                                        'storeUid':
-                                                            documentSnapshot[
-                                                                'storeUid'],
-                                                        'time': FieldValue
-                                                            .serverTimestamp(),
-                                                      });
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      return showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            AlertDialog(
-                                                          title: const Text(
-                                                              '조리시간'),
-                                                          actions: [
-                                                            ElevatedButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                await process
-                                                                    .add(
-                                                                  {
-                                                                    'area_name':
-                                                                        documentSnapshot[
-                                                                            'area_name'],
-                                                                    'arrivalTime':
-                                                                        documentSnapshot[
-                                                                            'arrivalTime'],
-                                                                    'boolreview':
-                                                                        false,
-                                                                    'count':
-                                                                        documentSnapshot[
-                                                                            'count'],
-                                                                    'imageUrl':
-                                                                        documentSnapshot[
-                                                                            'imageUrl'],
-                                                                    'name': documentSnapshot[
-                                                                        'name'],
-                                                                    'ordertime':
-                                                                        documentSnapshot[
-                                                                            'ordertime'],
-                                                                    'price':
-                                                                        documentSnapshot[
-                                                                            'price'],
-                                                                    'status':
-                                                                        '조리중',
-                                                                    'storeName':
-                                                                        documentSnapshot[
-                                                                            'storeName'],
-                                                                    'storeUid':
-                                                                        documentSnapshot[
-                                                                            'storeUid'],
-                                                                    'userUid':
-                                                                        documentSnapshot[
-                                                                            'userUid'],
-                                                                    'Cookingtime':
-                                                                        '10분',
-                                                                    'time': FieldValue
-                                                                        .serverTimestamp(),
-                                                                    'totalprice':
-                                                                        totalprice,
-                                                                  },
-                                                                );
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        'order')
-                                                                    .doc(
-                                                                        documentSnapshot
-                                                                            .id)
-                                                                    .delete();
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: const Text(
-                                                                  '10분'),
-                                                            ),
-                                                            ElevatedButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                await process
-                                                                    .add(
-                                                                  {
-                                                                    'area_name':
-                                                                        documentSnapshot[
-                                                                            'area_name'],
-                                                                    'arrivalTime':
-                                                                        documentSnapshot[
-                                                                            'arrivalTime'],
-                                                                    'boolreview':
-                                                                        false,
-                                                                    'count':
-                                                                        documentSnapshot[
-                                                                            'count'],
-                                                                    'imageUrl':
-                                                                        documentSnapshot[
-                                                                            'imageUrl'],
-                                                                    'name': documentSnapshot[
-                                                                        'name'],
-                                                                    'ordertime':
-                                                                        documentSnapshot[
-                                                                            'ordertime'],
-                                                                    'price':
-                                                                        documentSnapshot[
-                                                                            'price'],
-                                                                    'status':
-                                                                        '조리중',
-                                                                    'storeName':
-                                                                        documentSnapshot[
-                                                                            'storeName'],
-                                                                    'storeUid':
-                                                                        documentSnapshot[
-                                                                            'storeUid'],
-                                                                    'userUid':
-                                                                        documentSnapshot[
-                                                                            'userUid'],
-                                                                    'Cookingtime':
-                                                                        '20분',
-                                                                    'time': FieldValue
-                                                                        .serverTimestamp(),
-                                                                    'totalprice':
-                                                                        totalprice,
-                                                                  },
-                                                                );
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        'order')
-                                                                    .doc(
-                                                                        documentSnapshot
-                                                                            .id)
-                                                                    .delete();
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: const Text(
-                                                                  '20분'),
-                                                            ),
-                                                            ElevatedButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                await process
-                                                                    .add(
-                                                                  {
-                                                                    'area_name':
-                                                                        documentSnapshot[
-                                                                            'area_name'],
-                                                                    'arrivalTime':
-                                                                        documentSnapshot[
-                                                                            'arrivalTime'],
-                                                                    'boolreview':
-                                                                        false,
-                                                                    'count':
-                                                                        documentSnapshot[
-                                                                            'count'],
-                                                                    'imageUrl':
-                                                                        documentSnapshot[
-                                                                            'imageUrl'],
-                                                                    'name': documentSnapshot[
-                                                                        'name'],
-                                                                    'ordertime':
-                                                                        documentSnapshot[
-                                                                            'ordertime'],
-                                                                    'price':
-                                                                        documentSnapshot[
-                                                                            'price'],
-                                                                    'status':
-                                                                        '조리중',
-                                                                    'storeName':
-                                                                        documentSnapshot[
-                                                                            'storeName'],
-                                                                    'storeUid':
-                                                                        documentSnapshot[
-                                                                            'storeUid'],
-                                                                    'userUid':
-                                                                        documentSnapshot[
-                                                                            'userUid'],
-                                                                    'Cookingtime':
-                                                                        '30분',
-                                                                    'time': FieldValue
-                                                                        .serverTimestamp(),
-                                                                    'totalprice':
-                                                                        totalprice,
-                                                                  },
-                                                                );
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        'order')
-                                                                    .doc(
-                                                                        documentSnapshot
-                                                                            .id)
-                                                                    .delete();
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: const Text(
-                                                                  '30분'),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '${streamSnapshot.data!.docs.length}',
+                                                    style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 15,
+                                                        color: Colors.white),
                                                   ),
-                                                  ElevatedButton(
-                                                    child: const Text('취소'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  )
                                                 ],
-                                              );
-                                            }),
-                                          );
-                                        },
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '메뉴명 : ' +
-                                                      documentSnapshot['name'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '가격 : ' +
-                                                      documentSnapshot['price'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '수량 : ${documentSnapshot['count'].toString()}',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '주문시간 : ${DateFormat('a h시 m분').format(dateTime)}',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                const SizedBox(
-                                                  height: 30,
-                                                ),
-                                                Text(
-                                                  '총가격 : $totalprice',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '도착시간 : ' +
-                                                      documentSnapshot[
-                                                          'arrivalTime'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                              ],
+                                              ),
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount:
+                                              streamSnapshot.data!.docs.length,
+                                          itemBuilder: (context, index) {
+                                            final DocumentSnapshot
+                                                documentSnapshot =
+                                                streamSnapshot
+                                                    .data!.docs[index];
+                                            DateTime now = DateTime.now();
+                                            DateTime later10 = now.add(
+                                                const Duration(minutes: 10));
+                                            DateTime later20 = now.add(
+                                                const Duration(minutes: 20));
+                                            DateTime later30 = now.add(
+                                                const Duration(minutes: 30));
+                                            Timestamp timestamp =
+                                                documentSnapshot['ordertime'];
+                                            DateTime dateTime =
+                                                timestamp.toDate();
+                                            num totalprice = int.parse(
+                                                    documentSnapshot['price']) *
+                                                documentSnapshot['count'];
+                                            return InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: ((context) {
+                                                    return AlertDialog(
+                                                      title: const Text('승인'),
+                                                      content: const Text(
+                                                          '승인하시겠습니까?'),
+                                                      actions: [
+                                                        ElevatedButton(
+                                                          child:
+                                                              const Text('확인'),
+                                                          onPressed: () async {
+                                                            await sales.add({
+                                                              'price':
+                                                                  totalprice,
+                                                              'storeUid':
+                                                                  documentSnapshot[
+                                                                      'storeUid'],
+                                                              'time': FieldValue
+                                                                  .serverTimestamp(),
+                                                            });
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            return showDialog(
+                                                              context: context,
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  AlertDialog(
+                                                                title:
+                                                                    const Text(
+                                                                        '조리시간'),
+                                                                actions: [
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await product
+                                                                          .add(
+                                                                        {
+                                                                          'ordernumber':
+                                                                              documentSnapshot['ordernumber'],
+                                                                          'area_name':
+                                                                              documentSnapshot['area_name'],
+                                                                          'arrivalTime':
+                                                                              documentSnapshot['arrivalTime'],
+                                                                          'boolreview':
+                                                                              false,
+                                                                          'count':
+                                                                              documentSnapshot['count'],
+                                                                          'imageUrl':
+                                                                              documentSnapshot['imageUrl'],
+                                                                          'name':
+                                                                              documentSnapshot['name'],
+                                                                          'ordertime':
+                                                                              documentSnapshot['ordertime'],
+                                                                          'price':
+                                                                              documentSnapshot['price'],
+                                                                          'status':
+                                                                              '조리중',
+                                                                          'storeName':
+                                                                              documentSnapshot['storeName'],
+                                                                          'storeUid':
+                                                                              documentSnapshot['storeUid'],
+                                                                          'userUid':
+                                                                              documentSnapshot['userUid'],
+                                                                          'Cookingtime':
+                                                                              later10,
+                                                                          'time':
+                                                                              FieldValue.serverTimestamp(),
+                                                                          'totalprice':
+                                                                              totalprice,
+                                                                        },
+                                                                      );
+                                                                      FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'order')
+                                                                          .doc(documentSnapshot
+                                                                              .id)
+                                                                          .delete();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: const Text(
+                                                                        '10분'),
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await product
+                                                                          .add(
+                                                                        {
+                                                                          'ordernumber':
+                                                                              documentSnapshot['ordernumber'],
+                                                                          'area_name':
+                                                                              documentSnapshot['area_name'],
+                                                                          'arrivalTime':
+                                                                              documentSnapshot['arrivalTime'],
+                                                                          'boolreview':
+                                                                              false,
+                                                                          'count':
+                                                                              documentSnapshot['count'],
+                                                                          'imageUrl':
+                                                                              documentSnapshot['imageUrl'],
+                                                                          'name':
+                                                                              documentSnapshot['name'],
+                                                                          'ordertime':
+                                                                              documentSnapshot['ordertime'],
+                                                                          'price':
+                                                                              documentSnapshot['price'],
+                                                                          'status':
+                                                                              '조리중',
+                                                                          'storeName':
+                                                                              documentSnapshot['storeName'],
+                                                                          'storeUid':
+                                                                              documentSnapshot['storeUid'],
+                                                                          'userUid':
+                                                                              documentSnapshot['userUid'],
+                                                                          'Cookingtime':
+                                                                              later20,
+                                                                          'time':
+                                                                              FieldValue.serverTimestamp(),
+                                                                          'totalprice':
+                                                                              totalprice,
+                                                                        },
+                                                                      );
+                                                                      FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'order')
+                                                                          .doc(documentSnapshot
+                                                                              .id)
+                                                                          .delete();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: const Text(
+                                                                        '20분'),
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await product
+                                                                          .add(
+                                                                        {
+                                                                          'ordernumber':
+                                                                              documentSnapshot['ordernumber'],
+                                                                          'area_name':
+                                                                              documentSnapshot['area_name'],
+                                                                          'arrivalTime':
+                                                                              documentSnapshot['arrivalTime'],
+                                                                          'boolreview':
+                                                                              false,
+                                                                          'count':
+                                                                              documentSnapshot['count'],
+                                                                          'imageUrl':
+                                                                              documentSnapshot['imageUrl'],
+                                                                          'name':
+                                                                              documentSnapshot['name'],
+                                                                          'ordertime':
+                                                                              documentSnapshot['ordertime'],
+                                                                          'price':
+                                                                              documentSnapshot['price'],
+                                                                          'status':
+                                                                              '조리중',
+                                                                          'storeName':
+                                                                              documentSnapshot['storeName'],
+                                                                          'storeUid':
+                                                                              documentSnapshot['storeUid'],
+                                                                          'userUid':
+                                                                              documentSnapshot['userUid'],
+                                                                          'Cookingtime':
+                                                                              later30,
+                                                                          'time':
+                                                                              FieldValue.serverTimestamp(),
+                                                                          'totalprice':
+                                                                              totalprice,
+                                                                        },
+                                                                      );
+                                                                      FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'order')
+                                                                          .doc(documentSnapshot
+                                                                              .id)
+                                                                          .delete();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: const Text(
+                                                                        '30분'),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                        ElevatedButton(
+                                                          child:
+                                                              const Text('취소'),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                        )
+                                                      ],
+                                                    );
+                                                  }),
+                                                );
+                                              },
+                                              child: Card(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(15),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        '주문번호 : ' +
+                                                            documentSnapshot[
+                                                                'ordernumber'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Text(
+                                                        '메뉴명 : ' +
+                                                            documentSnapshot[
+                                                                'name'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '가격 : ' +
+                                                            documentSnapshot[
+                                                                'price'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '수량 : ${documentSnapshot['count'].toString()}',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '주문시간 : ${DateFormat('a h시 m분').format(dateTime)}',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Text(
+                                                        '총가격 : $totalprice',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '도착시간 : ' +
+                                                            documentSnapshot[
+                                                                'arrivalTime'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    ],
                                   );
                                 }
                                 return const Center(
@@ -1010,7 +1050,7 @@ class OpenBusiness extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(27),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -1019,20 +1059,20 @@ class OpenBusiness extends StatelessWidget {
                                     Text(
                                       '현재 음식는?',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 13),
+                                          fontFamily: "Jalnan", fontSize: 18),
                                     ),
                                     Text(
                                       '조리중~',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 40),
+                                          fontFamily: "Jalnan", fontSize: 36),
                                     ),
                                   ],
                                 ),
                                 CachedNetworkImage(
                                   imageUrl:
                                       'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fcooking.gif?alt=media&token=7e9bd9e2-618e-4636-aeb3-6efff5fc0758', // GIF 이미지의 URL을 여기에 입력
-                                  width: 100, // 이미지의 가로 크기
-                                  height: 100, // 이미지의 세로 크기
+                                  width: 90, // 이미지의 가로 크기
+                                  height: 90, // 이미지의 세로 크기
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                   errorWidget: (context, url, error) =>
@@ -1044,184 +1084,265 @@ class OpenBusiness extends StatelessWidget {
                           ),
                         ),
                         Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD2DAFF),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
                           margin: const EdgeInsets.only(left: 50, right: 50),
                           height: 520,
                           width: 300, //MediaQuery.of(context).size.width - 250,
-                          color: const Color(0xFFD2DAFF),
                           child: Container(
                             child: StreamBuilder(
-                              stream: process
+                              stream: product
                                   .where("storeUid", isEqualTo: user!.uid)
+                                  .where("status", isEqualTo: "조리중")
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                                 if (streamSnapshot.hasData) {
-                                  return ListView.builder(
-                                    itemCount: streamSnapshot.data!.docs.length,
-                                    itemBuilder: (context, index) {
-                                      final DocumentSnapshot documentSnapshot =
-                                          streamSnapshot.data!.docs[index];
-                                      // 사용자 도착시간
-                                      Timestamp ordertimestamp =
-                                          documentSnapshot['ordertime'];
-                                      DateTime orderdateTime =
-                                          ordertimestamp.toDate();
-                                      // 조리시작시간
-                                      Timestamp timestamp =
-                                          documentSnapshot['time'];
-                                      DateTime dateTime =
-                                          ordertimestamp.toDate();
-                                      // 총가격 계산
-                                      num totalprice =
-                                          int.parse(documentSnapshot['price']) *
-                                              documentSnapshot['count'];
-                                      return InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            barrierDismissible: true,
-                                            builder: ((context) {
-                                              return AlertDialog(
-                                                title: const Text('조리완료'),
-                                                content:
-                                                    const Text('조리완료 하시겠습니까?'),
-                                                actions: [
-                                                  ElevatedButton(
-                                                    child: const Text('확인'),
-                                                    onPressed: () async {
-                                                      await complete.add(
-                                                        {
-                                                          'area_name':
-                                                              documentSnapshot[
-                                                                  'area_name'],
-                                                          'arrivalTime':
-                                                              documentSnapshot[
-                                                                  'arrivalTime'],
-                                                          'boolreview': false,
-                                                          'count':
-                                                              documentSnapshot[
-                                                                  'count'],
-                                                          'imageUrl':
-                                                              documentSnapshot[
-                                                                  'imageUrl'],
-                                                          'name':
-                                                              documentSnapshot[
-                                                                  'name'],
-                                                          'ordertime':
-                                                              documentSnapshot[
-                                                                  'ordertime'],
-                                                          'price':
-                                                              documentSnapshot[
-                                                                  'price'],
-                                                          'status': '완료',
-                                                          'storeName':
-                                                              documentSnapshot[
-                                                                  'storeName'],
-                                                          'storeUid':
-                                                              documentSnapshot[
-                                                                  'storeUid'],
-                                                          'userUid':
-                                                              documentSnapshot[
-                                                                  'userUid'],
-                                                          'Cookingtime': '30분',
-                                                          'time': FieldValue
-                                                              .serverTimestamp(),
-                                                          'totalprice':
-                                                              documentSnapshot[
-                                                                  'totalprice'],
-                                                        },
-                                                      );
-                                                      FirebaseFirestore.instance
-                                                          .collection('process')
-                                                          .doc(documentSnapshot
-                                                              .id)
-                                                          .delete();
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '${streamSnapshot.data!.docs.length}',
+                                                    style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 15,
+                                                        color: Colors.white),
                                                   ),
-                                                  ElevatedButton(
-                                                    child: const Text('취소'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  )
                                                 ],
-                                              );
-                                            }),
-                                          );
-                                        },
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '메뉴명 : ' +
-                                                      documentSnapshot['name'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '가격 : ' +
-                                                      documentSnapshot['price'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '수량 : ${documentSnapshot['count'].toString()}',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '주문시간 : ${DateFormat('a h시 m분').format(orderdateTime)}',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                const SizedBox(
-                                                  height: 30,
-                                                ),
-                                                Text(
-                                                  '총가격 : $totalprice',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '시작시간 : ${DateFormat('a h시 m분').format(dateTime)}',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '조리예상시간 : ' +
-                                                      documentSnapshot[
-                                                          'Cookingtime'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '도착시간 : ' +
-                                                      documentSnapshot[
-                                                          'arrivalTime'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                              ],
+                                              ),
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount:
+                                              streamSnapshot.data!.docs.length,
+                                          itemBuilder: (context, index) {
+                                            final DocumentSnapshot
+                                                documentSnapshot =
+                                                streamSnapshot
+                                                    .data!.docs[index];
+                                            // 사용자 도착시간
+                                            Timestamp ordertimestamp =
+                                                documentSnapshot['ordertime'];
+                                            DateTime orderdateTime =
+                                                ordertimestamp.toDate();
+                                            Timestamp cooktimestamp =
+                                                documentSnapshot['Cookingtime'];
+                                            DateTime cookdateTime =
+                                                cooktimestamp.toDate();
+                                            // 조리시작시간
+                                            Timestamp timestamp =
+                                                documentSnapshot['time'];
+                                            DateTime dateTime =
+                                                ordertimestamp.toDate();
+                                            // 총가격 계산
+                                            num totalprice = int.parse(
+                                                    documentSnapshot['price']) *
+                                                documentSnapshot['count'];
+                                            return InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: ((context) {
+                                                    return AlertDialog(
+                                                      title: const Text('조리완료'),
+                                                      content: const Text(
+                                                          '조리완료 하시겠습니까?'),
+                                                      actions: [
+                                                        ElevatedButton(
+                                                          child:
+                                                              const Text('확인'),
+                                                          onPressed: () async {
+                                                            await complete.add(
+                                                              {
+                                                                'ordernumber':
+                                                                    documentSnapshot[
+                                                                        'ordernumber'],
+                                                                'area_name':
+                                                                    documentSnapshot[
+                                                                        'area_name'],
+                                                                'arrivalTime':
+                                                                    documentSnapshot[
+                                                                        'arrivalTime'],
+                                                                'boolreview':
+                                                                    false,
+                                                                'count':
+                                                                    documentSnapshot[
+                                                                        'count'],
+                                                                'imageUrl':
+                                                                    documentSnapshot[
+                                                                        'imageUrl'],
+                                                                'name':
+                                                                    documentSnapshot[
+                                                                        'name'],
+                                                                'ordertime':
+                                                                    documentSnapshot[
+                                                                        'ordertime'],
+                                                                'price':
+                                                                    documentSnapshot[
+                                                                        'price'],
+                                                                'status': '완료',
+                                                                'storeName':
+                                                                    documentSnapshot[
+                                                                        'storeName'],
+                                                                'storeUid':
+                                                                    documentSnapshot[
+                                                                        'storeUid'],
+                                                                'userUid':
+                                                                    documentSnapshot[
+                                                                        'userUid'],
+                                                                'Cookingtime':
+                                                                    '30분',
+                                                                'time': FieldValue
+                                                                    .serverTimestamp(),
+                                                                'totalprice':
+                                                                    documentSnapshot[
+                                                                        'totalprice'],
+                                                              },
+                                                            );
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'order')
+                                                                .doc(
+                                                                    documentSnapshot
+                                                                        .id)
+                                                                .delete();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                        ),
+                                                        ElevatedButton(
+                                                          child:
+                                                              const Text('취소'),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                        )
+                                                      ],
+                                                    );
+                                                  }),
+                                                );
+                                              },
+                                              child: Card(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(15),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        '주분번호 : ' +
+                                                            documentSnapshot[
+                                                                'ordernumber'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Text(
+                                                        '메뉴명 : ' +
+                                                            documentSnapshot[
+                                                                'name'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '가격 : ' +
+                                                            documentSnapshot[
+                                                                'price'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '수량 : ${documentSnapshot['count'].toString()}',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '주문시간 : ${DateFormat('a h시 m분').format(orderdateTime)}',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Text(
+                                                        '총가격 : $totalprice',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '시작시간 : ${DateFormat('a h시 m분').format(dateTime)}',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '조리예상시간 : ${DateFormat('a h시 m분').format(cookdateTime)}',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                      Text(
+                                                        '도착시간 : ' +
+                                                            documentSnapshot[
+                                                                'arrivalTime'],
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 18),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    ],
                                   );
                                 }
                                 return const Center(
@@ -1241,7 +1362,7 @@ class OpenBusiness extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(27),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -1250,39 +1371,43 @@ class OpenBusiness extends StatelessWidget {
                                     Text(
                                       '오늘의 노력',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan",
-                                          fontSize: 13,
-                                          color: Colors.white),
+                                        fontFamily: "Jalnan",
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     Text(
                                       '조리완료!',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan",
-                                          fontSize: 45,
-                                          color: Colors.white),
+                                        fontFamily: "Jalnan",
+                                        fontSize: 36,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ],
                                 ),
                                 CachedNetworkImage(
                                   imageUrl:
-                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fcheck.gif?alt=media&token=c5032a24-3575-486b-b5b5-2a9da5bbd135', // GIF 이미지의 URL을 여기에 입력
-                                  width: 120, // 이미지의 가로 크기
-                                  height: 120, // 이미지의 세로 크기
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fcheck.gif?alt=media&token=c5032a24-3575-486b-b5b5-2a9da5bbd135',
+                                  width: 90,
+                                  height: 90,
                                   placeholder: (context, url) =>
-                                      const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
+                                      const CircularProgressIndicator(),
                                   errorWidget: (context, url, error) =>
-                                      const Icon(Icons
-                                          .error), // 에러 발생 시 표시될 위젯 설정 (선택사항)
+                                      const Icon(Icons.error),
                                 ),
                               ],
                             ),
                           ),
                         ),
                         Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD2DAFF),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
                           margin: const EdgeInsets.only(left: 50, right: 50),
                           height: 520,
-                          width: 300, //MediaQuery.of(context).size.width - 250,
-                          color: const Color(0xFFD2DAFF),
+                          width: 300,
                           child: Container(
                             child: StreamBuilder(
                               stream: complete
@@ -1291,70 +1416,120 @@ class OpenBusiness extends StatelessWidget {
                               builder: (BuildContext context,
                                   AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                                 if (streamSnapshot.hasData) {
-                                  return ListView.builder(
-                                    itemCount: streamSnapshot.data!.docs.length,
-                                    itemBuilder: (context, index) {
-                                      final DocumentSnapshot documentSnapshot =
-                                          streamSnapshot.data!.docs[index];
-                                      Timestamp timestamp =
-                                          documentSnapshot['ordertime'];
-                                      DateTime dateTime = timestamp.toDate();
-                                      num totalprice =
-                                          int.parse(documentSnapshot['price']) *
-                                              documentSnapshot['count'];
-                                      return InkWell(
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '메뉴명 : ' +
-                                                      documentSnapshot['name'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '가격 : ' +
-                                                      documentSnapshot['price'],
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '수량 : ${documentSnapshot['count'].toString()}',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  '주문시간 : ${DateFormat('a h시 m분').format(dateTime)}',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                                const SizedBox(
-                                                  height: 30,
-                                                ),
-                                                Text(
-                                                  '총가격 : $totalprice',
-                                                  style: const TextStyle(
-                                                      fontFamily: "Jalnan",
-                                                      fontSize: 20),
-                                                ),
-                                              ],
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '${streamSnapshot.data!.docs.length}',
+                                                    style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 15,
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount:
+                                              streamSnapshot.data!.docs.length,
+                                          itemBuilder: (context, index) {
+                                            final DocumentSnapshot
+                                                documentSnapshot =
+                                                streamSnapshot
+                                                    .data!.docs[index];
+                                            Timestamp timestamp =
+                                                documentSnapshot['ordertime'];
+                                            DateTime dateTime =
+                                                timestamp.toDate();
+                                            num totalprice = int.parse(
+                                                    documentSnapshot['price']) *
+                                                documentSnapshot['count'];
+                                            return InkWell(
+                                              child: Card(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      16.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        '메뉴명 : ' +
+                                                            documentSnapshot[
+                                                                'name'],
+                                                        style: const TextStyle(
+                                                          fontFamily: "Jalnan",
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '가격 : ' +
+                                                            documentSnapshot[
+                                                                'price'],
+                                                        style: const TextStyle(
+                                                          fontFamily: "Jalnan",
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '수량 : ${documentSnapshot['count'].toString()}',
+                                                        style: const TextStyle(
+                                                          fontFamily: "Jalnan",
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '주문시간 : ${DateFormat('a h시 m분').format(dateTime)}',
+                                                        style: const TextStyle(
+                                                          fontFamily: "Jalnan",
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Text(
+                                                        '총가격 : $totalprice',
+                                                        style: const TextStyle(
+                                                          fontFamily: "Jalnan",
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    ],
                                   );
                                 }
                                 return const Center(
-                                    child: CircularProgressIndicator());
+                                  child: CircularProgressIndicator(),
+                                );
                               },
                             ),
                           ),

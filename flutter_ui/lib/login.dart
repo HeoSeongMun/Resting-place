@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_ui/mainpage.dart';
+import 'package:flutter_ui/open_business.dart';
 import 'package:flutter_ui/signup.dart';
 
 class Login extends StatelessWidget {
@@ -54,63 +54,78 @@ class Login extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(1),
+          padding: const EdgeInsets.fromLTRB(0, 100, 0, 100),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const SizedBox(
-                      height: 10,
+              Center(
+                child: Container(
+                  width: 500,
+                  height: 800,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1.0,
                     ),
-                    TextField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '이메일',
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                      obscureText: true,
-                      controller: pwController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '비밀번호',
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 100,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(50, 70, 50, 70),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Signup(),
-                              ),
-                            );
-                          },
-                          child: const Text('회원가입 요청 페이지'),
+                        Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fappicon.png?alt=media&token=821f2eae-edff-4498-ae42-6af0577bf1d7',
+                          width: 100,
+                          height: 100,
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Text(
+                          '휴잇 점포 회원',
+                          style: TextStyle(
+                            fontFamily: "Jalnan",
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          '로그인',
+                          style: TextStyle(
+                            fontFamily: "Jalnan",
+                            fontSize: 50,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        TextField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: '이메일',
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          obscureText: true,
+                          controller: pwController,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: '비밀번호',
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 100,
+                        ),
                         ElevatedButton(
                           onPressed: () async {
                             try {
@@ -124,7 +139,7 @@ class Login extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return MainPage();
+                                      return OpenBusiness();
                                     },
                                   ),
                                 );
@@ -137,14 +152,69 @@ class Login extends StatelessWidget {
                                 ),
                               );
                             }
-                            /*final String id = idController.text;
-                            final String pw = pwController.text;*/
                           },
-                          child: const Text('로그인'),
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                              const Size(1000, 60),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                          child: const Text(
+                            '로그인',
+                            style: TextStyle(
+                              fontFamily: "Jalnan",
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'or',
+                          style: TextStyle(
+                            fontFamily: "Jalnan",
+                            fontSize: 20,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                              const Size(1000, 60),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Signup(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            '회원가입 요청 페이지',
+                            style: TextStyle(
+                              fontFamily: "Jalnan",
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               )
             ],

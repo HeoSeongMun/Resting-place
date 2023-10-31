@@ -4,9 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_ui/add_image/Representative_image.dart';
+import 'package:flutter_ui/add_image/Representative_image.dart';
 import 'package:flutter_ui/add_menu.dart';
-import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/open_business.dart';
 import 'package:flutter_ui/review.dart';
 import 'package:flutter_ui/sales.dart';
@@ -40,7 +39,7 @@ class Menu extends StatelessWidget {
     userPickedImage = image;
   }
 
-  /*void showAlert(BuildContext context) {
+  void showAlert(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -50,7 +49,7 @@ class Menu extends StatelessWidget {
         );
       },
     );
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,100 +68,89 @@ class Menu extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: InkWell(
-                    onTap: () {
-                      // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MainPage(),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 80,
-                              width: 1000,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Center(
-                                        child: Text(
-                                          storename = docs[index]['storeName'],
+                  padding: const EdgeInsets.all(27),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 80,
+                            width: 1000,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Center(
+                                      child: Text(
+                                        storename = docs[index]['storeName'],
+                                        style: const TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 63),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 60,
+                            width: 400,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          mainarea =
+                                              docs[index]['restAreaName'],
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 70),
+                                              fontSize: 22),
                                         ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                        Text(
+                                          subarea =
+                                              '${'(' + docs[index]['direction']})',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 22),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              width: 400,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          Text(
-                                            mainarea =
-                                                docs[index]['restAreaName'],
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                          Text(
-                                            subarea =
-                                                '${'(' + docs[index]['direction']})',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -179,7 +167,7 @@ class Menu extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      padding: const EdgeInsets.symmetric(vertical: 27),
                       child: Column(
                         children: [
                           Container(
@@ -188,7 +176,7 @@ class Menu extends StatelessWidget {
                               borderRadius: BorderRadius.circular(25),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(30),
+                              padding: const EdgeInsets.all(27),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -197,20 +185,20 @@ class Menu extends StatelessWidget {
                                       Text(
                                         '팔고있는 품목!',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 20),
+                                            fontFamily: "Jalnan", fontSize: 18),
                                       ),
                                       Text(
                                         '메뉴관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 40),
+                                            fontFamily: "Jalnan", fontSize: 36),
                                       ),
                                     ],
                                   ),
                                   CachedNetworkImage(
                                     imageUrl:
                                         'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fmenu.gif?alt=media&token=d3be18db-e92e-4e6d-ba0e-368287987e1c', // GIF 이미지의 URL을 여기에 입력
-                                    width: 100, // 이미지의 가로 크기
-                                    height: 100, // 이미지의 세로 크기
+                                    width: 90, // 이미지의 가로 크기
+                                    height: 90, // 이미지의 세로 크기
                                     placeholder: (context, url) =>
                                         const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                     errorWidget: (context, url, error) =>
@@ -256,7 +244,7 @@ class Menu extends StatelessWidget {
                                     const Text(
                                       '주문관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -309,7 +297,7 @@ class Menu extends StatelessWidget {
                                       const Text(
                                         '메뉴관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
+                                            fontFamily: "Jalnan", fontSize: 27),
                                       ),
                                     ],
                                   ),
@@ -353,7 +341,7 @@ class Menu extends StatelessWidget {
                                     const Text(
                                       '리뷰관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -396,7 +384,7 @@ class Menu extends StatelessWidget {
                                     const Text(
                                       '매출관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -411,8 +399,8 @@ class Menu extends StatelessWidget {
                     width: 100,
                   ),
                   Container(
-                    height: 580,
-                    width: 500,
+                    height: 600,
+                    width: 800,
                     color: Colors.white,
                     child: StreamBuilder(
                       stream: FirebaseFirestore.instance
@@ -425,7 +413,7 @@ class Menu extends StatelessWidget {
                           return GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // 한 행에 ?개의 아이템을 표시
+                              crossAxisCount: 3, // 한 행에 ?개의 아이템을 표시
                               childAspectRatio: 1 / 1, // 각 아이템의 가로 세로 비율 설정
                             ),
                             itemCount: streamSnapshot.data!.docs.length,
@@ -437,14 +425,14 @@ class Menu extends StatelessWidget {
                                   children: [
                                     Image.network(
                                       documentSnapshot['imageUrl'],
-                                      width: 100,
-                                      height: 100,
+                                      width: 140,
+                                      height: 140,
                                     ),
                                     ListTile(
                                       title: Text(
                                         documentSnapshot['name'],
                                         style: const TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
+                                            fontFamily: "Jalnan", fontSize: 20),
                                       ),
                                       subtitle: Text(
                                         documentSnapshot['price'],
@@ -452,13 +440,23 @@ class Menu extends StatelessWidget {
                                             fontFamily: "Jalnan", fontSize: 20),
                                       ),
                                     ),
-                                    IconButton(
-                                      onPressed: () async {
-                                        await product
-                                            .doc(documentSnapshot.id)
-                                            .delete();
-                                      },
-                                      icon: const Icon(Icons.delete),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            await product
+                                                .doc(documentSnapshot.id)
+                                                .delete();
+                                          },
+                                          icon: const Icon(Icons.delete),
+                                        ),
+                                        IconButton(
+                                          onPressed: () async {},
+                                          icon: const Icon(Icons.border_color),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -490,7 +488,7 @@ class Menu extends StatelessWidget {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(27),
                             child: Row(
                               children: [
                                 Column(
@@ -499,14 +497,14 @@ class Menu extends StatelessWidget {
                                       '메뉴를 추가하세요!',
                                       style: TextStyle(
                                         fontFamily: "Jalnan",
-                                        fontSize: 20,
+                                        fontSize: 18,
                                       ),
                                     ),
                                     Text(
                                       '메뉴추가',
                                       style: TextStyle(
                                         fontFamily: "Jalnan",
-                                        fontSize: 40,
+                                        fontSize: 36,
                                       ),
                                     ),
                                   ],
@@ -514,8 +512,8 @@ class Menu extends StatelessWidget {
                                 CachedNetworkImage(
                                   imageUrl:
                                       'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Faddmenu.gif?alt=media&token=270c7f3c-98ff-4b76-a0fb-858f63513c29', // GIF 이미지의 URL을 여기에 입력
-                                  width: 100, // 이미지의 가로 크기
-                                  height: 100, // 이미지의 세로 크기
+                                  width: 90, // 이미지의 가로 크기
+                                  height: 90, // 이미지의 세로 크기
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                   errorWidget: (context, url, error) =>
@@ -537,10 +535,10 @@ class Menu extends StatelessWidget {
                         ),
                         child: InkWell(
                           onTap: () {
-                            //showAlert(context);
+                            showAlert(context);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(27),
                             child: Column(
                               children: [
                                 Row(
@@ -551,14 +549,14 @@ class Menu extends StatelessWidget {
                                           '이곳의 대표메뉴는?',
                                           style: TextStyle(
                                             fontFamily: "Jalnan",
-                                            fontSize: 20,
+                                            fontSize: 18,
                                           ),
                                         ),
                                         Text(
                                           '대표메뉴',
                                           style: TextStyle(
                                             fontFamily: "Jalnan",
-                                            fontSize: 40,
+                                            fontSize: 36,
                                           ),
                                         ),
                                       ],
@@ -566,8 +564,8 @@ class Menu extends StatelessWidget {
                                     CachedNetworkImage(
                                       imageUrl:
                                           'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Faddmenu.gif?alt=media&token=270c7f3c-98ff-4b76-a0fb-858f63513c29', // GIF 이미지의 URL을 여기에 입력
-                                      width: 100, // 이미지의 가로 크기
-                                      height: 100, // 이미지의 세로 크기
+                                      width: 90, // 이미지의 가로 크기
+                                      height: 90, // 이미지의 세로 크기
                                       placeholder: (context, url) =>
                                           const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                       errorWidget: (context, url, error) =>
@@ -598,7 +596,7 @@ class Menu extends StatelessWidget {
                                       '추가',
                                       style: TextStyle(
                                         fontFamily: "Jalnan",
-                                        fontSize: 40,
+                                        fontSize: 36,
                                       ),
                                     ),
                                   ),

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/menu.dart';
 import 'package:flutter_ui/monthly_sales.dart';
 import 'package:flutter_ui/review.dart';
@@ -44,98 +43,87 @@ class _SalesState extends State<Sales> {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: InkWell(
-                    onTap: () {
-                      // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MainPage(),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 80,
-                              width: 1000,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Center(
-                                        child: Text(
-                                          docs[index]['storeName'],
+                  padding: const EdgeInsets.all(27),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 80,
+                            width: 1000,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Center(
+                                      child: Text(
+                                        docs[index]['storeName'],
+                                        style: const TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 63),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 60,
+                            width: 400,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          docs[index]['restAreaName'],
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 70),
+                                              fontSize: 22),
                                         ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                        Text(
+                                          '${'(' + docs[index]['direction']})',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 22),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              width: 400,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          Text(
-                                            docs[index]['restAreaName'],
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                          Text(
-                                            '${'(' + docs[index]['direction']})',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -152,7 +140,7 @@ class _SalesState extends State<Sales> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      padding: const EdgeInsets.symmetric(vertical: 27),
                       child: Column(
                         children: [
                           Container(
@@ -161,7 +149,7 @@ class _SalesState extends State<Sales> {
                               borderRadius: BorderRadius.circular(25),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(30),
+                              padding: const EdgeInsets.all(27),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -170,20 +158,20 @@ class _SalesState extends State<Sales> {
                                       Text(
                                         '얼마나 벌었을까?',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 20),
+                                            fontFamily: "Jalnan", fontSize: 18),
                                       ),
                                       Text(
                                         '매출관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 40),
+                                            fontFamily: "Jalnan", fontSize: 36),
                                       ),
                                     ],
                                   ),
                                   CachedNetworkImage(
                                     imageUrl:
                                         'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fsales.gif?alt=media&token=0aa3a760-9f61-45a5-9762-bf41a2387ef1', // GIF 이미지의 URL을 여기에 입력
-                                    width: 100, // 이미지의 가로 크기
-                                    height: 100, // 이미지의 세로 크기
+                                    width: 90, // 이미지의 가로 크기
+                                    height: 90, // 이미지의 세로 크기
                                     placeholder: (context, url) =>
                                         const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                     errorWidget: (context, url, error) =>
@@ -229,7 +217,7 @@ class _SalesState extends State<Sales> {
                                     const Text(
                                       '주문관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -272,7 +260,7 @@ class _SalesState extends State<Sales> {
                                     const Text(
                                       '메뉴관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -305,8 +293,8 @@ class _SalesState extends State<Sales> {
                                   children: [
                                     Image.network(
                                       'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Freaview.png?alt=media&token=85827149-95c6-4acc-ab4f-e2e7f76062d6', // 이미지 URL 대체
-                                      width: 53,
-                                      height: 53,
+                                      width: 50,
+                                      height: 50,
                                       fit: BoxFit.contain,
                                     ),
                                     const SizedBox(
@@ -315,7 +303,7 @@ class _SalesState extends State<Sales> {
                                     const Text(
                                       '리뷰관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -368,7 +356,7 @@ class _SalesState extends State<Sales> {
                                       const Text(
                                         '매출관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
+                                            fontFamily: "Jalnan", fontSize: 27),
                                       ),
                                     ],
                                   ),
@@ -730,7 +718,7 @@ class _SalesState extends State<Sales> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF050204),
+                          color: const Color(0xFFEFF2EA),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: InkWell(
@@ -743,7 +731,7 @@ class _SalesState extends State<Sales> {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(27),
                             child: Row(
                               children: [
                                 Column(
@@ -751,17 +739,17 @@ class _SalesState extends State<Sales> {
                                     Text(
                                       '간편매출',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan",
-                                          fontSize: 40,
-                                          color: Colors.white),
+                                        fontFamily: "Jalnan",
+                                        fontSize: 36,
+                                      ),
                                     ),
                                   ],
                                 ),
                                 CachedNetworkImage(
                                   imageUrl:
-                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
-                                  width: 100, // 이미지의 가로 크기
-                                  height: 100, // 이미지의 세로 크기
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fmoney2.gif?alt=media&token=b9857b49-8dfd-4df1-8f6b-e187e99410ad', // GIF 이미지의 URL을 여기에 입력
+                                  width: 90, // 이미지의 가로 크기
+                                  height: 90, // 이미지의 세로 크기
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                   errorWidget: (context, url, error) =>
@@ -778,7 +766,7 @@ class _SalesState extends State<Sales> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF050204),
+                          color: const Color(0xFFEFF2EA),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: InkWell(
@@ -791,7 +779,7 @@ class _SalesState extends State<Sales> {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(27),
                             child: Row(
                               children: [
                                 Column(
@@ -799,17 +787,17 @@ class _SalesState extends State<Sales> {
                                     Text(
                                       '월간매출',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan",
-                                          fontSize: 40,
-                                          color: Colors.white),
+                                        fontFamily: "Jalnan",
+                                        fontSize: 36,
+                                      ),
                                     ),
                                   ],
                                 ),
                                 CachedNetworkImage(
                                   imageUrl:
-                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
-                                  width: 100, // 이미지의 가로 크기
-                                  height: 100, // 이미지의 세로 크기
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fmoney2.gif?alt=media&token=b9857b49-8dfd-4df1-8f6b-e187e99410ad', // GIF 이미지의 URL을 여기에 입력
+                                  width: 90, // 이미지의 가로 크기
+                                  height: 90, // 이미지의 세로 크기
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                   errorWidget: (context, url, error) =>
@@ -826,7 +814,7 @@ class _SalesState extends State<Sales> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF050204),
+                          color: const Color(0xFFEFF2EA),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: InkWell(
@@ -839,7 +827,7 @@ class _SalesState extends State<Sales> {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(27),
                             child: Row(
                               children: [
                                 Column(
@@ -847,17 +835,17 @@ class _SalesState extends State<Sales> {
                                     Text(
                                       '연간매출',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan",
-                                          fontSize: 40,
-                                          color: Colors.white),
+                                        fontFamily: "Jalnan",
+                                        fontSize: 36,
+                                      ),
                                     ),
                                   ],
                                 ),
                                 CachedNetworkImage(
                                   imageUrl:
-                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Fend.gif?alt=media&token=da3c5b87-b0fd-458d-8ea5-d7e9071152ee', // GIF 이미지의 URL을 여기에 입력
-                                  width: 100, // 이미지의 가로 크기
-                                  height: 100, // 이미지의 세로 크기
+                                      'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/iconimage%2Fmoney2.gif?alt=media&token=b9857b49-8dfd-4df1-8f6b-e187e99410ad', // GIF 이미지의 URL을 여기에 입력
+                                  width: 90, // 이미지의 가로 크기
+                                  height: 90, // 이미지의 세로 크기
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                   errorWidget: (context, url, error) =>

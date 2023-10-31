@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/add_image/add_image.dart';
 import 'package:flutter_ui/menu.dart';
 import 'package:flutter_ui/open_business.dart';
@@ -70,99 +69,88 @@ class Addmenu extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(30),
-                  child: InkWell(
-                    onTap: () {
-                      // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MainPage(),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 80,
-                              width: 1000,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Center(
-                                        child: Text(
-                                          storeName = docs[index]['storeName'],
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 80,
+                            width: 1000,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Center(
+                                      child: Text(
+                                        storeName = docs[index]['storeName'],
+                                        style: const TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 70),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 60,
+                            width: 400,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          mainarea =
+                                              docs[index]['restAreaName'],
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 70),
+                                              fontSize: 25),
                                         ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                        Text(
+                                          subarea =
+                                              '${'(' + docs[index]['direction']})',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 25),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              width: 400,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          Text(
-                                            mainarea =
-                                                docs[index]['restAreaName'],
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                          Text(
-                                            subarea =
-                                                '${'(' + docs[index]['direction']})',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

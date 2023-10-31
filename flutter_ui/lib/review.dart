@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui/mainpage.dart';
 import 'package:flutter_ui/menu.dart';
 import 'package:flutter_ui/open_business.dart';
 import 'package:flutter_ui/sales.dart';
@@ -92,98 +91,87 @@ class Review extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: InkWell(
-                    onTap: () {
-                      // 이동하고자 하는 페이지로 이동하는 코드를 작성합니다.
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MainPage(),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 80,
-                              width: 1000,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Center(
-                                        child: Text(
-                                          docs[index]['storeName'],
+                  padding: const EdgeInsets.all(27),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 80,
+                            width: 1000,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Center(
+                                      child: Text(
+                                        docs[index]['storeName'],
+                                        style: const TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 63),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 60,
+                            width: 400,
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('testlogin')
+                                  .where("email", isEqualTo: user!.email)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      snapshot) {
+                                final docs = snapshot.data!.docs;
+                                return ListView.builder(
+                                  itemCount: docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          docs[index]['restAreaName'],
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
                                               fontFamily: "Jalnan",
-                                              fontSize: 70),
+                                              fontSize: 22),
                                         ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                        Text(
+                                          '${'(' + docs[index]['direction']})',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 22),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              width: 400,
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('testlogin')
-                                    .where("email", isEqualTo: user!.email)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            QuerySnapshot<Map<String, dynamic>>>
-                                        snapshot) {
-                                  final docs = snapshot.data!.docs;
-                                  return ListView.builder(
-                                    itemCount: docs.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          Text(
-                                            docs[index]['restAreaName'],
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                          Text(
-                                            '${'(' + docs[index]['direction']})',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: "Jalnan",
-                                                fontSize: 25),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -191,6 +179,7 @@ class Review extends StatelessWidget {
                 height: 20,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
@@ -199,7 +188,7 @@ class Review extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      padding: const EdgeInsets.symmetric(vertical: 27),
                       child: Column(
                         children: [
                           Container(
@@ -208,28 +197,29 @@ class Review extends StatelessWidget {
                               borderRadius: BorderRadius.circular(25),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(30),
+                              padding: const EdgeInsets.all(27),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Column(
                                     children: const [
                                       Text(
                                         '고객님의 생각',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 20),
+                                            fontFamily: "Jalnan", fontSize: 18),
                                       ),
                                       Text(
                                         '리뷰관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 40),
+                                            fontFamily: "Jalnan", fontSize: 36),
                                       ),
                                     ],
                                   ),
                                   CachedNetworkImage(
                                     imageUrl:
                                         'https://firebasestorage.googleapis.com/v0/b/test2-4def8.appspot.com/o/gif%2Freview.gif?alt=media&token=bc277960-ab53-4a31-a31f-7e497fd850c8', // GIF 이미지의 URL을 여기에 입력
-                                    width: 100, // 이미지의 가로 크기
-                                    height: 100, // 이미지의 세로 크기
+                                    width: 90, // 이미지의 가로 크기
+                                    height: 90, // 이미지의 세로 크기
                                     placeholder: (context, url) =>
                                         const CircularProgressIndicator(), // 로딩 중일 때 표시될 위젯 설정 (선택사항)
                                     errorWidget: (context, url, error) =>
@@ -275,7 +265,7 @@ class Review extends StatelessWidget {
                                     const Text(
                                       '주문관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -302,7 +292,7 @@ class Review extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 10,
                                   // 글자크기 때문에 흰색 짤리면 수정
-                                  horizontal: 100,
+                                  horizontal: 115,
                                 ),
                                 child: Row(
                                   children: [
@@ -318,7 +308,7 @@ class Review extends StatelessWidget {
                                     const Text(
                                       '메뉴관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
@@ -371,7 +361,7 @@ class Review extends StatelessWidget {
                                       const Text(
                                         '리뷰관리',
                                         style: TextStyle(
-                                            fontFamily: "Jalnan", fontSize: 30),
+                                            fontFamily: "Jalnan", fontSize: 27),
                                       ),
                                     ],
                                   ),
@@ -415,15 +405,12 @@ class Review extends StatelessWidget {
                                     const Text(
                                       '매출관리',
                                       style: TextStyle(
-                                          fontFamily: "Jalnan", fontSize: 30),
+                                          fontFamily: "Jalnan", fontSize: 27),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 15,
                           ),
                         ],
                       ),
@@ -466,20 +453,17 @@ class Review extends StatelessWidget {
                                   builder: (BuildContext context,
                                       AsyncSnapshot<QuerySnapshot>
                                           streamSnapshot) {
-                                    final List<DocumentSnapshot> sortedDocs =
-                                        List.from(streamSnapshot.data!.docs);
-                                    sortedDocs.sort((a, b) {
-                                      Timestamp timeA = a['reviewtime'];
-                                      Timestamp timeB = b['reviewtime'];
-                                      return timeB.compareTo(timeA);
-                                    });
                                     if (streamSnapshot.hasData) {
                                       return ListView.builder(
                                         controller: _scrollController,
-                                        itemCount: sortedDocs.length,
+                                        itemCount:
+                                            streamSnapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
+                                          final DocumentSnapshot
+                                              documentSnapshot =
+                                              streamSnapshot.data!.docs[index];
                                           final Timestamp time =
-                                              sortedDocs[index]['reviewtime'];
+                                              documentSnapshot['reviewtime'];
                                           final DateTime dateTime =
                                               time.toDate();
                                           String formattime =
@@ -498,8 +482,8 @@ class Review extends StatelessWidget {
                                                         margin: const EdgeInsets
                                                             .only(top: 5),
                                                         child: Text(
-                                                          sortedDocs[index]
-                                                              ['name'],
+                                                          documentSnapshot[
+                                                              'name'],
                                                           style: const TextStyle(
                                                               fontSize: 30,
                                                               fontWeight:
@@ -514,13 +498,12 @@ class Review extends StatelessWidget {
                                                         child:
                                                             RatingBar.builder(
                                                           initialRating:
-                                                              sortedDocs[index][
+                                                              documentSnapshot[
                                                                           'grade']
                                                                       .isNaN
                                                                   ? 0
-                                                                  : sortedDocs[
-                                                                          index]
-                                                                      ['grade'],
+                                                                  : documentSnapshot[
+                                                                      'grade'],
                                                           minRating: 1,
                                                           direction:
                                                               Axis.horizontal,
@@ -549,8 +532,8 @@ class Review extends StatelessWidget {
                                                             top: 5),
                                                     child: Text(
                                                       '메뉴 :' +
-                                                          sortedDocs[index]
-                                                              ['menu'],
+                                                          documentSnapshot[
+                                                              'menu'],
                                                       style: const TextStyle(
                                                           fontSize: 20,
                                                           fontWeight:
@@ -562,7 +545,7 @@ class Review extends StatelessWidget {
                                                         const EdgeInsets.only(
                                                             top: 20),
                                                     child: Text(
-                                                      sortedDocs[index]['text'],
+                                                      documentSnapshot['text'],
                                                       style: const TextStyle(
                                                           fontSize: 25,
                                                           fontWeight:
@@ -635,17 +618,34 @@ class Review extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    '현재 평점은?',
+                                    '평균 평점',
                                     style: TextStyle(
                                         fontFamily: "Jalnan", fontSize: 30),
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    '평점 : $averagegrade',
-                                    style: const TextStyle(
-                                        fontFamily: "Jalnan", fontSize: 25),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '평점 : $averagegrade',
+                                        style: const TextStyle(
+                                            fontFamily: "Jalnan", fontSize: 25),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            right: 10, top: 4),
+                                        child: Text(
+                                          '($gradescount)',
+                                          style: const TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: "Jalnan"),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
                                   Row(
                                     children: [
@@ -665,16 +665,6 @@ class Review extends StatelessWidget {
                                           color: Color(0xFFFF8F00),
                                         ),
                                         onRatingUpdate: (_) {},
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.only(
-                                            right: 10, top: 4),
-                                        child: Text(
-                                          '( $gradescount )',
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: "Jalnan"),
-                                        ),
                                       ),
                                     ],
                                   )
@@ -706,7 +696,7 @@ class Review extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    '최고의 리뷰!',
+                                    '높은 평점',
                                     style: TextStyle(
                                         fontFamily: "Jalnan", fontSize: 30),
                                   ),
@@ -717,6 +707,9 @@ class Review extends StatelessWidget {
                                     '메뉴 : $highmenu',
                                     style: const TextStyle(
                                         fontFamily: "Jalnan", fontSize: 25),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
                                   RatingBar.builder(
                                     initialRating: highgrade.isNaN
@@ -763,7 +756,7 @@ class Review extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    '최악의 리뷰ㅠㅠ',
+                                    '낮은 평점',
                                     style: TextStyle(
                                         fontFamily: "Jalnan", fontSize: 30),
                                   ),
@@ -774,6 +767,9 @@ class Review extends StatelessWidget {
                                     '메뉴 : $lowmenu',
                                     style: const TextStyle(
                                         fontFamily: "Jalnan", fontSize: 25),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
                                   RatingBar.builder(
                                     initialRating: lowgrade.isNaN
