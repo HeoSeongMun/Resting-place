@@ -247,7 +247,8 @@ class _Restaurant extends State<Restaurant> {
                                                         documentSnapshot[
                                                             'storeimageUrl'],
                                                         height: 120,
-                                                        fit: BoxFit.fitHeight,
+                                                        width: 55,
+                                                        fit: BoxFit.cover,
                                                       ),
                                               ),
                                               title: Container(
@@ -289,7 +290,7 @@ class _Restaurant extends State<Restaurant> {
                                                       Container(
                                                         margin: const EdgeInsets
                                                             .only(left: 3),
-                                                        width: 70,
+                                                        width: 80,
                                                         alignment: Alignment
                                                             .centerLeft,
                                                         child: Text(

@@ -313,7 +313,8 @@ class _Menu extends State<Menu> {
                                 leading: Image.network(
                                   documentSnapshot['imageUrl'],
                                   height: 120,
-                                  fit: BoxFit.fitHeight,
+                                  width: 80,
+                                  fit: BoxFit.cover,
                                 ),
                                 title: Text(documentSnapshot['name']),
                                 trailing: Text(

@@ -16,17 +16,16 @@ class AreaSearch extends StatefulWidget {
 
 class _AreaSearchState extends State<AreaSearch> {
   final TextEditingController filter = TextEditingController();
-  CollectionReference product = FirebaseFirestore.instance.collection('area');
+  CollectionReference areacollection =
+      FirebaseFirestore.instance.collection('area');
   CollectionReference cartcollection =
       FirebaseFirestore.instance.collection('shoppingBasket');
   CollectionReference ordercollection =
       FirebaseFirestore.instance.collection('order');
+
   final user = FirebaseAuth.instance.currentUser;
   FocusNode focusNode = FocusNode();
   String searchText = "";
-  List<String> uniqueData = [];
-  List<String> uniqueData1 = [];
-
   int cartcount = 0;
   int ordercount = 0;
   _AreaSearchState() {
@@ -42,25 +41,6 @@ class _AreaSearchState extends State<AreaSearch> {
     super.initState();
     CartCount();
     OrderCount();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    QuerySnapshot snapshot = await product.get();
-
-    List<String> uniqueSet = [];
-    List<String> uniqueSet1 = [];
-    for (var doc in snapshot.docs) {
-      String data = doc['location'];
-      String data1 = doc['imageUrl'];
-      uniqueSet.add(data);
-      uniqueSet1.add(data1);
-    }
-
-    setState(() {
-      uniqueData = uniqueSet.toList();
-      uniqueData1 = uniqueSet1.toList();
-    });
   }
 
   @override
@@ -224,16 +204,14 @@ class _AreaSearchState extends State<AreaSearch> {
                         margin: const EdgeInsets.only(left: 5, right: 5),
                         height: MediaQuery.of(context).size.height - 280,
                         child: StreamBuilder(
-                          stream: product.snapshots(),
+                          stream: areacollection.snapshots(),
                           builder: (context, streamSnapshot) {
                             if (streamSnapshot.hasData) {
                               return ListView.builder(
-                                itemCount: uniqueData.length,
+                                itemCount: streamSnapshot.data!.docs.length,
                                 itemBuilder: (context, index) {
                                   final DocumentSnapshot documentSnapshot =
                                       streamSnapshot.data!.docs[index];
-                                  String data = uniqueData[index]; // location
-                                  String data1 = uniqueData[index]; // imageUrl
                                   if (searchText.isEmpty) {
                                     return Container(
                                       margin: const EdgeInsets.only(
@@ -256,13 +234,18 @@ class _AreaSearchState extends State<AreaSearch> {
                                             ),
                                           ]),
                                       child: ListTile(
-                                        leading: Image.network(
-                                          documentSnapshot['imageUrl'],
-                                          width: 100,
-                                          fit: BoxFit.fill,
-                                        ),
+                                        leading: documentSnapshot['imageUrl']
+                                                .toString()
+                                                .isEmpty
+                                            ? Image.asset(
+                                                'assets/images/cross.png')
+                                            : Image.network(
+                                                documentSnapshot['imageUrl'],
+                                                width: 100,
+                                                fit: BoxFit.fill,
+                                              ),
                                         title: Text(
-                                          data,
+                                          documentSnapshot['location'],
                                         ),
                                         subtitle: Text(
                                           documentSnapshot['direction'],
@@ -273,7 +256,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                               await Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) => Restaurant(
-                                                  data,
+                                                  documentSnapshot['location'],
                                                   documentSnapshot['imageUrl']
                                                       .toString()),
                                             ),
@@ -288,7 +271,9 @@ class _AreaSearchState extends State<AreaSearch> {
                                       ),
                                     );
                                   }
-                                  if (data.toString().contains(searchText)) {
+                                  if (documentSnapshot['location']
+                                      .toString()
+                                      .contains(searchText)) {
                                     return Container(
                                       margin: const EdgeInsets.only(
                                           left: 5, right: 5, bottom: 10),
@@ -316,7 +301,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                           fit: BoxFit.fill,
                                         ),
                                         title: Text(
-                                          data,
+                                          documentSnapshot['location'],
                                         ),
                                         subtitle: Text(
                                           documentSnapshot['direction'],
@@ -327,7 +312,7 @@ class _AreaSearchState extends State<AreaSearch> {
                                               await Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) => Restaurant(
-                                                  data,
+                                                  documentSnapshot['location'],
                                                   documentSnapshot['imageUrl']
                                                       .toString()),
                                             ),
