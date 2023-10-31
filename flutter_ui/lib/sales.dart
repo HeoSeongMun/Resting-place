@@ -27,6 +27,8 @@ class _SalesState extends State<Sales> {
 
   double totalPrice = 0;
 
+  int itemcount = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -369,349 +371,928 @@ class _SalesState extends State<Sales> {
                     ),
                   ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: const Color(0xFFD2DAFF),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 5,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 80,
-                            ),
-                            child: Text(formattedDate),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 2.0,
-                        width: 240.0,
-                        color: Colors.black,
-                      ),
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: const Color(0xFFD2DAFF),
                             ),
-                            child: const SizedBox(
-                              width: 145,
-                              child: Text(
-                                '매출 구분',
+                            child: SizedBox(
+                              width: 300,
+                              height: 190,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text(
+                                          "일일매출",
+                                          style: TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 35),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        SizedBox(
+                                          width: 100,
+                                          child: Column(
+                                            children: [
+                                              const Text(
+                                                "금액",
+                                                style: TextStyle(
+                                                    fontFamily: "Jalnan",
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 1,
+                                                  horizontal: 1,
+                                                ),
+                                                child: StreamBuilder<
+                                                    QuerySnapshot>(
+                                                  stream: FirebaseFirestore.instance
+                                                      .collection('sales')
+                                                      .where('storeUid',
+                                                          isEqualTo: user!.uid)
+                                                      .where('time',
+                                                          isGreaterThanOrEqualTo:
+                                                              DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  DateTime.now()
+                                                                      .day),
+                                                          isLessThan: DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  DateTime.now()
+                                                                      .day)
+                                                              .add(
+                                                                  const Duration(
+                                                                      days: 1)))
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (snapshot.hasError) {
+                                                      return Text(
+                                                          'Error: ${snapshot.error}');
+                                                    }
+
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Text(
+                                                          'Loading...');
+                                                    }
+
+                                                    double totalPrice = 0;
+
+                                                    // 'time'이 오늘인 데이터의 'price' 값을 더합니다.
+                                                    for (var document
+                                                        in snapshot
+                                                            .data!.docs) {
+                                                      totalPrice +=
+                                                          document['price']
+                                                              as double;
+                                                    }
+
+                                                    // Container에 결과를 표시합니다.
+                                                    return Container(
+                                                      child: Text(
+                                                        '$totalPrice',
+                                                        style: const TextStyle(
+                                                          fontFamily: "Jalnan",
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 100.0,
+                                          width: 2.0,
+                                          color: Colors.grey[600],
+                                        ),
+                                        SizedBox(
+                                          width: 100,
+                                          child: Column(
+                                            children: [
+                                              const Text(
+                                                "건수",
+                                                style: TextStyle(
+                                                    fontFamily: "Jalnan",
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 1,
+                                                  horizontal: 1,
+                                                ),
+                                                child: StreamBuilder<
+                                                    QuerySnapshot>(
+                                                  stream: FirebaseFirestore.instance
+                                                      .collection('sales')
+                                                      .where('storeUid',
+                                                          isEqualTo: user!.uid)
+                                                      .where('time',
+                                                          isGreaterThanOrEqualTo:
+                                                              DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  DateTime.now()
+                                                                      .day),
+                                                          isLessThan: DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  DateTime.now()
+                                                                      .day)
+                                                              .add(
+                                                                  const Duration(
+                                                                      days: 1)))
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    int count =
+                                                        snapshot.data!.size;
+                                                    return Container(
+                                                      child: Text(
+                                                        '$count',
+                                                        style: const TextStyle(
+                                                          fontFamily: "Jalnan",
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            child: const SizedBox(
-                              width: 100,
-                              child: Text(
-                                '매출',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: 2.0,
-                        width: 240.0,
-                        color: Colors.grey,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20,
-                              horizontal: 10,
-                            ),
-                            child: const SizedBox(
-                              width: 145,
-                              child: Text(
-                                '일일 매출',
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20,
-                              horizontal: 5,
-                            ),
-                            child: StreamBuilder<QuerySnapshot>(
-                              stream: FirebaseFirestore.instance
-                                  .collection('sales')
-                                  .where('storeUid', isEqualTo: user!.uid)
-                                  .where('time',
-                                      isGreaterThanOrEqualTo: DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day),
-                                      isLessThan: DateTime(
-                                              DateTime.now().year,
-                                              DateTime.now().month,
-                                              DateTime.now().day)
-                                          .add(const Duration(days: 1)))
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                }
-
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Text('Loading...');
-                                }
-
-                                // 'time'이 오늘인 데이터의 'price' 값을 더합니다.
-                                for (var document in snapshot.data!.docs) {
-                                  totalPrice += document['price'] as double;
-                                }
-
-                                // Container에 결과를 표시합니다.
-                                return Container(
-                                  child: Text('$totalPrice'),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: 2.0,
-                        width: 240.0,
-                        color: Colors.grey,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20,
-                              horizontal: 10,
-                            ),
-                            child: const SizedBox(
-                              width: 145,
-                              child: Text(
-                                '이번달 매출',
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20,
-                              horizontal: 5,
-                            ),
-                            child: StreamBuilder<QuerySnapshot>(
-                              stream: FirebaseFirestore.instance
-                                  .collection('sales')
-                                  .where('storeUid', isEqualTo: user!.uid)
-                                  .where('time',
-                                      isGreaterThanOrEqualTo: DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          1))
-                                  .where('time',
-                                      isLessThan: DateTime(DateTime.now().year,
-                                          DateTime.now().month + 1, 1))
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                }
-
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Text('Loading...');
-                                }
-
-                                double totalPrice = 0;
-
-                                // 'time'이 이번 달인 데이터의 'price' 값을 더합니다.
-                                for (var document in snapshot.data!.docs) {
-                                  totalPrice += document['price'] as double;
-                                }
-
-                                // Container에 결과를 표시합니다.
-                                return Container(
-                                  child: Text('$totalPrice'),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: 2.0,
-                        width: 240.0,
-                        color: Colors.grey,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20,
-                              horizontal: 10,
-                            ),
-                            child: const SizedBox(
-                              width: 145,
-                              child: Text(
-                                '이번년도 매출',
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20,
-                              horizontal: 5,
-                            ),
-                            child: StreamBuilder<QuerySnapshot>(
-                              stream: FirebaseFirestore.instance
-                                  .collection('sales')
-                                  .where('storeUid', isEqualTo: user!.uid)
-                                  .where('time',
-                                      isGreaterThanOrEqualTo:
-                                          DateTime(DateTime.now().year, 1, 1))
-                                  .where('time',
-                                      isLessThan: DateTime(
-                                          DateTime.now().year + 1, 1, 1))
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                }
-
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Text('Loading...');
-                                }
-
-                                double totalPrice = 0;
-
-                                // 'time'이 이번 달인 데이터의 'price' 값을 더합니다.
-                                for (var document in snapshot.data!.docs) {
-                                  totalPrice += document['price'] as double;
-                                }
-
-                                // Container에 결과를 표시합니다.
-                                return Container(
-                                  child: Text('$totalPrice'),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: const Color(0xFFD2DAFF),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 5,
-                            ),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 80,
-                            ),
-                            child: Text('날짜지정'),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          // 시작 날짜 선택 버튼
-                          ElevatedButton(
-                            onPressed: () async {
-                              final selectedStartDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(DateTime.now().year - 5),
-                                lastDate: DateTime.now(),
-                              );
-                              if (selectedStartDate != null) {
-                                setState(() {
-                                  startDate = selectedStartDate;
-                                });
-                              }
-                            },
-                            child: const Text('시작날짜'),
-                          ),
-                          // 종료 날짜 선택 버튼
                           const SizedBox(
-                            width: 50,
+                            width: 10,
                           ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              final selectedEndDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(DateTime.now().year - 5),
-                                lastDate: DateTime.now(),
-                              );
-                              if (selectedEndDate != null) {
-                                setState(() {
-                                  endDate = selectedEndDate
-                                      .add(const Duration(days: 1));
-                                });
-                              }
-                            },
-                            child: const Text('종료날짜'),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: const Color(0xFFD2DAFF),
+                            ),
+                            child: SizedBox(
+                              width: 300,
+                              height: 190,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text(
+                                          "이번달매출",
+                                          style: TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 35),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        SizedBox(
+                                          width: 110,
+                                          child: Column(
+                                            children: [
+                                              const Text(
+                                                "금액",
+                                                style: TextStyle(
+                                                    fontFamily: "Jalnan",
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 1,
+                                                  horizontal: 1,
+                                                ),
+                                                child: StreamBuilder<
+                                                    QuerySnapshot>(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection('sales')
+                                                      .where('storeUid',
+                                                          isEqualTo: user!.uid)
+                                                      .where('time',
+                                                          isGreaterThanOrEqualTo:
+                                                              DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  1))
+                                                      .where('time',
+                                                          isLessThan: DateTime(
+                                                              DateTime.now()
+                                                                  .year,
+                                                              DateTime.now()
+                                                                      .month +
+                                                                  1,
+                                                              1))
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (snapshot.hasError) {
+                                                      return Text(
+                                                          'Error: ${snapshot.error}');
+                                                    }
+
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Text(
+                                                          'Loading...');
+                                                    }
+
+                                                    double totalPrice = 0;
+
+                                                    // 'time'이 이번 달인 데이터의 'price' 값을 더합니다.
+                                                    for (var document
+                                                        in snapshot
+                                                            .data!.docs) {
+                                                      totalPrice +=
+                                                          document['price']
+                                                              as double;
+                                                    }
+
+                                                    // Container에 결과를 표시합니다.
+                                                    return Container(
+                                                      child: Text(
+                                                        '$totalPrice',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 20),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 100.0,
+                                          width: 2.0,
+                                          color: Colors.grey[600],
+                                        ),
+                                        SizedBox(
+                                          width: 110,
+                                          child: Column(
+                                            children: [
+                                              const Text(
+                                                "건수",
+                                                style: TextStyle(
+                                                    fontFamily: "Jalnan",
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 1,
+                                                  horizontal: 1,
+                                                ),
+                                                child: StreamBuilder<
+                                                    QuerySnapshot>(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection('sales')
+                                                      .where('storeUid',
+                                                          isEqualTo: user!.uid)
+                                                      .where('time',
+                                                          isGreaterThanOrEqualTo:
+                                                              DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  1))
+                                                      .where('time',
+                                                          isLessThan: DateTime(
+                                                              DateTime.now()
+                                                                  .year,
+                                                              DateTime.now()
+                                                                      .month +
+                                                                  1,
+                                                              1))
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    int count =
+                                                        snapshot.data!.size;
+                                                    if (snapshot.hasError) {
+                                                      return Text(
+                                                          'Error: ${snapshot.error}');
+                                                    }
+
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Text(
+                                                          'Loading...');
+                                                    }
+                                                    // Container에 결과를 표시합니다.
+                                                    return Container(
+                                                      child: Text(
+                                                        '$count',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 20),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: const Color(0xFFD2DAFF),
+                            ),
+                            child: SizedBox(
+                              width: 300,
+                              height: 190,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text(
+                                          "이번년도매출",
+                                          style: TextStyle(
+                                              fontFamily: "Jalnan",
+                                              fontSize: 35),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        SizedBox(
+                                          width: 110,
+                                          child: Column(
+                                            children: [
+                                              const Text(
+                                                "금액",
+                                                style: TextStyle(
+                                                    fontFamily: "Jalnan",
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 1,
+                                                  horizontal: 1,
+                                                ),
+                                                child: StreamBuilder<
+                                                    QuerySnapshot>(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection('sales')
+                                                      .where('storeUid',
+                                                          isEqualTo: user!.uid)
+                                                      .where('time',
+                                                          isGreaterThanOrEqualTo:
+                                                              DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  1,
+                                                                  1))
+                                                      .where('time',
+                                                          isLessThan: DateTime(
+                                                              DateTime.now()
+                                                                      .year +
+                                                                  1,
+                                                              1,
+                                                              1))
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (snapshot.hasError) {
+                                                      return Text(
+                                                          'Error: ${snapshot.error}');
+                                                    }
+
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Text(
+                                                          'Loading...');
+                                                    }
+
+                                                    double totalPrice = 0;
+
+                                                    // 'time'이 이번 달인 데이터의 'price' 값을 더합니다.
+                                                    for (var document
+                                                        in snapshot
+                                                            .data!.docs) {
+                                                      totalPrice +=
+                                                          document['price']
+                                                              as double;
+                                                    }
+
+                                                    // Container에 결과를 표시합니다.
+                                                    return Container(
+                                                      child: Text(
+                                                        '$totalPrice',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 20),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 100.0,
+                                          width: 2.0,
+                                          color: Colors.grey[600],
+                                        ),
+                                        SizedBox(
+                                          width: 110,
+                                          child: Column(
+                                            children: [
+                                              const Text(
+                                                "건수",
+                                                style: TextStyle(
+                                                    fontFamily: "Jalnan",
+                                                    fontSize: 20),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 1,
+                                                  horizontal: 1,
+                                                ),
+                                                child: StreamBuilder<
+                                                    QuerySnapshot>(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection('sales')
+                                                      .where('storeUid',
+                                                          isEqualTo: user!.uid)
+                                                      .where('time',
+                                                          isGreaterThanOrEqualTo:
+                                                              DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  1,
+                                                                  1))
+                                                      .where('time',
+                                                          isLessThan: DateTime(
+                                                              DateTime.now()
+                                                                      .year +
+                                                                  1,
+                                                              1,
+                                                              1))
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    int count =
+                                                        snapshot.data!.size;
+                                                    if (snapshot.hasError) {
+                                                      return Text(
+                                                          'Error: ${snapshot.error}');
+                                                    }
+
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Text(
+                                                          'Loading...');
+                                                    }
+                                                    // Container에 결과를 표시합니다.
+                                                    return Container(
+                                                      child: Text(
+                                                        '$count',
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Jalnan",
+                                                            fontSize: 20),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '날짜지정',
+                            style: TextStyle(
+                              fontFamily: "Jalnan",
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: const Color(0xFF827BE6),
+                            ),
+                            child: TextButton(
+                              onPressed: () async {
+                                final selectedStartDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(DateTime.now().year - 5),
+                                  lastDate: DateTime.now(),
+                                );
+                                if (selectedStartDate != null) {
+                                  setState(() {
+                                    startDate = selectedStartDate;
+                                  });
+                                }
+                              },
+                              child: const Text(
+                                '시작날짜',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: const Color(0xFF827BE6),
+                            ),
+                            child: TextButton(
+                              onPressed: () async {
+                                final selectedEndDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(DateTime.now().year - 5),
+                                  lastDate: DateTime.now(),
+                                );
+                                if (selectedEndDate != null) {
+                                  setState(() {
+                                    endDate = selectedEndDate
+                                        .add(const Duration(days: 1));
+                                  });
+                                }
+                              },
+                              child: const Text(
+                                '종료날짜',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 500,
                           ),
                         ],
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      // 선택한 날짜 사이의 'price' 값을 표시
-                      if (startDate != null && endDate != null)
-                        StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('sales')
-                              .where('storeUid', isEqualTo: user!.uid)
-                              .where('time', isGreaterThanOrEqualTo: startDate)
-                              .where('time', isLessThanOrEqualTo: endDate)
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            }
-
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Text('Loading...');
-                            }
-
-                            double totalPrice = 0;
-
-                            // 선택한 날짜 사이의 'price' 값을 더합니다.
-                            for (var document in snapshot.data!.docs) {
-                              totalPrice += document['price'] as double;
-                            }
-
-                            // Container에 결과를 표시합니다.
-                            return Container(
-                              child: Text('지정날짜매출 : $totalPrice원'),
-                            );
-                          },
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: const Color(0xFFD2DAFF),
                         ),
+                        child: SizedBox(
+                          width: 800,
+                          height: 230,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text(
+                                      "총 매출",
+                                      style: TextStyle(
+                                          fontFamily: "Jalnan", fontSize: 35),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      startDate != null
+                                          ? DateFormat('yyyy-MM-dd')
+                                              .format(startDate!)
+                                          : '',
+                                      style: const TextStyle(
+                                        fontFamily: "Jalnan",
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      startDate != null || endDate != null
+                                          ? '~'
+                                          : '',
+                                      style: const TextStyle(
+                                        fontFamily: "Jalnan",
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      endDate != null
+                                          ? DateFormat('yyyy-MM-dd').format(
+                                              endDate!.subtract(
+                                                  const Duration(days: 1)))
+                                          : '',
+                                      style: const TextStyle(
+                                        fontFamily: "Jalnan",
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      width: 250,
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                            "금액",
+                                            style: TextStyle(
+                                                fontFamily: "Jalnan",
+                                                fontSize: 27),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 1,
+                                              horizontal: 1,
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance
+                                                  .collection('sales')
+                                                  .where('storeUid',
+                                                      isEqualTo: user!.uid)
+                                                  .where('time',
+                                                      isGreaterThanOrEqualTo:
+                                                          startDate)
+                                                  .where('time',
+                                                      isLessThanOrEqualTo:
+                                                          endDate)
+                                                  .snapshots(),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<QuerySnapshot>
+                                                      snapshot) {
+                                                if (snapshot.hasError) {
+                                                  return Text(
+                                                      'Error: ${snapshot.error}');
+                                                }
+
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const Text(
+                                                      'Loading...');
+                                                }
+
+                                                double totalPrice = 0;
+
+                                                // 선택한 날짜 사이의 'price' 값을 더합니다.
+                                                for (var document
+                                                    in snapshot.data!.docs) {
+                                                  totalPrice +=
+                                                      document['price']
+                                                          as double;
+                                                }
+
+                                                // Container에 결과를 표시합니다.
+                                                return Container(
+                                                  child: Text(
+                                                    '$totalPrice원',
+                                                    style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 27),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 100.0,
+                                      width: 2.0,
+                                      color: Colors.grey[600],
+                                    ),
+                                    SizedBox(
+                                      width: 250,
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                            "건수",
+                                            style: TextStyle(
+                                                fontFamily: "Jalnan",
+                                                fontSize: 27),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 1,
+                                              horizontal: 1,
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance
+                                                  .collection('sales')
+                                                  .where('storeUid',
+                                                      isEqualTo: user!.uid)
+                                                  .where('time',
+                                                      isGreaterThanOrEqualTo:
+                                                          startDate)
+                                                  .where('time',
+                                                      isLessThan: endDate)
+                                                  .snapshots(),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<QuerySnapshot>
+                                                      snapshot) {
+                                                int count = snapshot.data!.size;
+                                                if (snapshot.hasError) {
+                                                  return Text(
+                                                      'Error: ${snapshot.error}');
+                                                }
+
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const Text(
+                                                      'Loading...');
+                                                }
+                                                // Container에 결과를 표시합니다.
+                                                return Container(
+                                                  child: Text(
+                                                    '$count',
+                                                    style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 27),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Column(

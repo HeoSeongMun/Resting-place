@@ -15,6 +15,15 @@ class OpenBusiness extends StatelessWidget {
   CollectionReference complete =
       FirebaseFirestore.instance.collection('complete');
   CollectionReference sales = FirebaseFirestore.instance.collection('sales');
+
+  DateTime startOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  DateTime endOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day, 23, 59, 59, 999, 999);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1415,6 +1424,11 @@ class OpenBusiness extends StatelessWidget {
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                                DateTime now = DateTime.now();
+                                Timestamp startOfToday =
+                                    Timestamp.fromDate(startOfDay(now));
+                                Timestamp endOfToday =
+                                    Timestamp.fromDate(endOfDay(now));
                                 if (streamSnapshot.hasData) {
                                   return Column(
                                     crossAxisAlignment:
