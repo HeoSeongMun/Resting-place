@@ -224,7 +224,7 @@ class ReviewListPage extends StatelessWidget {
                                       child: Text(
                                         formattime.toString(),
                                         style: TextStyle(
-                                          fontSize: 10,
+                                          fontSize: 8,
                                           color: Colors.grey[500],
                                         ),
                                       ),

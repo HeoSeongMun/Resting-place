@@ -466,17 +466,20 @@ class Review extends StatelessWidget {
                                   builder: (BuildContext context,
                                       AsyncSnapshot<QuerySnapshot>
                                           streamSnapshot) {
+                                    final List<DocumentSnapshot> sortedDocs =
+                                        List.from(streamSnapshot.data!.docs);
+                                    sortedDocs.sort((a, b) {
+                                      Timestamp timeA = a['reviewtime'];
+                                      Timestamp timeB = b['reviewtime'];
+                                      return timeB.compareTo(timeA);
+                                    });
                                     if (streamSnapshot.hasData) {
                                       return ListView.builder(
                                         controller: _scrollController,
-                                        itemCount:
-                                            streamSnapshot.data!.docs.length,
+                                        itemCount: sortedDocs.length,
                                         itemBuilder: (context, index) {
-                                          final DocumentSnapshot
-                                              documentSnapshot =
-                                              streamSnapshot.data!.docs[index];
                                           final Timestamp time =
-                                              documentSnapshot['reviewtime'];
+                                              sortedDocs[index]['reviewtime'];
                                           final DateTime dateTime =
                                               time.toDate();
                                           String formattime =
@@ -495,8 +498,8 @@ class Review extends StatelessWidget {
                                                         margin: const EdgeInsets
                                                             .only(top: 5),
                                                         child: Text(
-                                                          documentSnapshot[
-                                                              'name'],
+                                                          sortedDocs[index]
+                                                              ['name'],
                                                           style: const TextStyle(
                                                               fontSize: 30,
                                                               fontWeight:
@@ -511,12 +514,13 @@ class Review extends StatelessWidget {
                                                         child:
                                                             RatingBar.builder(
                                                           initialRating:
-                                                              documentSnapshot[
+                                                              sortedDocs[index][
                                                                           'grade']
                                                                       .isNaN
                                                                   ? 0
-                                                                  : documentSnapshot[
-                                                                      'grade'],
+                                                                  : sortedDocs[
+                                                                          index]
+                                                                      ['grade'],
                                                           minRating: 1,
                                                           direction:
                                                               Axis.horizontal,
@@ -545,8 +549,8 @@ class Review extends StatelessWidget {
                                                             top: 5),
                                                     child: Text(
                                                       '메뉴 :' +
-                                                          documentSnapshot[
-                                                              'menu'],
+                                                          sortedDocs[index]
+                                                              ['menu'],
                                                       style: const TextStyle(
                                                           fontSize: 20,
                                                           fontWeight:
@@ -558,7 +562,7 @@ class Review extends StatelessWidget {
                                                         const EdgeInsets.only(
                                                             top: 20),
                                                     child: Text(
-                                                      documentSnapshot['text'],
+                                                      sortedDocs[index]['text'],
                                                       style: const TextStyle(
                                                           fontSize: 25,
                                                           fontWeight:
