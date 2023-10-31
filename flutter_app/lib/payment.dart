@@ -157,12 +157,45 @@ class _Payment extends State<Payment> {
         });
   }
 
+  DateTime startOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  DateTime endOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day, 23, 59, 59, 999, 999);
+  }
+
   Future<String> generateOrderNumber() async {
     //주문 번호
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    String orderNumber = '';
+    // 현재 날짜를 기반으로 주문번호 생성
+    DateTime now = DateTime.now();
+    Timestamp startOfToday = Timestamp.fromDate(startOfDay(now));
+    Timestamp endOfToday = Timestamp.fromDate(endOfDay(now));
+
+    // 해당 날짜에 해당하는 주문 개수를 조회
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('complete')
+        .where('ordertime',
+            isGreaterThanOrEqualTo: startOfToday,
+            isLessThanOrEqualTo: endOfToday)
+        .get();
+    int orderCount = querySnapshot.size;
+
+    QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('order').get();
-    int orderCount = querySnapshot.size; // 현재까지 저장된 주문의 개수
-    String orderNumber = (orderCount + 1).toString(); // 새로운 주문 번호 생성
+    int orderOrdercount = snapshot.size;
+
+    if (orderCount > 0 && orderOrdercount > 0) {
+      orderNumber = (orderCount + orderOrdercount + 1).toString();
+    } else if (orderCount > 0 && orderOrdercount == 0) {
+      orderNumber = (orderCount + 1).toString();
+    } else if (orderCount == 0) {
+      // 해당 날짜에 저장된 주문이 없다면
+      orderNumber = (orderOrdercount + 1).toString();
+    }
+
     return orderNumber;
   }
 
