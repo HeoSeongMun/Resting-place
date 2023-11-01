@@ -39,8 +39,6 @@ class _OrderedList extends State<OrderedList> {
       });
     });
     super.initState();
-    CartCount();
-    OrderCount();
   }
 
   @override
