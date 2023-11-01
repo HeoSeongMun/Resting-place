@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -1417,135 +1419,156 @@ class OpenBusiness extends StatelessWidget {
                           margin: const EdgeInsets.only(left: 50, right: 50),
                           height: 520,
                           width: 300,
-                          child: Container(
-                            child: StreamBuilder(
-                              stream: complete
-                                  .where("storeUid", isEqualTo: user!.uid)
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                                DateTime now = DateTime.now();
-                                Timestamp startOfToday =
-                                    Timestamp.fromDate(startOfDay(now));
-                                Timestamp endOfToday =
-                                    Timestamp.fromDate(endOfDay(now));
-                                if (streamSnapshot.hasData) {
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    '${streamSnapshot.data!.docs.length}',
-                                                    style: const TextStyle(
-                                                        fontFamily: "Jalnan",
-                                                        fontSize: 15,
-                                                        color: Colors.white),
-                                                  ),
-                                                ],
-                                              ),
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: complete
+                                .where("storeUid", isEqualTo: user!.uid)
+                                .where("ordertime",
+                                    isGreaterThanOrEqualTo: Timestamp.fromDate(
+                                        DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day,
+                                            0,
+                                            0,
+                                            0,
+                                            0)),
+                                    isLessThanOrEqualTo: Timestamp.fromDate(
+                                        DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day,
+                                            23,
+                                            59,
+                                            59,
+                                            999,
+                                            999)))
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                              if (streamSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (streamSnapshot.hasError) {
+                                print(streamSnapshot.error);
+                                return Container();
+                              } else if (!streamSnapshot.hasData ||
+                                  streamSnapshot.data!.docs.isEmpty) {
+                                print('데이터 없음');
+                                return Container(); // 데이터가 없을 때의 처리
+                              } else if (streamSnapshot.hasData) {
+                                final List<DocumentSnapshot> sortedDocs =
+                                    List.from(streamSnapshot.data!.docs);
+                                sortedDocs.sort((a, b) {
+                                  Timestamp timeA = a['ordertime'];
+                                  Timestamp timeB = b['ordertime'];
+                                  return timeB.compareTo(timeA);
+                                });
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  '${streamSnapshot.data!.docs.length}',
+                                                  style: const TextStyle(
+                                                      fontFamily: "Jalnan",
+                                                      fontSize: 15,
+                                                      color: Colors.white),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      Expanded(
-                                        child: ListView.builder(
-                                          itemCount:
-                                              streamSnapshot.data!.docs.length,
-                                          itemBuilder: (context, index) {
-                                            final DocumentSnapshot
-                                                documentSnapshot =
-                                                streamSnapshot
-                                                    .data!.docs[index];
-                                            Timestamp timestamp =
-                                                documentSnapshot['ordertime'];
-                                            DateTime dateTime =
-                                                timestamp.toDate();
-                                            num totalprice = int.parse(
-                                                    documentSnapshot['price']) *
-                                                documentSnapshot['count'];
-                                            return InkWell(
-                                              child: Card(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        '메뉴명 : ' +
-                                                            documentSnapshot[
-                                                                'name'],
-                                                        style: const TextStyle(
-                                                          fontFamily: "Jalnan",
-                                                          fontSize: 18,
-                                                        ),
+                                        ),
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        itemCount: sortedDocs.length,
+                                        itemBuilder: (context, index) {
+                                          Timestamp timestamp =
+                                              sortedDocs[index]['ordertime'];
+                                          DateTime dateTime =
+                                              timestamp.toDate();
+                                          num totalprice = int.parse(
+                                                  sortedDocs[index]['price']) *
+                                              sortedDocs[index]['count'];
+                                          return InkWell(
+                                            child: Card(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      '메뉴명 : ' +
+                                                          sortedDocs[index]
+                                                              ['name'],
+                                                      style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 18,
                                                       ),
-                                                      Text(
-                                                        '가격 : ' +
-                                                            documentSnapshot[
-                                                                'price'],
-                                                        style: const TextStyle(
-                                                          fontFamily: "Jalnan",
-                                                          fontSize: 18,
-                                                        ),
+                                                    ),
+                                                    Text(
+                                                      '가격 : ' +
+                                                          sortedDocs[index]
+                                                              ['price'],
+                                                      style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 18,
                                                       ),
-                                                      Text(
-                                                        '수량 : ${documentSnapshot['count'].toString()}',
-                                                        style: const TextStyle(
-                                                          fontFamily: "Jalnan",
-                                                          fontSize: 18,
-                                                        ),
+                                                    ),
+                                                    Text(
+                                                      '수량 : ${sortedDocs[index]['count'].toString()}',
+                                                      style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 18,
                                                       ),
-                                                      Text(
-                                                        '주문시간 : ${DateFormat('a h시 m분').format(dateTime)}',
-                                                        style: const TextStyle(
-                                                          fontFamily: "Jalnan",
-                                                          fontSize: 18,
-                                                        ),
+                                                    ),
+                                                    Text(
+                                                      '주문시간 : ${DateFormat('a h시 m분').format(dateTime)}',
+                                                      style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 18,
                                                       ),
-                                                      const SizedBox(
-                                                        height: 30,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 30,
+                                                    ),
+                                                    Text(
+                                                      '총가격 : $totalprice',
+                                                      style: const TextStyle(
+                                                        fontFamily: "Jalnan",
+                                                        fontSize: 18,
                                                       ),
-                                                      Text(
-                                                        '총가격 : $totalprice',
-                                                        style: const TextStyle(
-                                                          fontFamily: "Jalnan",
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            );
-                                          },
-                                        ),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    ],
-                                  );
-                                }
-                                return const Center(
-                                  child: CircularProgressIndicator(),
+                                    ),
+                                  ],
                                 );
-                              },
-                            ),
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
                           ),
                         ),
                       ],
