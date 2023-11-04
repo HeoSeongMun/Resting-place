@@ -23,7 +23,7 @@ class Menu extends StatefulWidget {
 }
 
 class _Menu extends State<Menu> {
-  CollectionReference product =
+  CollectionReference cartcollection =
       FirebaseFirestore.instance.collection('shoppingBasket');
   CollectionReference ordercollection =
       FirebaseFirestore.instance.collection('order');
@@ -32,7 +32,7 @@ class _Menu extends State<Menu> {
   int ordercount = 0;
   Future<bool> checkItemExists(String itemName, String userUid) async {
     // 아이템이 이미 쇼핑 바스켓에 있는지 확인하는 코드
-    QuerySnapshot querySnapshot = await product
+    QuerySnapshot querySnapshot = await cartcollection
         .where('name', isEqualTo: itemName)
         .where('userUid', isEqualTo: userUid)
         .where('location', isEqualTo: widget.areaName)
@@ -324,7 +324,7 @@ class _Menu extends State<Menu> {
                                   bool itemExists = await checkItemExists(
                                       documentSnapshot['name'], user!.uid);
                                   if (!itemExists) {
-                                    await product.add({
+                                    await cartcollection.add({
                                       'storeName': widget.storeName,
                                       'name': documentSnapshot['name'],
                                       'price': documentSnapshot['price'],
@@ -498,24 +498,38 @@ class _Menu extends State<Menu> {
                         ),
                         child: Icon(Icons.shopping_cart_outlined),
                       ),
-                      if (cartcount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 3,
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              cartcount.toString(),
-                              style: const TextStyle(color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: StreamBuilder(
+                          stream: cartcollection
+                              .where('userUid', isEqualTo: user!.uid)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot streamSnapshot) {
+                            int count = streamSnapshot.data!.docs.length;
+                            if (!streamSnapshot.hasData ||
+                                streamSnapshot.data!.docs.isEmpty) {
+                              return Container(); // 데이터가 없는 경우 처리
+                            }
+                            if (streamSnapshot.hasError) {
+                              debugPrint('에러');
+                              Container();
+                            }
+                            if (streamSnapshot.hasData) {
+                              return Container(
+                                  width: 15,
+                                  height: 15,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(count.toString()));
+                            }
+                            return CircularProgressIndicator();
+                          },
+                        ),
+                      )
                     ],
                   ),
                   label: '장바구니',
@@ -619,7 +633,7 @@ class _Menu extends State<Menu> {
 
   Future<void> CartCount() async {
     QuerySnapshot snapshot =
-        await product.where('userUid', isEqualTo: user!.uid).get();
+        await cartcollection.where('userUid', isEqualTo: user!.uid).get();
 
     int count = snapshot.docs.length;
     if (count != 0) {

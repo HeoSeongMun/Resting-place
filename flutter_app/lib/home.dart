@@ -623,24 +623,38 @@ class _Home extends State<Home> {
                           ),
                           child: Icon(Icons.shopping_cart_outlined),
                         ),
-                        if (cartcount > 0)
-                          Positioned(
-                            top: 0,
-                            right: 3,
-                            child: Container(
-                              width: 15,
-                              height: 15,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Text(
-                                cartcount.toString(),
-                                style: const TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          )
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: StreamBuilder(
+                            stream: cartcollection
+                                .where('userUid', isEqualTo: user!.uid)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot streamSnapshot) {
+                              int count = streamSnapshot.data!.docs.length;
+                              if (!streamSnapshot.hasData ||
+                                  streamSnapshot.data!.docs.isEmpty) {
+                                return Container(); // 데이터가 없는 경우 처리
+                              }
+                              if (streamSnapshot.hasError) {
+                                debugPrint('에러');
+                                Container();
+                              }
+                              if (streamSnapshot.hasData) {
+                                return Container(
+                                    width: 15,
+                                    height: 15,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(count.toString()));
+                              }
+                              return CircularProgressIndicator();
+                            },
+                          ),
+                        )
                       ],
                     ),
                     label: '장바구니',
