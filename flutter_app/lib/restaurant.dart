@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/cart.dart';
 import 'package:flutter_app/home.dart';
-import 'package:flutter_app/areasearch.dart';
 import 'package:flutter_app/menu.dart';
 import 'package:flutter_app/orderedlist.dart';
 import 'package:flutter_app/userinfo.dart';
@@ -568,58 +568,33 @@ class _Restaurant extends State<Restaurant> {
                           builder: (context) => const AreaSearch()),
                       (route) => false,
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                      });
-                    }
                     break;
                   case 1: //장바구니
-                    final result = await Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Cart()),
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                      });
-                    }
+
                     break;
                   case 2: //홈
-                    final result = await Navigator.pushAndRemoveUntil(
+                    await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => const Home()),
                       (route) => false,
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                      });
-                    }
                     break;
                   case 3: //주문내역
-                    final result = await Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const OrderedList()),
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                      });
-                    }
                     break;
                   case 4: //마이휴잇
-                    final result = await Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => UserPage()),
-                      (route) => false,
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                      });
-                    }
                     break;
                 }
               },
@@ -663,24 +638,39 @@ class _Restaurant extends State<Restaurant> {
                         ),
                         child: Icon(Icons.shopping_cart_outlined),
                       ),
-                      if (cartcount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 3,
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              cartcount.toString(),
-                              style: const TextStyle(color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: StreamBuilder(
+                          stream: cartcollection
+                              .where('userUid', isEqualTo: user!.uid)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot streamSnapshot) {
+                            if (!streamSnapshot.hasData ||
+                                streamSnapshot.data!.docs.isEmpty) {
+                              return Container(); // 데이터가 없는 경우 처리
+                            }
+                            if (streamSnapshot.hasError) {
+                              debugPrint('에러');
+                              Container();
+                            }
+                            if (streamSnapshot.hasData) {
+                              int count = streamSnapshot.data!.docs.length;
+                              return Container(
+                                  alignment: Alignment.center,
+                                  width: 15,
+                                  height: 15,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(count.toString()));
+                            }
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      )
                     ],
                   ),
                   label: '장바구니',
@@ -724,24 +714,39 @@ class _Restaurant extends State<Restaurant> {
                         ),
                         child: Icon(Icons.receipt_long_outlined),
                       ),
-                      if (ordercount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 3,
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              ordercount.toString(),
-                              style: const TextStyle(color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: StreamBuilder(
+                          stream: ordercollection
+                              .where('userUid', isEqualTo: user!.uid)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot streamSnapshot) {
+                            if (!streamSnapshot.hasData ||
+                                streamSnapshot.data!.docs.isEmpty) {
+                              return Container(); // 데이터가 없는 경우 처리
+                            }
+                            if (streamSnapshot.hasError) {
+                              debugPrint('에러');
+                              Container();
+                            }
+                            if (streamSnapshot.hasData) {
+                              int count = streamSnapshot.data!.docs.length;
+                              return Container(
+                                  alignment: Alignment.center,
+                                  width: 15,
+                                  height: 15,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(count.toString()));
+                            }
+                            return const CircularProgressIndicator();
+                          },
                         ),
+                      )
                     ],
                   ),
                   label: '주문내역',

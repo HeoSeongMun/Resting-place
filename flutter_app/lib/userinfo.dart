@@ -25,8 +25,6 @@ class _UserPage extends State<UserPage> {
   CollectionReference cartcollection =
       FirebaseFirestore.instance.collection('shoppingBasket');
   final user = FirebaseAuth.instance.currentUser;
-  int cartcount = 0;
-  int ordercount = 0;
 
   CollectionReference product =
       FirebaseFirestore.instance.collection('userinfo');
@@ -34,8 +32,6 @@ class _UserPage extends State<UserPage> {
   @override
   void initState() {
     super.initState();
-    CartCount();
-    OrderCount();
   }
 
   @override
@@ -240,12 +236,6 @@ class _UserPage extends State<UserPage> {
                         MaterialPageRoute(
                             builder: (context) => const OrderedList()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -375,42 +365,24 @@ class _UserPage extends State<UserPage> {
               onTap: (int index) async {
                 switch (index) {
                   case 0: //검색
-                    final result = await Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const AreaSearch()),
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                        OrderCount();
-                      });
-                    }
                     break;
                   case 1: //장바구니
-                    final result = await Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Cart()),
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                        OrderCount();
-                      });
-                    }
                     break;
                   case 2: //홈
-                    final result = await Navigator.pushAndRemoveUntil(
+                    await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => const Home()),
                       (route) => false,
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                        OrderCount();
-                      });
-                    }
                     break;
                   case 3: //주문내역
                     final result = await Navigator.push(
@@ -418,24 +390,9 @@ class _UserPage extends State<UserPage> {
                       MaterialPageRoute(
                           builder: (context) => const OrderedList()),
                     );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                        OrderCount();
-                      });
-                    }
                     break;
                   case 4: //마이휴잇
-                    final result = await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => UserPage()),
-                    );
-                    if (result != null) {
-                      setState(() {
-                        CartCount();
-                        OrderCount();
-                      });
-                    }
+                    setState(() {});
                     break;
                 }
               },
@@ -479,24 +436,39 @@ class _UserPage extends State<UserPage> {
                         ),
                         child: Icon(Icons.shopping_cart_outlined),
                       ),
-                      if (cartcount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 3,
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              cartcount.toString(),
-                              style: const TextStyle(color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: StreamBuilder(
+                          stream: cartcollection
+                              .where('userUid', isEqualTo: user!.uid)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot streamSnapshot) {
+                            if (!streamSnapshot.hasData ||
+                                streamSnapshot.data!.docs.isEmpty) {
+                              return Container(); // 데이터가 없는 경우 처리
+                            }
+                            if (streamSnapshot.hasError) {
+                              debugPrint('에러');
+                              Container();
+                            }
+                            if (streamSnapshot.hasData) {
+                              int count = streamSnapshot.data!.docs.length;
+                              return Container(
+                                  alignment: Alignment.center,
+                                  width: 15,
+                                  height: 15,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(count.toString()));
+                            }
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      )
                     ],
                   ),
                   label: '장바구니',
@@ -540,24 +512,39 @@ class _UserPage extends State<UserPage> {
                         ),
                         child: Icon(Icons.receipt_long_outlined),
                       ),
-                      if (ordercount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 3,
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              ordercount.toString(),
-                              style: const TextStyle(color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                      Positioned(
+                        top: 0,
+                        right: 3,
+                        child: StreamBuilder(
+                          stream: ordercollection
+                              .where('userUid', isEqualTo: user!.uid)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot streamSnapshot) {
+                            if (!streamSnapshot.hasData ||
+                                streamSnapshot.data!.docs.isEmpty) {
+                              return Container(); // 데이터가 없는 경우 처리
+                            }
+                            if (streamSnapshot.hasError) {
+                              debugPrint('에러');
+                              Container();
+                            }
+                            if (streamSnapshot.hasData) {
+                              int count = streamSnapshot.data!.docs.length;
+                              return Container(
+                                  alignment: Alignment.center,
+                                  width: 15,
+                                  height: 15,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(count.toString()));
+                            }
+                            return const CircularProgressIndicator();
+                          },
                         ),
+                      )
                     ],
                   ),
                   label: '주문내역',
@@ -596,31 +583,5 @@ class _UserPage extends State<UserPage> {
         ),
       ),
     );
-  }
-
-  Future<void> CartCount() async {
-    QuerySnapshot snapshot =
-        await cartcollection.where('userUid', isEqualTo: user!.uid).get();
-
-    int count = snapshot.docs.length;
-    if (count != 0) {
-      setState(() {
-        cartcount = count;
-      });
-    }
-  }
-
-  Future<void> OrderCount() async {
-    QuerySnapshot snapshot = await ordercollection
-        .where('userUid', isEqualTo: user!.uid)
-        .where('status', isNotEqualTo: '완료')
-        .get();
-
-    int count = snapshot.docs.length;
-    if (count != 0) {
-      setState(() {
-        ordercount = count;
-      });
-    }
   }
 }

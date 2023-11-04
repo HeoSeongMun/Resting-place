@@ -26,8 +26,7 @@ class _AreaSearchState extends State<AreaSearch> {
   final user = FirebaseAuth.instance.currentUser;
   FocusNode focusNode = FocusNode();
   String searchText = "";
-  int cartcount = 0;
-  int ordercount = 0;
+
   _AreaSearchState() {
     filter.addListener(() {
       setState(() {
@@ -39,8 +38,6 @@ class _AreaSearchState extends State<AreaSearch> {
   @override
   void initState() {
     super.initState();
-    CartCount();
-    OrderCount();
   }
 
   @override
@@ -86,7 +83,7 @@ class _AreaSearchState extends State<AreaSearch> {
                             iconSize: 35,
                             color: const Color.fromARGB(255, 0, 0, 0),
                             onPressed: () {
-                              Navigator.pop(context, cartcount);
+                              Navigator.pop(context);
                             },
                           ),
                           Container(
@@ -261,12 +258,6 @@ class _AreaSearchState extends State<AreaSearch> {
                                                       .toString()),
                                             ),
                                           );
-                                          if (result != null) {
-                                            setState(() {
-                                              CartCount();
-                                              OrderCount();
-                                            });
-                                          }
                                         },
                                       ),
                                     );
@@ -317,12 +308,6 @@ class _AreaSearchState extends State<AreaSearch> {
                                                       .toString()),
                                             ),
                                           );
-                                          if (result != null) {
-                                            setState(() {
-                                              CartCount();
-                                              OrderCount();
-                                            });
-                                          }
                                         },
                                       ),
                                     );
@@ -357,68 +342,34 @@ class _AreaSearchState extends State<AreaSearch> {
                 onTap: (int index) async {
                   switch (index) {
                     case 0: //검색
-                      final result = await Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AreaSearch()),
-                      );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
+                      setState(() {});
                       break;
                     case 1: //장바구니
-                      final result = await Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const Cart()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
+
                       break;
                     case 2: //홈
-                      final result = await Navigator.pushAndRemoveUntil(
+                      await Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => const Home()),
                         (route) => false,
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                     case 3: //주문내역
-                      final result = await Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const OrderedList()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                     case 4: //마이휴잇
-                      final result = await Navigator.pushAndRemoveUntil(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => UserPage()),
-                        (route) => false,
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                   }
                 },
@@ -462,24 +413,39 @@ class _AreaSearchState extends State<AreaSearch> {
                           ),
                           child: Icon(Icons.shopping_cart_outlined),
                         ),
-                        if (cartcount > 0)
-                          Positioned(
-                            top: 0,
-                            right: 3,
-                            child: Container(
-                              width: 15,
-                              height: 15,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Text(
-                                cartcount.toString(),
-                                style: const TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          )
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: StreamBuilder(
+                            stream: cartcollection
+                                .where('userUid', isEqualTo: user!.uid)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot streamSnapshot) {
+                              if (!streamSnapshot.hasData ||
+                                  streamSnapshot.data!.docs.isEmpty) {
+                                return Container(); // 데이터가 없는 경우 처리
+                              }
+                              if (streamSnapshot.hasError) {
+                                debugPrint('에러');
+                                Container();
+                              }
+                              if (streamSnapshot.hasData) {
+                                int count = streamSnapshot.data!.docs.length;
+                                return Container(
+                                    alignment: Alignment.center,
+                                    width: 15,
+                                    height: 15,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(count.toString()));
+                              }
+                              return const CircularProgressIndicator();
+                            },
+                          ),
+                        )
                       ],
                     ),
                     label: '장바구니',
@@ -523,24 +489,39 @@ class _AreaSearchState extends State<AreaSearch> {
                           ),
                           child: Icon(Icons.receipt_long_outlined),
                         ),
-                        if (ordercount > 0)
-                          Positioned(
-                            top: 0,
-                            right: 3,
-                            child: Container(
-                              width: 15,
-                              height: 15,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Text(
-                                ordercount.toString(),
-                                style: const TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: StreamBuilder(
+                            stream: ordercollection
+                                .where('userUid', isEqualTo: user!.uid)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot streamSnapshot) {
+                              if (!streamSnapshot.hasData ||
+                                  streamSnapshot.data!.docs.isEmpty) {
+                                return Container(); // 데이터가 없는 경우 처리
+                              }
+                              if (streamSnapshot.hasError) {
+                                debugPrint('에러');
+                                Container();
+                              }
+                              if (streamSnapshot.hasData) {
+                                int count = streamSnapshot.data!.docs.length;
+                                return Container(
+                                    alignment: Alignment.center,
+                                    width: 15,
+                                    height: 15,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(count.toString()));
+                              }
+                              return const CircularProgressIndicator();
+                            },
                           ),
+                        )
                       ],
                     ),
                     label: '주문내역',
@@ -580,31 +561,5 @@ class _AreaSearchState extends State<AreaSearch> {
         ),
       ),
     );
-  }
-
-  Future<void> CartCount() async {
-    QuerySnapshot snapshot =
-        await cartcollection.where('userUid', isEqualTo: user!.uid).get();
-
-    int count = snapshot.docs.length;
-    if (count != 0) {
-      setState(() {
-        cartcount = count;
-      });
-    }
-  }
-
-  Future<void> OrderCount() async {
-    QuerySnapshot snapshot = await ordercollection
-        .where('userUid', isEqualTo: user!.uid)
-        .where('status', isNotEqualTo: '완료')
-        .get();
-
-    int count = snapshot.docs.length;
-    if (count != 0) {
-      setState(() {
-        ordercount = count;
-      });
-    }
   }
 }

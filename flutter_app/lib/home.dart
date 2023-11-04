@@ -129,8 +129,6 @@ class _Home extends State<Home> {
   @override
   void initState() {
     imageData();
-    CartCount();
-    OrderCount();
     getItems();
     isLoading = true;
     Future.delayed(const Duration(seconds: 1), () {
@@ -261,10 +259,6 @@ class _Home extends State<Home> {
                                                           imageurlData[index]),
                                                 ),
                                               );
-                                              setState(() {
-                                                CartCount();
-                                                OrderCount();
-                                              });
                                             },
                                             child: Image.network(
                                               image.toString(),
@@ -519,67 +513,37 @@ class _Home extends State<Home> {
                 onTap: (int index) async {
                   switch (index) {
                     case 0: //검색
-                      final result = await Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const AreaSearch()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                     case 1: //장바구니
-                      final result = await Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const Cart()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                     case 2: //홈
-                      final result = await Navigator.pushAndRemoveUntil(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => const Home()),
                         (route) => false,
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                     case 3: //주문내역
-                      final result = await Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const OrderedList()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                     case 4: //마이휴잇
-                      final result = await Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => UserPage()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          CartCount();
-                          OrderCount();
-                        });
-                      }
                       break;
                   }
                 },
@@ -632,7 +596,6 @@ class _Home extends State<Home> {
                                 .snapshots(),
                             builder: (BuildContext context,
                                 AsyncSnapshot streamSnapshot) {
-                              int count = streamSnapshot.data!.docs.length;
                               if (!streamSnapshot.hasData ||
                                   streamSnapshot.data!.docs.isEmpty) {
                                 return Container(); // 데이터가 없는 경우 처리
@@ -642,7 +605,9 @@ class _Home extends State<Home> {
                                 Container();
                               }
                               if (streamSnapshot.hasData) {
+                                int count = streamSnapshot.data!.docs.length;
                                 return Container(
+                                    alignment: Alignment.center,
                                     width: 15,
                                     height: 15,
                                     decoration: const BoxDecoration(
@@ -651,7 +616,7 @@ class _Home extends State<Home> {
                                     ),
                                     child: Text(count.toString()));
                               }
-                              return CircularProgressIndicator();
+                              return const CircularProgressIndicator();
                             },
                           ),
                         )
@@ -698,24 +663,39 @@ class _Home extends State<Home> {
                           ),
                           child: Icon(Icons.receipt_long_outlined),
                         ),
-                        if (ordercount > 0)
-                          Positioned(
-                            top: 0,
-                            right: 3,
-                            child: Container(
-                              width: 15,
-                              height: 15,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Text(
-                                ordercount.toString(),
-                                style: const TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        Positioned(
+                          top: 0,
+                          right: 3,
+                          child: StreamBuilder(
+                            stream: ordercollection
+                                .where('userUid', isEqualTo: user!.uid)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot streamSnapshot) {
+                              if (!streamSnapshot.hasData ||
+                                  streamSnapshot.data!.docs.isEmpty) {
+                                return Container(); // 데이터가 없는 경우 처리
+                              }
+                              if (streamSnapshot.hasError) {
+                                debugPrint('에러');
+                                Container();
+                              }
+                              if (streamSnapshot.hasData) {
+                                int count = streamSnapshot.data!.docs.length;
+                                return Container(
+                                    alignment: Alignment.center,
+                                    width: 15,
+                                    height: 15,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(count.toString()));
+                              }
+                              return const CircularProgressIndicator();
+                            },
                           ),
+                        )
                       ],
                     ),
                     label: '주문내역',
@@ -755,32 +735,6 @@ class _Home extends State<Home> {
         ),
       ),
     );
-  }
-
-  Future<void> CartCount() async {
-    QuerySnapshot snapshot =
-        await cartcollection.where('userUid', isEqualTo: user!.uid).get();
-
-    int count = snapshot.docs.length;
-    if (count != 0) {
-      setState(() {
-        cartcount = count;
-      });
-    }
-  }
-
-  Future<void> OrderCount() async {
-    QuerySnapshot snapshot = await ordercollection
-        .where('userUid', isEqualTo: user!.uid)
-        .where('status', isNotEqualTo: '완료')
-        .get();
-
-    int count = snapshot.docs.length;
-    if (count != 0) {
-      setState(() {
-        ordercount = count;
-      });
-    }
   }
 
   //앱 종료 함수
