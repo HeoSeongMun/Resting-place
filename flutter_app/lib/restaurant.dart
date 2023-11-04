@@ -242,7 +242,11 @@ class _Restaurant extends State<Restaurant> {
                                                         .toString()
                                                         .isEmpty
                                                     ? Image.asset(
-                                                        'assets/images/cross.png')
+                                                        'assets/images/cross.png',
+                                                        height: 120,
+                                                        width: 55,
+                                                        fit: BoxFit.cover,
+                                                      )
                                                     : Image.network(
                                                         documentSnapshot[
                                                             'storeimageUrl'],
