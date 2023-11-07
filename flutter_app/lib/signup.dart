@@ -456,6 +456,7 @@ class _SignupState extends State<Signup> {
                                   'email': emailController.text,
                                   'password': pwController.text,
                                   'userUid': newUser.user!.uid,
+                                  'mileage': 0,
                                 });
                                 Navigator.push(
                                   context,
