@@ -4,21 +4,11 @@
 
 ### 어플리케이션 명 : 휴잇
 
-**개발 환경**
-- Windows 10
-- Android Studio
-- Framework(프레임워크) : Flutter 3.7.0
-- Language(언어) : Dart
-- Database(데이터베이스) : Firebase[Firestore]
-
-
 **개발 동기**
 
 특정 시간 또는 일자에 휴게소에 인파가 몰려 상품을 주문했음에도
 
 대기 시간이 길어지는 일이 발생하여 이를 해소 하기 위함.
-
-
 
 
 **개발 목표**
@@ -29,6 +19,13 @@
 
 [점포]
 오프라인 주문 외에 온라인 주문 접수 **회전율 향상**
+
+**개발 환경**
+- Windows 10
+- Android Studio
+- Framework(프레임워크) : Flutter 3.7.0
+- Language(언어) : Dart
+- Database(데이터베이스) : Firebase[Firestore]
 
 
 ---
