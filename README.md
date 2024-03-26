@@ -1,4 +1,4 @@
-# 졸업작품
+![image](https://github.com/HeoSeongMun/Resting-place/assets/100749666/94ddeb46-fbe3-4ccd-8f3e-8a75285aeaf4)# 졸업작품
 
 **휴게소 온라인 주문 어플리케이션**
 
@@ -46,7 +46,9 @@
    > 점포 리뷰 작성 및 수정
    > 
    > 포인트 적립
-   
+   >
+   ![image](https://github.com/HeoSeongMun/Resting-place/assets/100749666/5f4c1e73-b4fb-4386-9e0a-3fead0ceeff5)
+
 3. **판매자(웹)**
    > 점포 등록 요청
    > 
