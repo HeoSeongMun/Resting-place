@@ -47,8 +47,7 @@
    > 
    > 포인트 적립
    >
-<img src="https://github.com/HeoSeongMun/Resting-place/assets/100749666/d77df793-13b7-4a3c-bdf6-c8ce2d690e14
-" width="200" height="400"/>
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/e7dee0c2-cf7b-4bc9-9506-736feccdbe05" width="100" height="200"/>
 
 3. **판매자(웹)**
    > 점포 등록 요청
