@@ -51,20 +51,20 @@
    > 포인트 적립
    >
    
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/e7dee0c2-cf7b-4bc9-9506-736feccdbe05" width="130" height="260"/>      
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2655e42f-dec4-40a1-8e45-c6ff5e5ef459" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/c24a6607-874f-40bc-9c49-34cbd9fbce4a" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/ab32574a-15ce-419f-a916-9b3486c687b6" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/3bbbf446-e483-40d6-9ea2-920136cabbb3" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9a318918-1d07-4b67-960d-7aaad7e774ae" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/dba9577f-0452-477d-afcf-f8722452a94a" width="130" height="260"/> 
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2bc71e6a-ae6c-4c85-8837-1cc5bbecc5cc" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9babe1d8-75ae-425c-b3fa-d96cb57330c5" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/b672fa1e-d98b-4408-b332-1cfda520e77f" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/59a4749b-183a-4cb8-94b7-44c96fb566b0" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/545d1e04-a891-41d0-8d1a-83707770bd3a" width="130" height="260"/>    
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/388d1533-e7f4-4bcd-a403-13b79566c971" width="130" height="260"/>     
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/04522804-8723-4721-8b05-d4e5d2397980" width="130" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/e7dee0c2-cf7b-4bc9-9506-736feccdbe05" width="125" height="260"/>      
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2655e42f-dec4-40a1-8e45-c6ff5e5ef459" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/c24a6607-874f-40bc-9c49-34cbd9fbce4a" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/ab32574a-15ce-419f-a916-9b3486c687b6" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/3bbbf446-e483-40d6-9ea2-920136cabbb3" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9a318918-1d07-4b67-960d-7aaad7e774ae" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/dba9577f-0452-477d-afcf-f8722452a94a" width="125" height="260"/> 
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2bc71e6a-ae6c-4c85-8837-1cc5bbecc5cc" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9babe1d8-75ae-425c-b3fa-d96cb57330c5" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/b672fa1e-d98b-4408-b332-1cfda520e77f" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/59a4749b-183a-4cb8-94b7-44c96fb566b0" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/545d1e04-a891-41d0-8d1a-83707770bd3a" width="125" height="260"/>    
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/388d1533-e7f4-4bcd-a403-13b79566c971" width="125" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/04522804-8723-4721-8b05-d4e5d2397980" width="125" height="260"/>     
 
 
 3. **판매자(웹)**
