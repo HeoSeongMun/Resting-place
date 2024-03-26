@@ -63,8 +63,8 @@
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/b672fa1e-d98b-4408-b332-1cfda520e77f" width="130" height="260"/>     
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/59a4749b-183a-4cb8-94b7-44c96fb566b0" width="130" height="260"/>     
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/545d1e04-a891-41d0-8d1a-83707770bd3a" width="130" height="260"/>    
-                                           <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/388d1533-e7f4-4bcd-a403-13b79566c971" width="130" height="260"/>     
-                                                                                                <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/04522804-8723-4721-8b05-d4e5d2397980" width="130" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/388d1533-e7f4-4bcd-a403-13b79566c971" width="130" height="260"/>     
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/04522804-8723-4721-8b05-d4e5d2397980" width="130" height="260"/>     
 
 
 3. **판매자(웹)**
