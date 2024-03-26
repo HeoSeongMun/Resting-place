@@ -29,9 +29,9 @@
 **개발 환경**
 - Windows 10
 - Android Studio
-- Framework(프레임워크) : Flutter 3.7.0
-- Language(언어) : Dart
-- Database(데이터베이스) : Firebase[Firestore]
+- Framework(프레임워크) : `Flutter 3.7.0`
+- Language(언어) : `Dart`
+- Database(데이터베이스) : `Firebase[Firestore]`
 
 
 ---
@@ -61,6 +61,6 @@
    > 휴게소 및 점포 추가/수정/삭제
    > 
 
-판매자 웹 : https://test2-4def8.firebaseapp.com/#/
+판매자 웹 : <https://test2-4def8.firebaseapp.com/#/>
 
-관리자 웹 : https://ra-admin-site.firebaseapp.com/#/
+관리자 웹 : <https://ra-admin-site.firebaseapp.com/#/>
