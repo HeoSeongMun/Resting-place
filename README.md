@@ -42,4 +42,5 @@
    > 휴게소 및 점포 추가/수정/삭제
 
 판매자 웹 : https://test2-4def8.firebaseapp.com/#/
+
 관리자 웹 : https://ra-admin-site.firebaseapp.com/#/
