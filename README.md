@@ -38,6 +38,9 @@
 
 #### 🏷 설명
 시스템 기능으로 크게 3가지로 분류
+
+앱,웹은 서로 상호 작용을 하며 정보를 출력
+
 1. **사용자(앱)**
    > 휴게소, 점포 검색 및 조회
    > 
@@ -55,10 +58,6 @@
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/3bbbf446-e483-40d6-9ea2-920136cabbb3" width="130" height="260"/>     
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9a318918-1d07-4b67-960d-7aaad7e774ae" width="130" height="260"/>     
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/dba9577f-0452-477d-afcf-f8722452a94a" width="130" height="260"/> 
-
-
-
-
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2bc71e6a-ae6c-4c85-8837-1cc5bbecc5cc" width="130" height="260"/>     
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9babe1d8-75ae-425c-b3fa-d96cb57330c5" width="130" height="260"/>     
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/b672fa1e-d98b-4408-b332-1cfda520e77f" width="130" height="260"/>     
