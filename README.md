@@ -26,7 +26,7 @@
 
 ---
 
-#### ⚙ 개발 환경**
+#### ⚙ 개발 환경
 - Windows 10
 - Android Studio
 - Framework(프레임워크) : `Flutter 3.7.0`
