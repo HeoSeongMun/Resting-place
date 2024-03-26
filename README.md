@@ -55,6 +55,7 @@
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9a318918-1d07-4b67-960d-7aaad7e774ae" width="120" height="250"/>  
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/dba9577f-0452-477d-afcf-f8722452a94a" width="120" height="250"/>  
 
+
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2bc71e6a-ae6c-4c85-8837-1cc5bbecc5cc" width="120" height="250"/>  
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9babe1d8-75ae-425c-b3fa-d96cb57330c5" width="120" height="250"/>  
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/b672fa1e-d98b-4408-b332-1cfda520e77f" width="120" height="250"/>  
