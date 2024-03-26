@@ -1,4 +1,4 @@
-![image](https://github.com/HeoSeongMun/Resting-place/assets/100749666/94ddeb46-fbe3-4ccd-8f3e-8a75285aeaf4)# 졸업작품
+# 졸업작품
 
 **휴게소 온라인 주문 어플리케이션**
 
