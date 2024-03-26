@@ -47,13 +47,14 @@
    > 
    > 포인트 적립
    >
+   
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/e7dee0c2-cf7b-4bc9-9506-736feccdbe05" width="120" height="250"/>   
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2655e42f-dec4-40a1-8e45-c6ff5e5ef459" width="120" height="250"/>  
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/c24a6607-874f-40bc-9c49-34cbd9fbce4a" width="120" height="250"/>  
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/ab32574a-15ce-419f-a916-9b3486c687b6" width="120" height="250"/>  
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/3bbbf446-e483-40d6-9ea2-920136cabbb3" width="120" height="250"/>  
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/9a318918-1d07-4b67-960d-7aaad7e774ae" width="120" height="250"/>  
-<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/dba9577f-0452-477d-afcf-f8722452a94a" width="120" height="250"/>  
+<img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/dba9577f-0452-477d-afcf-f8722452a94a" width="120" height="250"/>
 
 
 <img src ="https://github.com/HeoSeongMun/Resting-place/assets/100749666/2bc71e6a-ae6c-4c85-8837-1cc5bbecc5cc" width="120" height="250"/>  
